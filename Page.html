@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+  name="generator" />
+<title>Page Option</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>Use this option to specify the dimensions of the
+<i>PostScript</i> page in dots per inch or a TEXT page or GIF image
+in pixels. The <b>page</b> parameter looks like this:</p>
+<pre class="text">
+    <i>&lt;width&gt;{%}x&lt;height&gt;{%}{!}{&lt;}{&gt;}</i>
+</pre>
+<p>The choices for a Postscript page are: </p>
+<pre class="text">
+   11x17         792  1224 
+   Ledger       1224   792    
+   Legal         612  1008
+   Letter        612   792
+   LetterSmall   612   792
+   ArchE        2592  3456
+   ArchD        1728  2592
+   ArchC        1296  1728
+   ArchB         864  1296
+   ArchA         648   864
+   A0           2380  3368
+   A1           1684  2380
+   A2           1190  1684
+   A3            842  1190
+   A4            595   842
+   A4Small       595   842
+   A5            421   595
+   A6            297   421
+   A7            210   297
+   A8            148   210
+   A9            105   148
+   A10            74   105
+   B0           2836  4008
+   B1           2004  2836
+   B2           1418  2004
+   B3           1002  1418
+   B4            709  1002
+   B5            501   709
+   C0           2600  3677
+   C1           1837  2600
+   C2           1298  1837
+   C3            918  1298
+   C4            649   918
+   C5            459   649
+   C6            323   459
+   Flsa          612   936 
+   Flse          612   936
+   HalfLetter    396   612
+</pre>
+<p>For convenience you can specify the page size by media (e.g. A4,
+Ledger, etc.). Otherwise, the <b>page</b> option behaves much like
+the <b>geometry</b> option (e.g. <tt>-page
+letter+43+43&gt;</tt>).</p>
+<p>To position a GIF image, use +LEFT+TOP (e.g. -page
++100+200).</p>
+<p>The default page dimensions for a TEXT image is 612x792.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

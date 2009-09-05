@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Image Effects</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>You have your choice of these image effects:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>Adaptive Blur</b></dt>
+<dd>adaptively blur pixels; decrease effect near edges. Specify <i>radius</i> and <i>sigma</i> as the parameter to effect the characteristics of the sharpening: 
+<pre>
+    <i>&lt;radius&gt;x&lt;sigma&gt;</i>
+</pre></dd><br />
+<dt><b>Adaptive Sharpen</b></dt>
+<dd>adaptively sharpen pixels; increase effect near edges. Specify <i>radius</i> and <i>sigma</i> as the parameter to effect the characteristics of the sharpening: 
+<pre>
+    <i>&lt;radius&gt;x&lt;sigma&gt;</i>
+</pre></dd><br />
+<dt><b>Sharpen</b></dt>
+<dd>sharpen your image. Specify <i>radius</i> and <i>sigma</i> as
+the parameter to effect the characteristics of the sharpening: 
+<pre>
+    <i>&lt;radius&gt;x&lt;sigma&gt;</i>
+</pre></dd><br />
+<dt><b>Blur</b></dt>
+<dd>blur your image. Specify <i>radius</i> and <i>sigma</i> as the
+parameter to effect the characteristics of the blur: 
+<pre>
+    <i>&lt;radius&gt;x&lt;sigma&gt;</i>
+</pre></dd><br />
+<dt><b>Gaussian Blur</b></dt>
+<dd>Gaussian blur your image. Specify <i>radius</i> and
+<i>sigma</i> as the parameter to effect the characteristics of the
+blur: 
+<pre>
+    <i>&lt;radius&gt;x&lt;sigma&gt;</i>
+</pre></dd><br />
+<dt><b>Despeckle</b></dt>
+<dd>reduce the speckles within your image.</dd><br />
+<dt><b>Median Filter</b></dt>
+<dd>reduce the noise in an image by replacing each pixel with the
+median color in a circular neighborhood.</dd><br />
+<dt><b>Reduce noise</b></dt>
+<dd>reduce noise in your image. The principal function of noise
+peak elimination filter is to smooth the objects within an image
+without losing edge information and without creating undesired
+structures.</dd><br />
+<dt><b>Emboss</b></dt>
+<dd>emboss your image.</dd><br />
+<dt><b>Threshold</b></dt>
+<dd>create a bi-level image such that any pixel intensity that is
+equal or exceeds the threshold is reassigned the maximum intensity
+otherwise the minimum intensity.</dd><br />
+<dt><b>Edge detect</b></dt>
+<dd>detect edges within your image. Specify <i>factor</i> as the
+percent enhancement (0.0 - 99.9%).</dd><br />
+<dt><b>Motion Blur</b></dt>
+<dd>simulate motion blur.  Try a parameter of 0x1+135.</dd><br />
+<dt><b>Spread</b></dt>
+<dd>displace image pixels by a random amount. Specify the parameter
+as the amount of spread.</dd><br />
+<dt><b>Shade</b></dt>
+<dd>shade the image using a distant light source. The parameter
+looks like this: 
+<pre>
+    <i>&lt;azimuth&gt;x&lt;elevation&gt;</i>
+</pre></dd><br /></dl></dd><br /></dl>
+<p>See <a href="images/examples.jpg">examples</a> of select
+<b>ImageMagick Studio</b> effects.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

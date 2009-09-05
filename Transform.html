@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Image Transforms</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>You have your choice of these image enhancements:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>affine</b></dt>
+<dd>affine transform image. The parameter has this format: 
+<pre>
+    <i>sx, rx, ry, sy, tx, ty</i>
+</pre></dd><br />
+<dt><b>Crop</b></dt>
+<dd>preferred size and location of the cropped image. The parameter
+has this format: 
+<pre>
+    <i>&lt;width&gt;x&lt;height&gt;{+-}&lt;x offset&gt;{+-}&lt;y offset&gt;{%}</i>
+</pre>
+<p>For example, <tt>100x200+20+10</tt>.</p>
+<p>To specify a percentage width or height instead, append
+<b>%</b>. For example to crop the image by ten percent on all sides
+of the image, use <b>10%</b>.</p>
+<p>Use cropping to apply image processing options to, or display, a
+particular area of an image. Omit the x and y offset to generate
+one or more subimages of a uniform size.</p></dd><br />
+<dt><b>Chop</b></dt>
+<dd>preferred size and location of the chopped image. See
+<b>crop</b> for the parameter requirements. Use this transform to
+remove a section of the image from it's interior. If you remove
+from the exterior of the image, <b>chop</b> behaves like
+<b>crop</b>.</dd><br />
+<dt><b>Coalesce</b></dt>
+<dd>merge a sequence of images. Requires an image sequence.</dd><br />
+<dt><b>Deconstruct</b></dt>
+<dd>break down an image sequence into constituent parts. Requires
+an image sequence.</dd><br />
+<dt><b>Deskew</b></dt>
+<dd>straighten an image. The parameter is the threshold (e.g. 40%).</dd><br />
+<dt><b>Flip</b></dt>
+<dd>create a <em>mirror image</em> by reflecting the image
+scanlines in the vertical direction.</dd><br />
+<dt><b>Flop</b></dt>
+<dd>create a <em>mirror image</em> by reflecting the image
+scanlines in the horizontal direction.</dd><br />
+<dt><b>Layers</b></dt>
+<dd>Optimize, merge, or compare image layers.  Requires an image sequence.</dd><br />
+<dt><b>Rotate right</b></dt>
+<dd>rotate the image right 90 degrees.</dd><br />
+<dt><b>Rotate left</b></dt>
+<dd>rotate the image right -90 degrees.</dd><br />
+<dt><b>Rotate</b></dt>
+<dd>apply Paeth image rotation to the image. The parameter has this
+format: 
+<pre>
+    <i>degrees{&lt;}{&gt;}</i>
+</pre>
+<p>Use <tt>&gt;</tt> to rotate the image only if its width exceeds
+the height. <tt>&lt;</tt> rotates the image <i>only</i> if its
+width is less than the height. For example, if you specify
+<tt>-90&gt;</tt> and the image size is 480x640, the image is not
+rotated by the specified angle. However, if the image is 640x480,
+it is rotated by -90 degrees.</p></dd><br />
+<dt><b>Shave</b></dt>
+<dd>shave pixels from the image edges. The parameter has this
+format: 
+<pre>
+    &lt;width&gt;x&lt;height&gt;
+</pre></dd><br />
+<dt><b>Shear</b></dt>
+<dd>shear the image along the X or Y axis by a positive or negative
+shear angle. The parameter has this format: 
+<pre>
+    &lt;x degrees&gt;x&lt;y degrees&gt;
+</pre>
+<p>Shearing slides one edge of an image along the X or Y axis,
+creating a parallelogram. An X direction shear slides an edge along
+the X axis, while a Y direction shear slides an edge along the Y
+axis. The amount of the shear is controlled by a shear angle. For X
+direction shears, <i>x degrees</i> is measured relative to the Y
+axis, and similarly, for Y direction shears <i>y degrees</i> is
+measured relative to the X axis.</p></dd><br />
+<dt><b>Roll</b></dt>
+<dd>roll an image vertically or horizontally. The parameter has
+this format: 
+<pre>
+    {+-}&lt;x offset&gt;{+-}&lt;y offset&gt;
+</pre>
+<p>A negative <i>x offset</i> rolls the image left-to-right. A
+negative <i>y offset</i> rolls the image top-to-bottom.</p></dd><br />
+<dt><b>Trim</b></dt>
+<dd>remove edges that are the background color.</dd><br />
+<dt><b>Unique Colors</b></dt>
+<dd>discard all but one of any pixel color.</dd><br />
+</dl></dd><br /></dl>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

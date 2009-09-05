@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Colormap Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>First define the preferred number of colors in your image. The
+actual number of colors in the image may be less than your request,
+but never more. Note, this is a color reduction option. Images with
+less unique colors than specified with this option will have any
+duplicate or unused colors removed. Refer to
+<a href="http://www.imagemagick.org/script/quantize.php">quantize</a>
+for more details.</p>
+<p>You also have a choice of several options that affect your image
+colormap. Choose from these options:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>dither</b></dt>
+<dd>apply Floyd/Steinberg error diffusion to the image. The basic
+strategy of dithering is to trade intensity resolution for spatial
+resolution by averaging the intensities of several neighboring
+pixels. Images which suffer from severe contouring when reducing
+colors can be improved with this option.</dd><br />
+<dt><b>black &amp; white</b></dt>
+<dd>transform the image to black and white.</dd><br />
+<dt><b>global colormap</b></dt>
+<dd>create a single colormap for a sequence of images.</dd><br />
+<dt><b>netscape color cube</b></dt>
+<dd>map image to web safe colors.</dd><br />
+<dt><b>map to clipboard</b></dt>
+<dd>map image to clipboard colors.</dd><br />
+<dt><b>gray image</b></dt>
+<dd>transform the image to gray colors.</dd><br />
+<dt><b>ordered dither</b></dt>
+<dd>ordered dither.  The parameter should be one of
+<pre>
+  threshold        Threshold Non-Dither
+  checks           Checkerboard Dither
+  o2x2             Ordered 2x2 Diffused Pixel
+  o3x3             Ordered 4x4 Diffused Pixel
+  o4x4             Ordered 4x4 Diffused Pixel
+  o8x8             Ordered 8x8 Diffused Pixel
+  h4x4a            Halftone 4x4 (angled)
+  h6x6a            Halftone 6x6 (angled)
+  h8x8a            Halftone 8x8 (angled)
+  h4x4o            Halftone 4x4 (othogonal)
+  h6x6o            Halftone 6x6 (othogonal)
+  h8x8o            Halftone 8x8 (othogonal)
+  h16x16o          Halftone 16x16 (othogonal)
+  hlines6x4        Horizontal Lines 6x4
+</pre></dd><br />
+<dt><b>segment</b></dt>
+<dd>segment an image by analyzing the histograms of the color
+components and identifying units that are homogeneous with the
+fuzzy c-means technique.</dd><br />
+<dt><b>preserve transparent pixels</b></dt>
+<dd>by default color reduction does not preserve and transparent
+pixels in your image. Choose this option to reduce the number of
+colors in your image <em>while</em> preserving any transparent
+pixels.</dd><br /></dl></dd><br /></dl>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

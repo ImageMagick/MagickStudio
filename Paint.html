@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Paint Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>Choose from these graphic primitives:</p>
+<pre class="text">
+    none
+    color
+    matte
+</pre>
+<p>The default is <b>none</b>. Choose this to report the color
+information associated with a particular pixel in the image. Just
+move your pointer anywhere of interest in your image and press
+button 1. The color information for that particular pixel is
+returned as individual red, green, blue, and alpha intensities and
+as a color name (e.g. white) or hex value (e.g. #feff00).</p>
+<p>Use <b>color</b> to change the color of a pixel. Choose from
+these methods:</p>
+<pre class="text">
+    point
+    replace
+    floodfill
+    filltoborder
+    reset
+</pre>
+<p>The target pixel is the one you click on within the image
+boundaries . The <b>point</b> method recolors the target pixel. The
+<b>replace</b> method recolors any pixel that matches the color of
+the target pixel. <b>Floodfill</b> recolors any pixel that matches
+the color of the target pixel and is a neighbor. Whereas
+<b>filltoborder</b> recolors any neighbor pixel that is not the
+border color. Finally, <b>reset</b> recolors all pixels.</p>
+<p>Use <b>matte</b> to the change the pixel matte value to
+transparent. Follow the pixel coordinate with a method (see the
+<b>color</b> primitive for a description of methods). The
+<b>point</b> method changes the matte value of the target pixel.
+The <b>replace</b> method changes the matte value of any pixel that
+matches the color of the target pixel. <b>Floodfill</b> changes the
+matte value of any pixel that matches the color of the target pixel
+and is a neighbor. Whereas <b>filltoborder</b> changes the matte
+value any neighbor pixel that is not the border color. Finally
+<b>reset</b> changes the matte value of all pixels.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

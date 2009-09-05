@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Composite Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>A composite operation combines pixels from a different image
+with your target image. You can control composition by choosing
+which image to combine, where the combining occurs (the offset from
+the target image), and how the pixels are combined (composite
+operation).</p>
+<p>Select your composite image, press <b>Browse</b> to browse and
+select your image file or enter the <a href="URL.html">URL</a> of
+your image. Use <tt>clipboard:</tt> as the filename to import a
+previously saved image from the ImageMagick Studio clipboard.</p>
+<p>The offset geometry specifies the (x,y) offset from your target
+image to combine the composite image. The x and y offset are
+conveniently specified as one value. For example, to offset the
+target image by 30 pixels in the horizontal direction and 40 pixels
+in the vertical use:</p>
+<pre class="text">
+  +30+40
+</pre>
+<p>For convenience, you can select a gravity instead of an offset
+geometry. For example, <b>Center</b> centers the image. The
+location geometry has precedence over any gravity.</p>
+<p>Finally, you need to specify how the pixels are combined. By
+default, each of the composite image pixels are replaced by the
+corresponding image tile pixel. You can choose an alternate
+composite operation. How each operator behaves is described
+below.</p>
+<dl>
+<dd>
+<dl>
+<dt>
+Clear</dt>
+<dd>
+Both the color and the alpha of the destination are cleared. Neither
+the source nor the destination are used as input.
+</dd><br />
+<dt>
+Src </dt>
+<dd>
+The source is copied to the destination. The destination is not used
+as input.
+</dd><br />
+<dt>
+dst </dt>
+<dd>
+The destination is left untouched. 
+</dd><br />
+<dt>
+Over </dt>
+<dd>
+The source is composited over the destination. 
+</p>
+
+
+</dd><br />
+<dt>
+DstOver </dt>
+<dd>
+The destination is composited over the source and the 
+result replaces the destination. 
+</dd><br />
+<dt>
+In </dt>
+<dd>
+The part of the source lying inside of the destination 
+replaces the destination. 
+</p>
+
+</dd><br />
+</dl>
+<dl>
+<dt>
+DstIn </dt>
+<dd>
+The part of the destination lying inside of the source
+replaces the destination. 
+<dt>
+Out </dt>
+<dd>
+The part of the source lying outside of the destination
+replaces the destination. 
+
+</dd><br />
+<dt>
+DstOut </dt>
+<dd>
+The part of the destination lying outside of the source       replaces the destination. 
+</dd><br />
+<dt>
+Atop </dt>
+<dd>
+The part of the source lying inside of the destination is  
+composited onto the destination. 
+</dd><br />
+<dt>
+DstAtop </dt>
+<dd>
+The part of the destination lying inside of the source is composited over the source and replaces the destination. 
+
+</dd><br />
+<dt>
+Xor </dt>
+<dd>
+The part of the source that lies outside of the destination is
+combined with the part of the destination that lies outside of the
+source.
+</dd><br />
+</dl>
+<p>
+The following compositing operators add blending of source and destination colors beyond the base 12 Porter-Duff operations. The behavior of these operators necessitates clamping of the output values after compositing. 
+</p>
+
+<dl>
+<dt>
+Plus </dt>
+<dd>
+The source is added to the destination and replaces the destination. This operator is useful for animating a dissolve between two images. 
+
+</dd><br />
+<dt>
+Multiply </dt>
+<dd>
+The source is multiplied by the destination and replaces the destination. The resultant color is always at least as dark as either of the two constituent colors. Multiplying any color with black produces black. Multiplying any color with white leaves the original color unchanged. 
+
+<p>
+</p>
+
+</dd><br />
+<dt>
+Screen </dt>
+<dd>
+The source and destination are complemented and then multiplied and then replace the destination. The resultant color is always at least as light as either of the two constituent colors. Screening any color with white produces white. Screening any color with black leaves the original color unchanged. 
+
+<p>
+</p>
+
+</dd><br />
+<dt>
+Overlay </dt>
+<dd>
+Multiplies or screens the colors, dependent on the destination color. Source colors overlay the destination whilst preserving its highlights and shadows. The destination color is not replaced, but is mixed with the source color to reflect the lightness or darkness of the destination. 
+
+</dd><br />
+<dt>
+Darken </dt>
+<dd>
+Selects the darker of the destination and source colors.  The destination is replaced with the source when the source is darker, otherwise it is left unchanged. 
+</dd><br />
+<dt>
+Lighten </dt>
+<dd>
+Selects the lighter of the destination and source colors.  The destination is replaced with the source when the source is lighter, otherwise it is left unchanged. 
+
+</dd><br />
+</dl>
+<dl>
+<dt>
+ColorDodge </dt>
+<dd>
+Brightens the destination color to reflect the source color. Painting with black produces no change. 
+
+</dd><br />
+<dt>
+ColorBurn </dt>
+<dd>
+Darkens the destination color to reflect the source color.  Painting with white produces no change. 
+
+</dd><br />
+<dt>
+HardLight </dt>
+<dd>
+Multiplies or screens the colors, dependent on the source color value. If the source color is lighter than 0.5, the destination is lightened as if it were screened. If the source color is darker than 0.5, the destination is darkened, as if it were multiplied. The degree of lightening or darkening is proportional to the difference between the source color and 0.5. If it is equal to 0.5 the destination is unchanged. Painting with pure black or white produces black or white. 
+
+</dd><br />
+<dt>
+SoftLight </dt>
+<dd>
+Darkens or lightens the colors, dependent on the source color value. If the source color is lighter than 0.5, the destination is lightened. If the source color is darker than 0.5, the destination is darkened, as if it were burned in. The degree of darkening or lightening is proportional to the difference between the source color and 0.5. If it is equal to 0.5, the destination is unchanged. Painting with pure black or white produces a distinctly darker or lighter area, but does not result in pure black or white. 
+
+</dd><br />
+<dt>
+Difference </dt>
+<dd>
+Subtracts the darker of the two constituent colors from the lighter. Painting with white inverts the destination color. Painting with black produces no change. 
+
+</dd><br />
+<dt>
+Exclusion </dt>
+<dd>
+Produces an effect similar to that of 'difference', but appears as lower contrast. Painting with white inverts the destination color. Painting with black produces no change. 
+
+</dd>
+</dl>
+</dd>
+</dl></dd></dl>
+<p>The image compositor requires a matte, or alpha channel in the
+image for some operations. This extra channel usually defines a
+mask which represents a sort of a cookie-cutter for the image. This
+is the case when matte is 255 (full coverage) for pixels inside the
+shape, zero outside, and between zero and 255 on the boundary. For
+certain operations, if <em>image</em> does not have an matte
+channel, it is initialized with 0 for any pixel matching in color
+to pixel location (0,0), otherwise 255. properly <b>borderwidth</b>
+must be 0). </p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

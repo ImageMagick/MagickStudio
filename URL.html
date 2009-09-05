@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Uniform Resource Locator</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>A Uniform Resource Locator (URL) specifies the location of one
+or more images at a remote location. For example:</p>
+<pre>
+    http://www.imagemagick.org/MagickStudio/images/rose.png
+</pre>
+<p>selects a single GIF image of a rose. You can also specify an
+image sequence such as <tt>animated_banner.png</tt>. See
+<a href="http://www.imagemagick.org/www/formats.html">formats</a>
+for a list of image formats recognized by ImageMagick Studio.</p>
+<p>You can create an animation sequence by placing two or more
+images in a directory accessible as an URL and ending the URL with
+a slash (<tt>/</tt>):</p>
+<pre>
+    http://www.sympatico.org/MagickStudio/images/
+</pre>
+<p>A URL might not hint at what type of image is being loaded:</p>
+<pre>
+    http://my.photos.com/j/View?u=9216&amp;a=115372&amp;p=1430943&amp;Sequence=1
+</pre>
+<p>If the image fails to load, try hinting by adding a slash and
+the image type to the URL. For example, here we hint that the image
+is in the JPEG format:</p>
+<pre>
+    http://my.photos.com/j/View?u=9216&amp;a=115372&amp;p=1430943&amp;Sequence=1/jpg
+</pre>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

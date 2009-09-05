@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Resize Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>The image geometry specifies the desired size of the image. It's
+format is:</p>
+<pre class="text">
+  <i>&lt;width&gt;x&lt;height&gt;{%}{!}{&lt;}{&gt;}</i>
+</pre>
+<p>By default, the width and height are maximum values. That is,
+the image is expanded or contracted to fit the width and height
+value while maintaining the aspect ratio of the image. <em>Append
+an exclamation point to the geometry to force the image size to
+exactly the size you specify</em>. For example, if you specify
+<b>640x480!</b> the image width is set to 640 pixels and height to
+480. If only one factor is specified, both the width and height
+assume the value.</p>
+<p>To specify a percentage width or height instead, append %. The
+image size is multiplied by the width and height percentages to
+obtain the final image dimensions. To increase the size of an
+image, use a value greater than 100 (e.g. 125%). To decrease an
+image's size, use a percentage less than 100.</p>
+<p>Use <b>&gt;</b> to change the dimensions of the image
+<em>only</em> if its size exceeds the geometry specification.
+<b>&lt;</b> resizes the image <em>only</em> if its dimensions is
+less than the geometry specification. For example, if you specify
+<b>640x480&gt;</b> and the image size is 512x512, the image size
+does not change. However, if the image is 1024x1024, it is resized
+to 640x480.</p>
+<p>Use <b>&lt;</b> to change the dimensions of the image
+<em>only</em> if its size exceeds the geometry specification.
+<b>&gt;</b> resizes the image <em>only</em> if its dimensions is
+less than the geometry specification. For example, if you specify
+<b>640x480&gt;</b> and the image size is 512x512, the image size
+does not change. However, if the image is 1024x1024, it is resized
+to 640x480.</p>
+<p>There are 72 dots per inch in PostScript coordinates.</p>
+<p>You have your choice of algorithms to resize your image. Choose
+from these algorithms:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>Adaptive Resize</b></dt>
+<dd>resize image with data dependent triangulation</dd><br />
+<dt><b>Liquid Rescale</b></dt>
+<dd>rescale image with seam carving.</dd><br />
+<dt><b>Resize</b></dt>
+<dd>scale the image using the selected scaling filter, support radius, and blur factor. The default
+is the <em>Mitchell</em> filter, general overall scaling filter
+that produces high-quality results. Set the blur factor to &gt; 1.0 for more blurry and &lt; 1.0 for more sharp</dd><br />
+<dt><b>Scale</b></dt>
+<dd>To scale a scanline from x pixels to y pixels, each new pixel
+represents x/y old pixels. To read x/y pixels, read (x/y rounded
+up) pixels but only count the required fraction of the last old
+pixel read in your new pixel. The remainder of the old pixel will
+be counted in the next new pixel.</dd><br />
+<dt><b>Sample</b></dt>
+<dd>scales image with pixel sampling. This algorithm does no
+introduce new colors into your image.</dd><br />
+<dt><b>Resample</b></dt>
+<dd>change the resolution of an image</dd><br />
+<dt><b>Half Size</b></dt>
+<dd>half the size of an image using a weighted average of a 4x4
+cell centered at each reference pixel. The image geometry is
+ignored.</dd><br />
+<dt><b>Double Size</b></dt>
+<dd>double the size of an image using bi-linear interpolation. The
+image</dd><br />
+<dt><b>Extent</b></dt>
+<dd>set the image extent. The pixels scale or location do not change.  If the image is enlarged, unfilled areas are set to the background color.</dd><br />
+<dt><b>Thumbnail</b></dt>
+<dd>Create a thumbnail from your image. If there are more than one
+image, they are tiled on a transparent background as defined by the
+tile geometry (see the optional scaling
+attributes).</dd><br /></dl></dd><br /></dl>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

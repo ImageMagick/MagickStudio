@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+      name="generator" />
+<title>Annotate Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>You can annotate your image with text. Optionally you can
+include the image filename, type, width, height, or other image
+attribute by embedding special format characters:</p>
+<pre>
+    %b   file size
+    %d   directory
+    %e   filename extention
+    %f   filename
+    %h   height
+    %m   magick
+    %p   page number
+    %s   scene number
+    %t   top of filename
+    %w   width
+    %x   x resolution
+    %y   y resolution
+    \n   newline
+    \r   carriage return
+</pre>
+<p>For example,</p>
+<pre>
+  "%m:%f %wx%h"
+</pre>
+<dl>
+<dd>produces an image annotation of <b>MIFF:bird.miff 512x480</b>
+for an image titled <b>bird.miff</b> and whose width is 512 and
+height is 480.</dd><br /></dl>
+<p>To generate a Unicode character (<i>TrueType fonts only</i>),
+embed the code as an escaped hex string (e.g.
+<tt>\\0x30a3</tt>).</p>
+<p>The location is the offset from the upper left hand corner of
+the image. The (x,y) offset of the location is conveniently
+specified as one value. For example if your text is located 30
+pixels along the horizontal and 40 pixels along the vertical,
+use:</p>
+<pre>
+    +30+40
+</pre>
+<p>From this starting point the final text location is determined
+from the gravity attribute: NorthWest, North, NorthEast, West,
+Center, East, SouthWest, South, and SouthEast. Center, for example,
+places text in the center of the image relative to the (x,y)
+offset. The text lines are centered in both the vertical and
+horizontal directions. The default gravity is NorthWest. Here is
+text begins, left to right, at the specified (x,y) offset.</p>
+<p>Other attributes you can set are which color the text appears,
+the color of the text bounding color, the text font, its size, and
+what angle to display the text. The color is specified by its name
+(e.g. red, white, blue) or a hex value (e.g. #c0d1bf).
+<b>MagickStudio</b> contacts your X server for any fonts it needs.
+You may may need to permit the remote server access otherwise
+Postscript fonts are used. In most cases, X font rendering is much
+faster than with Postscript. The point size gives the height of the
+text when rendered with Postscript fonts. Finally, the angle of the
+text is specified in degrees, 0 to 360.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

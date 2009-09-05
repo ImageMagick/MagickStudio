@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Image Enhancements</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<h1>Image Enhancements</h1>
+<hr />
+<p>You have your choice of these image enhancements:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>Clipboard as CLUT</b></dt>
+<dd>use the clipboard image as a color lookup table.</dd><br />
+<dt><b>Spiff</b></dt>
+<dd>enhances the intensity differences between the lighter and darker elements of the image.</dd><br />
+<dt><b>Dull</b></dt>
+<dd>reduces the intensity differences between the lighter and
+darker elements of the image.</dd><br />
+<dt><b>Contrast Stretch</b></dt>
+<dd>improve the contrast in an image by `stretching' the range of intensity values.  A good starting point is a 1% black and white point (e.g. 1%).</dd><br />
+<dt><b>Equalize</b></dt>
+<dd>perform histogram equalization on the image.</dd><br />
+<dt><b>Normalize</b></dt>
+<dd>transform image to span the full range of color values.</dd><br />
+<dt><b>Negate</b></dt>
+<dd>replace very pixel with its complementary color (white becomes
+black, yellow becomes blue, etc.).</dd><br />
+<dt><b>Hue</b></dt>
+<dd>vary the percent hue of the image (0-200%).</dd><br />
+<dt><b>Saturation</b></dt>
+<dd>vary the percent saturation of the image (0-200%).</dd><br />
+<dt><b>Brightness</b></dt>
+<dd>vary the percent brightness of the image. Reasonable values
+extend from <b>50</b> (darker) to <b>150</b> (brighter).</dd><br />
+<dt><b>Gamma</b></dt>
+<dd>level of gamma correction. The same color image displayed on
+two different workstations may look different due to differences in
+the display monitor. Use gamma correction to adjust for this color
+difference. Reasonable values extend from <b>0.8</b> to <b>2.3</b>.
+You can apply separate gamma values to the red, green, and blue
+channels of the image with a gamma value list delineated with
+slashes (e.g. <b>1.7</b>/<b>2.3</b>/<b>1.2</b>).</dd><br />
+<dt><b>Level</b></dt>
+<dd>adjust the level of image contrast. Give three point values
+delineated with commas: black, white, and mid (e.g. 10%,90%,1.0).
+The white and black points range from 0 to 100% and mid ranges
+from 0 to 10.</dd><br />
+<dt><b>Linear Stretch</b></dt>
+<dd>linear with saturation stretch.  Give two point values
+delineated with commas: black, and white (e.g. 10,90%).
+The white and black points range from 0 to 100%.
+<dt><b>Sigmoidal Contrast</b></dt>
+<dd>sigmoidal non-lineraity contrast control.  Give two values contrast and midpoint.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows. <em class="option">Contrast</em> indicates how much to increase the contrast (0 is none; 3 is typical; 20 is a lot);  <em class="option">mid-point</em> indicates where midtones fall in the resultant image (0 is white; 50% is middle-gray; 100% is black).  A good starting point is 3x50%.</dd><br />
+
+</dl></dd><br /></dl>
+<hr />
+</body>
+</html>

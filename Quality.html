@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+    name="generator" />
+<title>Quality Option</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>This option is the JPEG/PNG/MIFF compression quality
+setting.</p>
+<p>For the JPEG image format, quality is 0 (worst) to 100 (best).
+The default quality is 75.</p>
+<p>Quality for the MIFF and PNG image format sets the amount of
+image compression (quality / 10) and filter-type (quality % 10).
+Compression quality values range from 0 (worst) to 100 (best). If
+filter-type is 4 or less, the specified filter-type is used for all
+scanlines:</p>
+<pre class="text">
+  0: none
+  1: sub
+  2: up
+  3: average
+  4: Paeth
+</pre>
+<p>If filter-type is 5, adaptive filtering is used when quality is
+greater than 50 and the image does not have a color map, otherwise
+no filtering is used.</p>
+<p>If filter-type is 6 or more, adaptive filtering with
+<em>minimum-sum-of-absolute-values</em> is used.</p>
+<p>The default is quality is 75. Which means nearly the best
+compression with adaptive filtering.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

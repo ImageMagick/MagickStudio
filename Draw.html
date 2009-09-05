@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
+    name="generator" />
+<title>Draw Image</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<center><img src="images/magick.png" align="bottom" width="114"
+height="113" /></center>
+<hr />
+<p>The draw tools annotates your image with one or more graphic
+primitives.</p>
+<p>Choose from these graphic primitives:</p>
+ <pre class="text">
+  point
+  line
+  rectangle
+  roundRectangle
+  arc
+  ellipse
+  circle
+  polyline
+  polygon
+  bezier
+  path
+</pre>
+<p><b>Point</b> and <b>line</b> each require a single coordinate.
+<b>Line</b> requires a start and end coordinate, while
+<b>rectangle</b> expects an upper left and lower right coordinate.
+<b>roundRectangle</b> has a center coordinate, a width and height,
+and the width and height of the corners. <b>Circle</b> has a center
+coordinate and a coordinate for the outer edge. Use <b>Arc</b> to
+circumscribe an arc within a rectangle. Arcs require a start and
+end point as well as the degree of rotation (e.g. 130,30 200,100
+45,90). Use <b>Ellipse</b> to draw a partial ellipse centered at
+the given point, specified width and height, and start and end of
+arc in degrees (e.g. 100,100 100,150 0,360). Finally,
+<b>polyline</b> and <b>polygon</b> require three or more
+coordinates to define its boundaries. Coordinates are integers
+separated by an optional comma. For example, to define a circle
+centered at 100,100 that extends to 150,150 use:</p>
+ <pre class="text">
+  100,100 150,150
+</pre>
+<p>An equivalent format is</p>
+ <pre class="text">
+  +100+100 +150+150
+</pre>
+<p>
+<a href="http://www.w3.org/TR/2000/03/WD-SVG-20000303/paths.html#PathDataGeneralInformation">
+Paths</a> represent an outline of an object which is defined in
+terms of moveto (set a new current point), lineto (draw a straight
+line), curveto (draw a curve using a cubic bezier), arc (elliptical
+or circular arc) and closepath (close the current shape by drawing
+a line to the last moveto) elements. Compound paths (i.e., a path
+with subpaths, each consisting of a single moveto followed by one
+or more line or curve operations) are possible to allow effects
+such as "donut holes" in objects.</p>
+<p>You also have the option of setting the primitive color, line
+width, x and y translation, degree of rotation, or fill the
+interior of the primitive.</p>
+<hr />
+<p>
+<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
+   target="Comment"><img alt="[comment]" src="images/mail.png"
+   border="0" /></a></p>
+</body>
+</html>

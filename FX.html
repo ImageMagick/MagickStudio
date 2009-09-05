@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Image Effects</title>
+<link rel="StyleSheet" href="style/magick.css" type="text/css" />
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
+vlink="#800080" alink="#0085C0">
+<h1>Image Effects</h1>
+<hr />
+<p>You have your choice of these special effects:</p>
+<dl>
+<dd>
+<dl>
+<dt><b>Charcoal drawing</b></dt>
+<dd>simulate a charcoal drawing. Good parameter values are odd
+numbers from 3 to 31</dd><br />
+<dt><b>Convolve</b></dt>
+<dd>apply a convolution kernel to the image. Given the kernel
+<i>order</i>, you would supply <i>order*order</i> float values. For
+example, the parameter would look like this for a 3x3 Gaussian
+kernel:</dd><br />
+<dd>
+<pre>
+    <i>1, 2, 1, 2, 4, 2, 1, 2, 1</i>
+</pre></dd><br />
+<dt><b>Distort</b></dt>
+<dd>distort an image with as defined by a source and destination quadrilateral.</dd><br />
+<dd>The parameter is a set of coordinate pairs (e.g. x1,y1,u1,v1 x2,y2,u2,v2 ...).</dd><br />
+<dt><b>Fx</b></dt>
+<dd>evaluate expression for each pixel in the specified channel.  The Fx expressions includes any combination of the following:<br />
+<li> <em>x</em> <kbd>^</kbd> <em>y</em>:  exponentiation (<em>x<sup>y</sup></em>)</li>
+<li> <kbd>(</kbd> ... <kbd>)</kbd>:  grouping</li>
+<li> <em>x</em> <kbd>*</kbd> <em>y</em>:  multiplication (the asterisk <kbd>*</kbd> is optional, for example, <kbd>2u</kbd> or <kbd>2(x+y)</kbd> are acceptable)</li>
+<li> <em>x</em> <kbd>/</kbd> <em>y</em>:  division</li>
+<li> <em>x</em> <kbd>%</kbd> <em>y</em>:  modulo</li>
+<li> <em>x</em> <kbd>+</kbd> <em>y</em>:  addition</li>
+<li> <em>x</em> <kbd>-</kbd> <em>y</em>:  subtraction</li>
+<li> <em>x</em> <kbd>&lt;&lt;</kbd> <em>y</em>:  left shift</li>
+<li> <em>x</em> <kbd>&gt;&gt;</kbd> <em>y</em>:  right shift</li>
+<li> <em>x</em> <kbd>&lt;</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x</em> &lt; <em>y</em>,  otherwise 0.0</li>
+<li> <em>x</em> <kbd>&lt;=</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x</em> &lt;= <em>y</em>,  otherwise 0.0</li>
+<li> <em>x</em> <kbd>&gt;</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x</em> &gt; <em>y</em>,  otherwise 0.0</li>
+<li> <em>x</em> <kbd>&gt;=</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x</em> &gt;= <em>y</em>,  otherwise 0.0</li>
+<li> <em>x</em> <kbd>==</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x </em>==<em> y</em>, otherwise 0.0</li>
+<li> <em>x</em> <kbd>!=</kbd> <em>y</em>:  boolean relation, returns value 1.0 if <em>x </em>!=<em> y</em>, otherwise 0.0</li>
+<li> <em>x</em> <kbd>&amp</kbd> <em>y</em>:  binary AND</li>
+<li> <em>x</em> <kbd>|</kbd> <em>y</em>:  binary OR</li>
+<li> <em>x</em> <kbd>&amp;&amp;</kbd> <em>y</em>:  logical AND connective, returns value 1.0 if <em>x</em> &gt; 0 and <em>y</em> &gt; 0,  otherwise 0.0</li>
+<li> <em>x</em> <kbd>||</kbd> <em>y</em>:  logical OR connective (inclusive), returns value 1.0 if <em>x</em> &gt; 0 or <em>y</em> &gt; 0 (or both),  otherwise 0.0</li>
+<li> <kbd>~</kbd><em>x</em>:  logical NOT operator, returns value 1.0 if <em>not</em> <em>x</em> &gt; 0,  otherwise 0.0</li>
+<li> <kbd>+</kbd><em>x</em>:  unary plus, returns 1.0*value</li>
+<li> <kbd>-</kbd><em>x</em>:  unary minus, returns -1.0*value</li>
+<li> <em>x</em> <kbd>?</kbd> <em>y</em> :</b> <em>z</em>: ternary conditional expression, returns value <em>y</em> if <em>x</em> &gt; 0, otherwise <em>z</em>; only one ternary conditional permitted per statement</li>
+<li> <em>x</em> <kbd>=</kbd> <em>y</em>: assignment </li>
+<li> <em>x</em> <kbd>;</kbd> <em>y</em>: statement separator </li>
+<li> <kbd>pi</kbd>:  constant (3.141659...)</li>
+<li> <kbd>e</kbd>:  constant (2.71828...)</li>
+<li> <kbd>QuantumRange</kbd>:  constant maximum pixel value (255 for Q8, 65535 for Q16)</li>
+<li> <kbd>QuantumScale</kbd>:  constant 1.0/<kbd>QuantumRange</kbd></li>
+<li> <kbd>intensity</kbd>:  pixel intensity</li>
+<li> <kbd>hue</kbd>:  pixel hue</li>
+<li> <kbd>saturation</kbd>:  pixel saturation</li>
+<li> <kbd>luminosity</kbd>:  pixel luminosity</li>
+<li> <kbd>red, green, blue</kbd>, etc.:  color names</li>
+<li> <kbd>#ccc, #cbfed0, #b9e1cc00</kbd>, etc.:  color hex values</li>
+<li> <kbd>rgb(), rgba(), cmyk(), cmyka(), hsl(), hsla()</kbd>:  color functions</li>
+<li> <kbd>s,t,u,v,n,i,j,w,h,z,r,g,b,a,o,c,y,m,k</kbd>:  symbols</li>
+<li> <kbd>abs(</kbd><em>x</em><kbd>)</kbd>:  absolute value function</li>
+<li> <kbd>acos(</kbd><em>x</em><kbd>)</kbd>:  arc cosine function</li>
+<li> <kbd>alt(</kbd><em>x</em><kbd>)</kbd>:  sign alternation function (returns 1 if <kbd>int(</kbd><em>x</em><kbd>)</kbd> is even, -1 if <kbd>int(</kbd><em>x</em><kbd>)</kbd> is odd)</li>
+<li> <kbd>asin(</kbd><em>x</em><kbd>)</kbd>:  arc sine function</li>
+<li> <kbd>atan(</kbd><em>x</em><kbd>)</kbd>:  arc tangent function</li>
+<li> <kbd>atan2(</kbd><em>y</em>,<em>x</em><kbd>)</kbd>:  arc tangent function of two variables</li>
+<li> <kbd>ceil(</kbd><em>x</em><kbd>)</kbd>: smallest integral value not less than argument</li>
+<li> <kbd>cos(</kbd><em>x</em><kbd>)</kbd>:  cosine function</li>
+<li> <kbd>debug(</kbd><em>x</em><kbd>)</kbd>:  print value for debugging</li>
+<li> <kbd>exp(</kbd><em>x</em><kbd>)</kbd>:  natural exponential function (<em>e<sup>x</sup></em>)</li>
+<li> <kbd>floor(</kbd><em>x</em><kbd>)</kbd>:  largest integral value not greater than argument</li>
+<li> <kbd>int(</kbd><em>x</em><kbd>)</kbd>:  greatest integer function (returns greatest integer less than or equal to <em>x</em>)</li>
+<li> <kbd>ln(</kbd><em>x</em><kbd>)</kbd>:  natural logarithm function</li>
+<li> <kbd>log(</kbd><em>x</em><kbd>)</kbd>:  logarithm base 10</li>
+<li> <kbd>max(</kbd><em>x</em>,</b> <em>y</em><kbd>)</kbd>:  maximum of <em>x</em> and <em>y</em></li>
+<li> <kbd>min(</kbd><em>x</em>,</b> <em>y</em><kbd>)</kbd>:  minimum of <em>x</em> and <em>y</em></li>
+<li> <kbd>mod(</kbd><em>x</em>,</b> <em>y</em><kbd>)</kbd>:  floating-point remainder function</li>
+<li> <kbd>pow(</kbd><em>x</em>,<em>y</em><kbd>)</kbd>:  power function (<em>x<sup>y</sup></em>)</li>
+<li> <kbd>rand()</kbd>:  value uniformly distributed over the interval [0.0, 1.0) with a 2 to the 128th-1 period</li>
+<li> <kbd>sign(</kbd><em>x</em><kbd>)</kbd>:  returns 1 if <em>x</em> is less than 0 otherwise 1</li>
+<li> <kbd>sin(</kbd><em>x</em><kbd>)</kbd>:  sine function</li>
+<li> <kbd>sqrt(</kbd><em>x</em><kbd>)</kbd>:  square root function</li>
+<li> <kbd>tan(</kbd><em>x</em><kbd>)</kbd>:  tangent function</li></dd><br /><br />
+
+<dd>The expression semantics include these rules:
+
+<li>symbols are case insensitive</li>
+<li>only one ternary conditional (e.g. x ? y : z) per statement</li>
+<li>statements are assignments or the final expression to return</li>
+<li>an assignment starts a statement, it is not an operator</li>
+<li>assignments to built-ins do not throw errors and have no effect;  e.g. <kbd>r=3.0; r</kbd> returns the pixel red color value, not 3.0</li>
+</dd><br />
+<dt><b>Implode</b></dt>
+<dd>implode/explode image pixels about the center. A positive
+parameter implodes while a negative parameter explodes the
+image.</dd><br />
+<dt><b>mosaic</b></dt>
+<dd>create an mosaic from an image sequence.</dd><br />
+<dt><b>Morph</b></dt>
+<dd>morphs an image sequence. Both the image pixels and size are
+linearly interpolated to give the appearance of a meta-morphosis
+from one image to the next. Specify the parameter as the number of
+in-between images to generate. If you have a single image in your
+sequence, the clipboard image is used as the morph anchor.</dd><br />
+<dt><b>Oil Paint</b></dt>
+<dd>simulate an oil painting. Each pixel is replaced by the most
+frequent color in a circular neighborhood whose width is specified
+as a radius. Good parameter values are odd numbers from 3 to 31</dd><br />
+<dt><b>Recolor</b></dt>
+<dd>translate, scale, shear, or rotate image colors.  Although you can use variable sized matrices, typically you use a 5 x 5 for an RGBA image and a 6x6 for CMYKA.  Populate the last row with normalized values to translate.  For example to double the red component and add 20% to each of red, green, and blue, use:
+<pre>
+  <i>2.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.2,0.2,0.2,0.0,1.0</i>
+</pre></dd><br />
+<dt><b>Sepia Tone</b></dt>
+<dd>apply a special effect to the image, similar to the effect achieved in a photo darkroom by sepia toning.  Threshold ranges from 0 to MaxRGB and is a measure of the extent of the sepia toning.  A threshold of 80% is a good starting point for a reasonable tone.</dd><br />
+<dt><b>Shadow</b></dt>
+<dd>simulate an image shadow. Start with a parameter of 50x5+20+30.
+The first value is the percent opacity, the second is the blur sigma value,
+and the third and fourth value is the shadow offset relative to the original image</dd><br />
+<dt><b>Sketch</b></dt>
+<dd>simulate a pencil sketch.  Try a parameter of 0x20+135.</dd><br />
+<dt><b>Solarize</b></dt>
+<dd>negate all pixels above the threshold level. Specify the
+parameter as the percent threshold of the intensity (0 -
+99.9%).</dd><br />
+<dt><b>Sparse-Color</b></dt>
+<dd>given a set of coordinates, sparse-color interpolates the colors found at those coordinates, across the whole image, using various methods.</dd><br />
+<dt><b>Stegano</b></dt>
+<dd>hide the clipboard image within this image. The parameter is
+the offset within the image to begin any hiding.</dd><br />
+<dt><b>Stereo</b></dt>
+<dd>combine two image to create a stereo anaglyph. The left side of
+the stereo pair is saved as the red channel of the output image.
+The right sife is saved as the green channel. Red-blue stereo
+glasses are required to properly view the stereo image.</dd><br />
+<dt><b>Swirl</b></dt>
+<dd>swirl image pixels about the center. <i>Degrees</i> defines the
+tightness of the swirl.</dd><br />
+<dt><b>Tint</b></dt>
+<dd>tint the image with the fill color. Tint applies a color vector
+to each pixel in the image. The length of the vector is 0 for black
+and white and at its maximum for the midtones. The vector weighting
+function in between is f(x) = (1-(4.0*((x-0.5)*(x-0.5)))). The
+dynamic weighting can be controlled by a constant percentage
+(0..100) given as the parameter for tint (e.g. 50%). Usually
+de-saturating the image is what you want before tinting.</dd><br />
+<dt><b>Vignette</b></dt>
+<dd>soften the edges of the image in vignette style.  Start with a parameter of 0x20.
+The first value is the blur radius, the second is the blur sigma value,
+and the third and fourth value is the vignette offset relative to the original image</dd><br />
+<dt><b>Wave</b></dt>
+<dd>alter an image along a sine wave. Specify <i>amplitude</i> and
+<i>wavelength</i> as the parameter to effect the characteristics of
+the wave: 
+<pre>
+    <i>&lt;amplitude&gt;x&lt;wavelength&gt;</i>
+</pre></dd><br /></dl></dd><br /></dl>
+<p>See <a href="images/examples.jpg">examples</a> of select
+<b>ImageMagick Studio</b> effects.</p>
+<hr />
+</body>
+</html>

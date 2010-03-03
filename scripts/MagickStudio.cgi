@@ -62,9 +62,9 @@ my($action, %Functions, $header, $length, $prefix, $q, %seen, $timer,
 
 our($AreaLimit, $ContactInfo, $Debug, $DefaultFont, $DiskLimit,
     $DocumentDirectory, $DocumentRoot, $ExpireCache, $ExpireThreshold,
-    $IconSize, $LoadAverageThreshold, $MapLimit, $MaxFilesize, $MaxImageArea,
-    $MaxImageExtent, $MaxWorkFiles, $MemoryLimit, $MinExpireAge, $RedirectURL,
-    $SponsorIcon, $SponsorURL, $Timeout);
+    $HashDigestSalt, $IconSize, $LoadAverageThreshold, $MapLimit, $MaxFilesize,
+    $MaxImageArea, $MaxImageExtent, $MaxWorkFiles, $MemoryLimit, $MinExpireAge,
+    $RedirectURL, $SponsorIcon, $SponsorURL, $TimeLimit, $Timeout);
 
 #
 # Change these variables to reflect your environment.
@@ -74,6 +74,7 @@ our($AreaLimit, $ContactInfo, $Debug, $DefaultFont, $DiskLimit,
 $ENV{DISPLAY}="$ENV{REMOTE_HOST}:0" if $ENV{REMOTE_HOST};
 $ENV{LD_LIBRARY_PATH}='/usr/lib:/usr/openwin/lib:/usr/local/lib';
 $ENV{MAGICK_FONT_PATH}=$DocumentRoot . $DocumentDirectory . "/fonts";
+$ENV{MAGICK_PRECISION}=15;
 $ENV{PATH}='/bin:/usr/bin:/usr/openwin/bin:/usr/local/bin';
 $ENV{TMPDIR}=$DocumentRoot . $DocumentDirectory . "/tmp";
 
@@ -86,9 +87,10 @@ sub Annotate
 
   no strict 'refs';
 
-  my($antialias, $density, $fill, $font, $geometry, $gravity, $image, $path,
-    $pointsize, $rotate, $scale, $skew_x, $skew_y, $status, $stroke,
-    $strokewidth, $text, $translate, $undercolor);
+  my($antialias, $density, $fill, $font, $geometry, $gravity, $image, $kerning,
+    $interline_spacing, $interword_spacing, $path, $pointsize, $rotate, $scale,
+    $skew_x, $skew_y, $status, $stroke, $strokewidth, $text, $translate,
+    $undercolor);
 
   #
   # Read image.
@@ -115,6 +117,14 @@ sub Annotate
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $gravity=$q->param('Gravity');
   $pointsize=int($q->param('Pointsize'));
+  $kerning=0.0;
+  $kerning=$q->param('Kerning') if $q->param('Kerning');
+  $interline_spacing=0.0;
+  $interline_spacing=$q->param('InterlineSpacing') if
+    $q->param('InterlineSpacing');
+  $interword_spacing=0.0;
+  $interword_spacing=$q->param('InterwordSpacing') if
+    $q->param('InterwordSpacing');
   $rotate=0.0;
   $rotate=$q->param('Rotate') if $q->param('Rotate');
   $scale='0.0, 0.0';
@@ -144,8 +154,10 @@ sub Annotate
       $image->Annotate(text=>$text,geometry=>$geometry,font=>$font,fill=>$fill,
         stroke=>$stroke,strokewidth=>$strokewidth,undercolor=>$undercolor,
         pointsize=>$pointsize,density=>$density,gravity=>$gravity,
-        translate=>$translate,scale=>$scale,rotate=>$rotate,skewX=>$skew_x,
-        skewY=>$skew_y,antialias=>$antialias,encoding=>'UTF-8');
+        kerning=>$kerning,'interline-spacing'=>$interline_spacing,
+        'interword-spacing'=>$interword_spacing,translate=>$translate,
+        scale=>$scale,rotate=>$rotate,skewX=>$skew_x,skewY=>$skew_y,
+        antialias=>$antialias);
     }
   #
   # Write image.
@@ -190,7 +202,8 @@ XXX
   print '<td>', $q->textfield(-name=>'Geometry',-size=>25,-value=>'+0+0'),
     "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types],
+    -default=>'Center'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print 'Press to ', $q->submit(-name=>'Action',-value=>'annotate'),
@@ -228,7 +241,22 @@ XXX
   print '<td>', $q->textfield(-name=>'StrokeWidth',-value=>'0',-size=>25),
    "</td>\n";
   print "</tr>\n";
-  print '</table></dd>';
+  print '</table></dd><br />';
+  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<tr>\n";
+  print "<th>Kerning</th>\n";
+  print "<th>Interline Spacing</th>\n";
+  print "<th>Interword Spacing</th>\n";
+  print "</tr>\n";
+  print "<tr>\n";
+  print '<td>', $q->textfield(-name=>'Kerning',-value=>'0',-size=>25),
+    "</td>\n";
+  print '<td>', $q->textfield(-name=>'InterlineSpacing',-value=>'0',-size=>25),
+    "</td>\n";
+  print '<td>', $q->textfield(-name=>'InterwordSpacing',-value=>'0',-size=>25),
+    "</td>\n";
+  print "</tr>\n";
+  print '</table></dd><br />';
   print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
@@ -547,7 +575,7 @@ XXX
 #
 sub Comment
 {
-  use Digest::SHA;
+  use Digest::SHA2;
 
   no strict 'subs';
 
@@ -557,8 +585,8 @@ sub Comment
 
   umask(002);
   $path=$DocumentRoot . $DocumentDirectory . "/comments";
-  $digest=Digest::SHA->new(512);
-  $digest->add($q->remote_addr(),time(),{},rand(),$$);
+  $digest=Digest::SHA2->new(512);
+  $digest->add($HashDigestSalt,$q->remote_addr(),time(),{},rand(),$$);
   $filename=$path . '/' . $digest->hexdigest . '.txt';
   open(DATA,">$filename") || Error('Unable to save your comments',$filename);
   $remote_host='localhost';
@@ -781,7 +809,8 @@ XXX
   print '<td>', $q->textfield(-name=>'Geometry',-size=>25,-value=>'+0+0'),
     "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types],
+    -default=>'Center'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print 'Press to ', $q->submit(-name=>'Action',-value=>'composite'),
@@ -799,7 +828,7 @@ XXX
   print '<td>', $q->textfield(-name=>'Blend',-size=>25,-value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('compose');
   print '<td>', $q->popup_menu(-name=>'ComposeType',-values=>[@types],
-    -default=>'Over'), "</td>\n";
+    -default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
@@ -831,7 +860,7 @@ XXX
 #
 sub CreateWorkDirectory
 {
-  use Digest::SHA;
+  use Digest::SHA2;
 
   my($check) = @_;
 
@@ -842,8 +871,8 @@ sub CreateWorkDirectory
   $path=$DocumentRoot . $DocumentDirectory . '/workarea';
   chdir($path) || Error('Your image has expired',$path);
   umask(002);
-  $digest=Digest::SHA->new(512);
-  $digest->add($q->remote_addr(),time(),{},rand(),$$);
+  $digest=Digest::SHA2->new(512);
+  $digest->add($HashDigestSalt,$q->remote_addr(),time(),{},rand(),$$);
   $path.='/' . $digest->hexdigest;
   $ENV{TMPDIR}=$path;
   mkdir($path,0775);
@@ -1146,15 +1175,31 @@ sub Effects
   $image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
     $q->param('VirtualPixelMethod');
   $image->Set(label=>$q->param('Label')) if $q->param('Label');
-  $image->AdaptiveBlur("$parameter") if $q->param('Option') eq
-    'adaptive blur *';
-  $image->AdaptiveSharpen("$parameter") if $q->param('Option') eq
-    'adaptive sharpen *';
-  $image->BlackThreshold("$parameter") if
+  $image->AdaptiveBlur(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'adaptive blur *';
+  $image->AdaptiveSharpen(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'adaptive sharpen *';
+  $image->BlackThreshold(geomery=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'black threshold *';
   $image->Blur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'blur *';
   $image->Charcoal("$parameter") if $q->param('Option') eq 'charcoal drawing *';
+  if ($q->param('Option') eq 'clut')
+    {
+      my($channel, $source);
+
+      $channel=$q->param('Channel');
+      $source=Image::Magick->new;
+      $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+        $q->param('SessionID') . '.mpc';
+      $status=$source->Read($filename);
+      Error($status) if $#$source < 0;
+      if ($channel eq 'All')
+        { $image->Clut(image=>$source); }
+      else
+        { $image->Clut(image=>$source,channel=>$channel); }
+      Error($image) if !ref($image);
+    }
   if ($q->param('Option') eq 'convolve *')
     {
       my(@coefficients);
@@ -1171,8 +1216,26 @@ sub Effects
       $method=$q->param('DistortType');
       $image->Distort(method=>$method,points=>\@points);
     }
+  if ($q->param('Option') eq 'evaluate *')
+    {
+      my(@values, $operator);
+
+      @values=split(/[ ,]+/,$parameter);
+      $operator=$q->param('EvaluateType');
+      $image->Evaluate(operator=>$operator,value=>\@values);
+    }
+  if ($q->param('Option') eq 'function *')
+    {
+      my(@parameters, $function);
+
+      @parameters=split(/[ ,]+/,$parameter);
+      $function=$q->param('FunctionType');
+      $image->Function(function=>$function,parameters=>\@parameters);
+    }
   $image->Edge("$parameter") if $q->param('Option') eq 'edge detect *';
   $image->Emboss(geometry=>$parameter) if $q->param('Option') eq 'emboss *';
+  $image->ForwardFourierTransform("$parameter") if
+    $q->param('Option') eq 'forward Fourier transform';
   if ($q->param('Option') eq 'F(x) *')
     {
       my($channel);
@@ -1212,7 +1275,25 @@ sub Effects
     }
   $image->GaussianBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'gaussian blur *';
+  if ($q->param('Option') eq 'hald-clut')
+    {
+      my($channel, $source);
+
+      $channel=$q->param('Channel');
+      $source=Image::Magick->new;
+      $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+        $q->param('SessionID') . '.mpc';
+      $status=$source->Read($filename);
+      Error($status) if $#$source < 0;
+      if ($channel eq 'All')
+        { $image->HaldClut(image=>$source); }
+      else
+        { $image->HaldClut(image=>$source,channel=>$channel); }
+      Error($image) if !ref($image);
+    }
   $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
+  $image->InverseFourierTransform("$parameter") if
+    $q->param('Option') eq 'inverse Fourier transform';
   if ($q->param('Option') eq 'morph *')
     {
       my($morph_image);
@@ -1236,6 +1317,13 @@ sub Effects
           undef $image;
           $image=$morph_image;
         }
+    }
+  if ($q->param('Option') eq 'morphology *')
+    {
+      my($method);
+
+      $method=$q->param('MorphologyMethod');
+      $image->Morphology(kernel=>$parameter,method=>$method,channel=>$channel);
     }
   if ($q->param('Option') eq 'mosaic')
     {
@@ -1261,7 +1349,8 @@ sub Effects
           $image=$mosaic_image;
         }
     }
-  $image->MotionBlur("$parameter") if $q->param('Option') eq 'motion blur *';
+  $image->MotionBlur(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'motion blur *';
   $image->MedianFilter("$parameter") if
     $q->param('Option') eq 'median filter *';
   $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
@@ -1273,6 +1362,8 @@ sub Effects
       @coefficients=split(/[ ,]+/,$parameter);
       $image->Recolor(\@coefficients);
     }
+  $image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'selective blur *';
   $image->SepiaTone("$parameter") if $q->param('Option') eq 'sepia tone *';
   $image->Shade(geometry=>$parameter,gray=>'false')
     if $q->param('Option') eq 'shade *';
@@ -1300,7 +1391,8 @@ sub Effects
           $image=$mosaic_image;
         }
     }
-  $image->Sharpen("$parameter") if $q->param('Option') eq 'sharpen *';
+  $image->Sharpen(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'sharpen *';
   $image->Sketch("$parameter") if $q->param('Option') eq 'sketch *';
   $image->Solarize("$parameter") if $q->param('Option') eq 'solarize *';
   $image->Spread("$parameter") if $q->param('Option') eq 'spread *';
@@ -1329,14 +1421,16 @@ sub Effects
   $image->Swirl("$parameter") if $q->param('Option') eq 'swirl *';
   $image->AdaptiveThreshold("$parameter") if
     $q->param('Option') eq 'adaptive threshold *';
-  $image->Threshold("$parameter") if $q->param('Option') eq 'threshold *';
+  $image->Threshold(threshold=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'threshold *';
   $image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
     $q->param('Option') eq 'tint';
-  $image->UnsharpMask("$parameter") if $q->param('Option') eq 'unsharp mask *';
+  $image->UnsharpMask(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'unsharp mask *';
   $image->Vignette(geometry=>"$parameter",background=>
     $q->param('BackgroundColor')) if $q->param('Option') eq 'vignette *';
   $image->Wave("$parameter") if $q->param('Option') eq 'wave *';
-  $image->WhiteThreshold("$parameter") if
+  $image->WhiteThreshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'white threshold *';
   $image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
   #
@@ -1358,22 +1452,23 @@ sub EffectsForm
   [
     'adaptive blur *',
     'adaptive sharpen *',
-    'sharpen *',
+    'adaptive threshold *',
+    'black threshold *',
     'blur *',
     'despeckle',
-    'emboss *',
-    'threshold *',
-    'spread *',
-    'shade *',
-    'gray shade *',
     'edge detect *',
-    'motion blur *',
-    'median filter *',
-    'reduce noise *',
+    'emboss *',
     'gaussian blur *',
-    'adaptive threshold *',
+    'gray shade *',
+    'median filter *',
+    'motion blur *',
+    'reduce noise *',
+    'selective blur *',
+    'shade *',
+    'sharpen *',
+    'spread *',
+    'threshold *',
     'unsharp mask *',
-    'black threshold *',
     'white threshold *'
   ];
 
@@ -1466,6 +1561,10 @@ sub Enhance
     }
   $image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
     $q->param('VirtualPixelMethod');
+  $image->AutoGamma() if $q->param('Option') eq 'auto-gamma';
+  $image->AutoLevel() if $q->param('Option') eq 'auto-level';
+  $image->BrightnessContrast(geometry=>$parameter,channel=>$channel) if
+    $q->param('Option') eq 'brightness-contrast *';
   $image->Contrast(sharpen=>'true') if $q->param('Option') eq 'spiff';
   $image->Contrast(sharpen=>'false') if $q->param('Option') eq 'dull';
   $image->ContrastStretch(geometry=>$parameter,channel=>$channel) if
@@ -1503,7 +1602,10 @@ sub EnhanceForm
 {
   my @OptionTypes=
   [
+    'auto-gamma',
+    'auto-level',
     'brightness *',
+    'brightness-contrast *',
     'clipboard as CLUT',
     'contrast-stretch *',
     'dull',
@@ -1760,11 +1862,18 @@ sub FXForm
   my @OptionTypes =
   [
     'charcoal drawing *',
+    'clut',
     'convolve *',
     'distort *',
+    'evaluate *',
+    'forward Fourier transform',
+    'function *',
     'F(x) *',
+    'hald-clut',
     'implode *',
+    'inverse Fourier transform',
     'morph *',
+    'morphology *',
     'mosaic',
     'oil paint *',
     'recolor *',
@@ -1811,13 +1920,31 @@ XXX
   print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
   print "<tr>\n";
   print "<th>Distort Type</th>\n";
-  print "<th>Virtual Pixel Method</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
+  print "<th>Evaluate Type</th>\n";
+  print "<th>Function Type</th>\n";
   print "</tr>\n";
   print "<tr>\n";
   my @distorts=Image::Magick->QueryOption('distort');
   print '<td>', $q->popup_menu(-name=>'DistortType',-values=>[@distorts],
     -default=>'Arc'), "</td>\n";
+  my @operators=Image::Magick->QueryOption('evaluate');
+  print '<td>', $q->popup_menu(-name=>'EvaluateType',-values=>[@operators],
+    -default=>'Sin'), "</td>\n";
+  my @functions=Image::Magick->QueryOption('function');
+  print '<td>', $q->popup_menu(-name=>'FunctionType',-values=>[@functions],
+    -default=>'Sin'), "</td>\n";
+  print "</tr>\n";
+  print '</table><br />';
+  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<tr>\n";
+  print "<th>Morphology Method</th>\n";
+  print "<th>Virtual Pixel Method</th>\n";
+  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
+  print "</tr>\n";
+  print "<tr>\n";
+  my @methods=Image::Magick->QueryOption('morphology');
+  print '<td>', $q->popup_menu(-name=>'MorphologyMethod',-values=>[@methods]),
+    "</td>\n";
   my @methods=Image::Magick->QueryOption('virtual-pixel');
   print '<td>', $q->popup_menu(-name=>'VirtualPixelMethod',-values=>[@methods]),
     "</td>\n";
@@ -1963,17 +2090,21 @@ sub Header
     "$DocumentDirectory/style/magick.css", "\");\n";
   print "//--></style>\n";
   print <<XXX;
-  <table width="100%" id="titlebar" style="background-color: white" cellpadding="0" cellspacing="0" border="0" summary="ImageMagick">
-    <tbody>
-      <tr valign="top">
-        <td align="left"><a href="http://www.imagemagick.org"><img id="titlebar-west" src="$DocumentDirectory/images/script.png" alt="[ImageMagick]" width="350" height="60" border="0" vspace="28" name="titlebar-west"/></a></td>
-        <td align="left"><a href="$SponsorURL" target="sponsor"><img id="titlebar-west" src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" border="0" vspace="44" name="titlebar-west"/></a></td>
-        <td width="99%"><br /></td>
-        <td style="background-color: white" align="right"><a href="http://www.imagemagick.org"><img src="$DocumentDirectory/images/sprite.jpg" alt="" width="114" height="118" border="0" name="titlebar-east"/></a></td>
-        <td style="background-color: white" align="right"><a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5" target="discourse-server"><img id="titlebar-east" src="$DocumentDirectory/images/logo.jpg" alt="" width="114" height="118" border="0" name="titlebar-east"/></a></td>
-      </tr>
-    </tbody>
-  </table>
+<div class="titlebar">
+<a href="/ImageMagick/script/../index.php">
+  <img src="$DocumentDirectory/images/script.png" alt="[ImageMagick]"
+  style="width: 350px; height: 60px; margin: 28px auto; float: left;" /></a>
+<a href="$SponsorURL">
+  <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]"
+  style="margin: 45px auto; border: 0px; float: left;" /></a>
+
+<a href="http://www.imagemagick.org/discourse-server/">
+  <img src="$DocumentDirectory/images/logo.jpg" alt=""
+  style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
+<a href="/ImageMagick/script/../index.php">
+  <img src="$DocumentDirectory/images/sprite.jpg" alt=""
+  style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
+</div>
 XXX
   ;
   $url=$q->script_name;
@@ -2052,7 +2183,7 @@ XXX
   ;
   print "<dl>\n";
   print "<dd><pre class=\"text\">\n";
-  $images->Describe();
+  $images->Identify();
   print "</pre>\n";
   print "</dl>\n";
   Trailer(1);
@@ -2070,7 +2201,7 @@ sub Input
   use LWP::Simple;
   use File::Basename;
   use File::Copy;
-  use Digest::SHA;
+  use Digest::SHA2;
 
   my(@attributes, $basename, $digest, $extent, @extents, $filename, $format,
      $i, $image, $magick, $path, $session, $status, $scene);
@@ -2246,9 +2377,9 @@ sub Input
   $q->param(-name=>'Name',-value=>$basename);
   $magick=~tr/A-Z/a-z/;
   $q->param(-name=>'Magick',-value=>$magick);
-  $digest=Digest::SHA->new(512);
-  $digest->add($image->Get('signature'),$filename,$q->remote_addr(),time(),{},
-    rand(),$$);
+  $digest=Digest::SHA2->new(512);
+  $digest->add($HashDigestSalt,$image->Get('signature'),$filename,
+    $q->remote_addr(),time(),{},rand(),$$);
   $session=$digest->hexdigest;
   if (defined($q->param('SessionID')))
     {
@@ -2306,6 +2437,7 @@ sub InputForm
     'gradient',
     'granite',
     'gray',
+    'hald',
     'label',
     'mono',
     'netscape',
@@ -3154,7 +3286,7 @@ XXX
 </span>
 </div>
 <div style="clear: both; margin: 0; width: 100%; "></div>
-</td></table>
+</td>
 XXX
   ;
   if ($Debug)
@@ -3715,11 +3847,8 @@ if ((hostname =~ /magick.imagemagick.org/) ||
   }
 $q->delete('CacheID');
 $q->param(-name=>'CacheID',-value=>rand($timer+$$));
-Image::Magick->new('area-limit'=>$AreaLimit);
-Image::Magick->new('disk-limit'=>$DiskLimit);
-Image::Magick->new('map-limit'=>$MapLimit);
-Image::Magick->new('memory-limit'=>$MemoryLimit);
-#
+Image::Magick->new('area-limit'=>$AreaLimit,'disk-limit'=>$DiskLimit,
+  'map-limit'=>$MapLimit,'memory-limit'=>$MemoryLimit,'time-limit'=>$TimeLimit);
 #
 # Choose function as determined by the query and environment.
 #

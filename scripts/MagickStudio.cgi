@@ -87,10 +87,10 @@ sub Annotate
 
   no strict 'refs';
 
-  my($antialias, $density, $fill, $font, $geometry, $gravity, $image, $kerning,
-    $interline_spacing, $interword_spacing, $path, $pointsize, $rotate, $scale,
-    $skew_x, $skew_y, $status, $stroke, $strokewidth, $text, $translate,
-    $undercolor);
+  my($antialias, $density, $direction, $fill, $font, $geometry, $gravity,
+    $image, $kerning, $interline_spacing, $interword_spacing, $path,
+    $pointsize, $rotate, $scale, $skew_x, $skew_y, $status, $stroke,
+    $strokewidth, $text, $translate, $undercolor);
 
   #
   # Read image.
@@ -107,6 +107,7 @@ sub Annotate
   $antialias='true' if $q->param('Antialias') eq 'on';
   $density='72';
   $density=$q->param('Density') if $q->param('Density');
+  $direction=$q->param('Direction');
   $fill='none';
   $fill=$q->param('Fill') if $q->param('Fill');
   getstore(Untaint($q->param('FontURL')),'MagickStudio.ttf')
@@ -157,7 +158,7 @@ sub Annotate
         kerning=>$kerning,'interline-spacing'=>$interline_spacing,
         'interword-spacing'=>$interword_spacing,translate=>$translate,
         scale=>$scale,rotate=>$rotate,skewX=>$skew_x,skewY=>$skew_y,
-        antialias=>$antialias);
+        antialias=>$antialias,direction=>$direction);
     }
   #
   # Write image.
@@ -260,12 +261,15 @@ XXX
   print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
+  print "<th>Direction</th>\n";
   print "</tr>\n";
   print "<tr>\n";
   $image=new Image::Magick;
   @fonts=$image->QueryFont();
   print '<td>', $q->scrolling_list(-name=>'Font',-values=>[@fonts],-size=>7),
     "</td><br />\n";
+  my @types=Image::Magick->QueryOption('direction');
+  print '<td>', $q->popup_menu(-name=>'Direction',-values=>[@types]), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
   print '<td>', $q->textfield(-name=>'FontURL',-value=>'http://',-size=>25),
@@ -1355,12 +1359,12 @@ sub Effects
     $q->param('Option') eq 'median filter *';
   $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
   $image->OilPaint("$parameter") if $q->param('Option') eq 'oil paint *';
-  if ($q->param('Option') eq 'recolor *')
+  if ($q->param('Option') eq 'color-matrix *')
     {
       my(@coefficients);
 
       @coefficients=split(/[ ,]+/,$parameter);
-      $image->Recolor(\@coefficients);
+      $image->ColorMatrix(\@coefficients);
     }
   $image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'selective blur *';
@@ -1863,6 +1867,7 @@ sub FXForm
   [
     'charcoal drawing *',
     'clut',
+    'color-matrix *',
     'convolve *',
     'distort *',
     'evaluate *',
@@ -1876,7 +1881,6 @@ sub FXForm
     'morphology *',
     'mosaic',
     'oil paint *',
-    'recolor *',
     'sepia tone *',
     'shadow *',
     'sketch *',
@@ -2146,8 +2150,22 @@ XXX
       ;
     }
   print <<XXX;
-<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
-<td id="main" valign="top">
+<div class="eastbar">
+  <script type="text/javascript">
+  <!--
+    google_ad_client = "pub-3129977114552745";
+    /* 160x600, created 7/27/10 */
+    google_ad_slot = "0574824969";
+    google_ad_width = 160;
+    google_ad_height = 600;
+  //-->
+  </script>
+  <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
+
+<div class="main">
 XXX
   ;
 }
@@ -3230,6 +3248,7 @@ sub Trailer
   my($home, $load_average, $url);
 
   print <<XXX;
+</div>
 <div id="linkbar">
 </div>
 <div>

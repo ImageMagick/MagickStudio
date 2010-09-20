@@ -450,7 +450,7 @@ sub Colormap
   $global_colormap='false';
   $global_colormap='true' if $options{'global colormap'};
   $colorspace='RGB';
-  $colorspace='Gray' if $options{'gray'};
+  $image->Set(colorspace=>'Gray') if $options{'gray'};
   $measure_error='False';
   $measure_error='True' if $options{'measure error'};
   $parameter=$q->param('Parameter');
@@ -460,7 +460,7 @@ sub Colormap
   if ($options{'black & white'})
     {
       $colors='2';
-      $colorspace='Gray';
+      $image->Set(colorspace=>'Gray');
     }
   $colorspace='Transparent' if $options{'preserve transparent pixels'};
   if ($options{'map to clipboard'})

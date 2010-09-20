@@ -439,7 +439,6 @@ sub Colormap
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  $image->Ping("$path/MagickStudio.mpc");
   Error($status) if $#$image < 0;
   #
   # Quantize image.

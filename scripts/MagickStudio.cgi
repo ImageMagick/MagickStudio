@@ -439,6 +439,7 @@ sub Colormap
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
+  $image->Ping("$path/MagickStudio.mpc");
   Error($status) if $#$image < 0;
   #
   # Quantize image.
@@ -3720,7 +3721,6 @@ sub ViewForm
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;
-  print "\n";
   print $q->startform;
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";

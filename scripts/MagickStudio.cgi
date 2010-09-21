@@ -495,7 +495,6 @@ sub Colormap
   $image->OrderedDither($parameter) if $options{'ordered dither'};
   $image->Posterize(levels=>$levels,dither=>$dither) if $options{'posterize'};
   $image->Segment(colorspace=>$colorspace) if $options{'segment'};
-  $image->Set(colorspace=>$colorspace);
   $image->Quantize(colors=>$colors,dither=>$dither,colorspace=>$colorspace,
     'transparent-color'=>$transparent_color,measure_error=>$measure_error);
   #

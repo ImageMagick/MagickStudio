@@ -64,7 +64,8 @@ our($AreaLimit, $ContactInfo, $Debug, $DefaultFont, $DiskLimit,
     $DocumentDirectory, $DocumentRoot, $ExpireCache, $ExpireThreshold,
     $HashDigestSalt, $IconSize, $LoadAverageThreshold, $MapLimit, $MaxFilesize,
     $MaxImageArea, $MaxImageExtent, $MaxWorkFiles, $MemoryLimit, $MinExpireAge,
-    $RedirectURL, $SponsorIcon, $SponsorURL, $TimeLimit, $Timeout);
+    $RedirectURL, $SponsorIcon, $SponsorURL, $ThreadLimit, $TimeLimit,
+    $Timeout);
 
 #
 # Change these variables to reflect your environment.
@@ -3867,7 +3868,8 @@ if ((hostname =~ /magick.imagemagick.org/) ||
 $q->delete('CacheID');
 $q->param(-name=>'CacheID',-value=>rand($timer+$$));
 Image::Magick->new('area-limit'=>$AreaLimit,'disk-limit'=>$DiskLimit,
-  'map-limit'=>$MapLimit,'memory-limit'=>$MemoryLimit,'time-limit'=>$TimeLimit);
+  'map-limit'=>$MapLimit,'memory-limit'=>$MemoryLimit,
+  'thread-limit'=>$ThreadLimit,'time-limit'=>$TimeLimit);
 #
 # Choose function as determined by the query and environment.
 #

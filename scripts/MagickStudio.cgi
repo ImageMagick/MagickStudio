@@ -570,6 +570,9 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br />
+<br />
+<br />
 XXX
   ;
   Trailer(1);
@@ -986,6 +989,11 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br />
+<br />
+<br />
+<br />
+<br />
 XXX
   ;
   Trailer(1);
@@ -2125,8 +2133,22 @@ XXX
       # Define toolbar.
       #
       print <<XXX;
+<div class="eastbar">
+  <script type="text/javascript">
+  <!--
+    google_ad_client = "pub-3129977114552745";
+    /* 160x600, created 7/27/10 */
+    google_ad_slot = "0574824969";
+    google_ad_width = 160;
+    google_ad_height = 600;
+  //-->
+  </script>
+  <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
 <br />
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<table width="80%" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr><td align="center">
   <a href="$url;ToolType=Input"> <img width="66" height="21" border="0" vspace="2" src="$DocumentDirectory/images/$tools{'Input'}.png" /></a>
   <a href="$url;ToolType=Output"> <img width="76" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Output'}.png" /></a>
@@ -2151,21 +2173,6 @@ XXX
       ;
     }
   print <<XXX;
-<div class="eastbar">
-  <script type="text/javascript">
-  <!--
-    google_ad_client = "pub-3129977114552745";
-    /* 160x600, created 7/27/10 */
-    google_ad_slot = "0574824969";
-    google_ad_width = 160;
-    google_ad_height = 600;
-  //-->
-  </script>
-  <script type="text/javascript"
-    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-  </script>
-</div>
-
 <div class="main">
 XXX
   ;
@@ -3818,6 +3825,8 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br />
+<br />
 XXX
   ;
   Trailer(undef);
@@ -3858,8 +3867,8 @@ $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
 $q->private_tempfiles(1);
-if ((hostname =~ /magick.imagemagick.org/) ||
-    (hostname =~ /magick.imagemagick.net/))
+if ((hostname =~ /studio.imagemagick.org/) ||
+    (hostname =~ /studio.imagemagick.net/))
   {
     print $q->redirect(
       'http://www.imagemagick.org/MagickStudio/scripts/MagickStudio.cgi');

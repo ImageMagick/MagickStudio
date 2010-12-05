@@ -2111,7 +2111,7 @@ sub Header
   <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]"
   style="margin: 45px auto; border: 0px; float: left;" /></a>
 
-<a href="http://www.imagemagick.org/discourse-server/">
+<a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5">
   <img src="$DocumentDirectory/images/logo.jpg" alt=""
   style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
 <a href="/ImageMagick/script/../index.php">
@@ -2145,7 +2145,7 @@ XXX
 <div class="main">
 XXX
   ;
-  if (defined($action))
+  if ($q->param('ToolType') ne 'Input')
     {
       #
       # Define toolbar.

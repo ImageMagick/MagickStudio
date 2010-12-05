@@ -2127,12 +2127,7 @@ XXX
   $url.=';Name=' . $q->param('Name') if  $q->param('Name');
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
-  if (defined($action))
-    {
-      #
-      # Define toolbar.
-      #
-      print <<XXX;
+  print <<XXX;
 <div class="eastbar">
   <script type="text/javascript">
   <!--
@@ -2147,9 +2142,17 @@ XXX
     src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   </script>
 </div>
+<div class="main">
+XXX
+  ;
+  if (defined($action))
+    {
+      #
+      # Define toolbar.
+      #
+      print <<XXX;
 <br />
-<table width="80%" border="0" cellspacing="0" cellpadding="0" align="center">
-<tr><td align="center">
+<center>
   <a href="$url;ToolType=Input"> <img width="66" height="21" border="0" vspace="2" src="$DocumentDirectory/images/$tools{'Input'}.png" /></a>
   <a href="$url;ToolType=Output"> <img width="76" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Output'}.png" /></a>
   <a href="$url;ToolType=View"> <img width="67" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'View'}.png" /></a>
@@ -2168,14 +2171,10 @@ XXX
   <a href="$url;ToolType=Annotate"> <img width="88" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Annotate'}.png" /></a>
   <a href="$url;ToolType=Draw"> <img width="69" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Draw'}.png" /></a>
   <a href="$url;ToolType=Composite"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Composite'}.png" /></a>
-</td></tr></table>
+</center>
 XXX
       ;
     }
-  print <<XXX;
-<div class="main">
-XXX
-  ;
 }
 
 #
@@ -3867,8 +3866,8 @@ $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
 $q->private_tempfiles(1);
-if ((hostname =~ /studio.imagemagick.org/) ||
-    (hostname =~ /studio.imagemagick.net/))
+if ((hostname =~ /sans.imagemagick.org/) ||
+    (hostname =~ /sans.imagemagick.net/))
   {
     print $q->redirect(
       'http://www.imagemagick.org/MagickStudio/scripts/MagickStudio.cgi');

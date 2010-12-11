@@ -410,6 +410,7 @@ sub ChooseTool
     'Annotate'=>\&Annotate,
     'Draw'=>\&Draw,
     'Composite'=>\&Composite,
+    'Compare'=>\&Compare,
     'Comment'=>\&Comment
   );
 
@@ -570,9 +571,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
-<br />
-<br />
-<br />
+<br /> <br /> <br /> <br /> <br /> <br />
 XXX
   ;
   Trailer(1);
@@ -685,6 +684,139 @@ XXX
   print "<p><hr /></p>\n";
   print $q->end_html;
   exit;
+}
+
+#
+# Compare image.
+#
+sub Compare
+{
+  no strict 'refs';
+
+  use Image::Magick;
+  use File::Copy;
+
+  my($channel, $compare, $extent, @extents, $filename, $fuzz, $i, $image,
+    $metric, $path, $status);
+
+  #
+  # Read image.
+  #
+  $path=Untaint($q->param('Path'));
+  chdir($path) || Error('Your image has expired',$path);
+  $image=Image::Magick->new;
+  $status=$image->Read("$path/MagickStudio.mpc");
+  Error($status) if $#$image < 0;
+  #
+  # Read compare image.
+  #
+  $filename=Untaint($q->param('CompareURL'));
+  $filename=Untaint($q->param('CompareFile')) if $q->param('CompareFile');
+  $filename=$q->param('CompareFile') if $q->param('CompareFile');
+  $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+    $q->param('SessionID') if $filename eq 'clipboard:';
+  copy($filename,'MagickStudio.dat') ||
+    copy(\*$filename,'MagickStudio.dat') ||
+      (getstore($filename,'MagickStudio.dat') eq '200') ||
+        Error('Unable to compare image',$filename);
+  Error('Unable to read image file',$filename)
+    unless (-f 'MagickStudio.dat') && (-s 'MagickStudio.dat');
+  Error('Image size exceeds maximum allowable',$filename)
+    unless (-s 'MagickStudio.dat') < (1024*$MaxFilesize);
+  $compare=Image::Magick->new;
+  @extents=$compare->Ping("MagickStudio.dat");
+  $extent=0;
+  for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
+  Error('Image extent exceeds maximum allowable') if $extent &&
+    ($extent > (1024*$MaxImageExtent));
+  $status=$compare->Read('MagickStudio.dat');
+  Error("unable to read your image",$filename) if $#$compare < 0;
+  unlink('MagickStudio.dat');
+  #
+  # Compare image.
+  #
+  $channel=$q->param('Channel');
+  $metric=$q->param('MetricType');
+  $fuzz="0.0";
+  $fuzz=>$q->param('Fuzz') if $q->param('Fuzz');
+  my $difference_image=$image->Compare(image=>$compare,metric=>$metric,
+    channel=>$channel,fuzz=>$fuzz);
+  if (!ref($difference_image))
+    { Error("image width or height differs"); }
+  else
+    {
+      undef $image;
+      $image=$difference_image;
+    }
+  #
+  # Write image.
+  #
+  CreateWorkDirectory(1);
+  Header(GetTitle($image));
+  $status=$image->Write(filename=>'MagickStudio.mpc');
+  Error($status) if "$status";
+  ViewForm($image);
+}
+
+#
+# Compare image form.
+#
+sub CompareForm
+{
+  my($action);
+
+  #
+  # Compare image form.
+  #
+  Header(GetTitle(undef));
+  print <<XXX;
+<p>To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <b>compare</b> to continue.</p>
+XXX
+  ;
+  $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
+    ";Action=compare";
+  print $q->start_multipart_form(-action=>$action);
+  print $q->hidden(-name=>'SessionID'), "\n";
+  print $q->hidden(-name=>'Path'), "\n";
+  print $q->hidden(-name=>'ToolType'), "\n";
+  print $q->hidden(-name=>'Name'), "\n";
+  print $q->hidden(-name=>'Magick'), "\n";
+  print "<dt><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
+    "Filename</a>:</dt>\n";
+  print '<dd>', $q->filefield(-name=>'CompareFile',-size=>50,-maxlength=>1024),
+    "</dd><br />\n";
+  print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
+    "URL</a>:</dt>\n";
+  print '<dd>', $q->textfield(-name=>'CompareURL',-size=>50), "</dd><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-value=>'compare'),
+    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print "<br />\n";
+  print "<fieldset>\n";
+  print "<legend>Compare Properties</legend>\n";
+  print "<dl><dd>\n";
+  print "<table cellpadding=\"2\"  cellspacing=\"2\" border=\"0\">\n";
+  print "<tr>\n";
+  print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
+  print "<th><a href=\"$DocumentDirectory/Metric.html\" target=\"help\">Metric</a></th>\n";
+  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel Type</a></th>\n";
+  print "</tr>\n";
+  print "<tr>\n";
+  print '<td>', $q->textfield(-name=>'Fuzz',-size=>25,-value=>'0%'), "</td>\n";
+  my @types=Image::Magick->QueryOption('metric');
+  print '<td>', $q->popup_menu(-name=>'MetricType',-values=>[@types]), "</td>\n";
+  my @channels=Image::Magick->QueryOption('channel');
+  print '<td>', $q->popup_menu(-name=>'ChannelType',-values=>[@channels]),
+    "</td>\n";
+  print "</tr>\n";
+  print '</table><br />';
+  print "</dd></dl>\n";
+  print "</fieldset>\n";
+  print $q->endform, "\n";
+  print <<XXX;
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+XXX
+  ;
+  Trailer(1);
 }
 
 #
@@ -863,6 +995,7 @@ XXX
   ;
   Trailer(1);
 }
+
 #
 # Create a temporary work area for image files.
 #
@@ -989,11 +1122,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
-<br />
-<br />
-<br />
-<br />
-<br />
+<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
 XXX
   ;
   Trailer(1);
@@ -1531,6 +1660,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br /> <br /> <br />
 XXX
   ;
   Trailer(1);
@@ -1680,6 +1810,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br /> <br /> <br />
 XXX
   ;
   Trailer(1);
@@ -2085,6 +2216,7 @@ sub Header
   $tools{'Annotate'}='annotate';
   $tools{'Draw'}='draw';
   $tools{'Composite'}='composite';
+  $tools{'Compare'}='compare';
   $q->param(-name=>'ToolType',-value=>'View') unless
     defined($q->param('ToolType'));
   $tooltype=$q->param('ToolType');
@@ -2171,6 +2303,7 @@ XXX
   <a href="$url;ToolType=Annotate"> <img width="88" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Annotate'}.png" /></a>
   <a href="$url;ToolType=Draw"> <img width="69" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Draw'}.png" /></a>
   <a href="$url;ToolType=Composite"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Composite'}.png" /></a>
+  <a href="$url;ToolType=Compare"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Compare'}.png" /></a>
 </center>
 XXX
       ;
@@ -2517,11 +2650,9 @@ XXX
   print 'Press to ', $q->submit(-name=>'Action',-value=>'view'),
     ' your image or ', $q->reset(-name=>'reset'), " the form.\n";
   print <<XXX;
-<br />
-<br />
+<br /> <br />
 An example <a href="$url?File=$DocumentRoot$DocumentDirectory/images/rose.jpg;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
-<br />
-<br />
+<br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>
 Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are automatically removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.
@@ -2617,6 +2748,7 @@ sub Mogrify
     'Annotate'=>\&AnnotateForm,
     'Draw'=>\&DrawForm,
     'Composite'=>\&CompositeForm,
+    'Compare'=>\&CompareForm,
     'Comment'=>\&CommentForm
   );
 
@@ -2840,9 +2972,7 @@ XXX
   $hostname=$q->server_name();
   print <<XXX;
 </map>
-<br />
-<br />
-<br />
+<br /> <br /> <br />
 </center>
 XXX
   ;
@@ -3187,6 +3317,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
+<br /> <br />
 XXX
   ;
   Trailer(1);
@@ -3824,8 +3955,7 @@ XXX
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
-<br />
-<br />
+<br /> <br /> <br /> <br />
 XXX
   ;
   Trailer(undef);
@@ -3895,6 +4025,7 @@ Error('You must specify a filename or URL') unless $q->param('Path');
 %Functions=
 (
   'annotate'=>\&ChooseTool,
+  'compare'=>\&ChooseTool,
   'composite'=>\&ChooseTool,
   'decorate'=>\&ChooseTool,
   'draw'=>\&ChooseTool,

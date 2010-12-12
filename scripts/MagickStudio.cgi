@@ -735,7 +735,7 @@ sub Compare
   #
   # Compare image.
   #
-  $channel=$q->param('Channel');
+  $channel=$q->param('ChannelType');
   $metric=$q->param('MetricType');
   $fuzz="0.0";
   $fuzz=>$q->param('Fuzz') if $q->param('Fuzz');
@@ -803,10 +803,11 @@ XXX
   print "<tr>\n";
   print '<td>', $q->textfield(-name=>'Fuzz',-size=>25,-value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('metric');
-  print '<td>', $q->popup_menu(-name=>'MetricType',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-name=>'MetricType',-values=>[@types],
+    default=>'NCC'), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'ChannelType',-values=>[@channels]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-name=>'ChannelType',-values=>[@channels],
+    default=>'Default'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -3918,6 +3919,14 @@ XXX
                 $matte != 0;
             }
         }
+      print "</pre>\n";
+    }
+  if ($image->Get('error') != 0.0)
+    {
+      my $error=$image->Get('error');
+      $error*=QuantumRange;
+      print '<pre class="text">';
+      print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
       print "</pre>\n";
     }
   print "</center>\n";

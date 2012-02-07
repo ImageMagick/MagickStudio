@@ -732,6 +732,10 @@ sub Compare
   $status=$compare->Read('MagickStudio.dat');
   Error("unable to read your image",$filename) if $#$compare < 0;
   unlink('MagickStudio.dat');
+  Error('Image width or height differ') if $image->Get('width') ne 
+   $compare->Get('width');
+  Error('Image width or height differ') if $image->Get('height') ne 
+   $compare->Get('height');
   #
   # Compare image.
   #
@@ -741,9 +745,7 @@ sub Compare
   $fuzz=>$q->param('Fuzz') if $q->param('Fuzz');
   my $difference_image=$image->Compare(image=>$compare,metric=>$metric,
     channel=>$channel,fuzz=>$fuzz);
-  if (!ref($difference_image))
-    { Error("image width or height differs"); }
-  else
+  if (ref($difference_image))
     {
       undef $image;
       $image=$difference_image;
@@ -1437,6 +1439,7 @@ sub Effects
   $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
   $image->InverseFourierTransform("$parameter") if
     $q->param('Option') eq 'inverse Fourier transform';
+  $image->Mode("$parameter") if $q->param('Option') eq 'mode *';
   if ($q->param('Option') eq 'morph *')
     {
       my($morph_image);
@@ -1604,6 +1607,7 @@ sub EffectsForm
     'gaussian blur *',
     'gray shade *',
     'median filter *',
+    'mode *',
     'motion blur *',
     'reduce noise *',
     'selective blur *',
@@ -2111,8 +2115,8 @@ XXX
   print "</tr>\n";
   print '</table><br />';
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-label=>' reset page geometry.'),
-    "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
+    -label=>' reset page geometry.'), "</dd>\n";
   print '<dd>', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for F(x).'),"</dd>\n";
   print "</dd></dl>\n";
@@ -2231,19 +2235,23 @@ sub Header
   print $q->start_html(-title=>$title,
     -style=>{-src=>"$DocumentDirectory/style/magick.css"},
     -author=>$ContactInfo,-encoding=>'UTF-8'), "\n";
-  print "<style type=\"text/css\"><!--\n";
-  print "  \@import url(\"",
-    "$DocumentDirectory/style/magick.css", "\");\n";
-  print "//--></style>\n";
   print <<XXX;
+<link rel="canonical" href="http://www.imagemagick.org" />
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 <div class="titlebar">
-<a href="/ImageMagick/script/../index.php">
-  <img src="$DocumentDirectory/images/script.png" alt="[ImageMagick]"
-  style="width: 350px; height: 60px; margin: 28px auto; float: left;" /></a>
-<a href="$SponsorURL">
-  <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]"
-  style="margin: 45px auto; border: 0px; float: left;" /></a>
-
+<div style="margin: 17px auto; float: left;">
+  <script type="text/javascript">
+  <!--
+    google_ad_client = "pub-3129977114552745";
+    google_ad_slot = "5439289906";
+    google_ad_width = 728;
+    google_ad_height = 90;
+  //-->
+  </script>
+  <script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
 <a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5">
   <img src="$DocumentDirectory/images/logo.jpg" alt=""
   style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
@@ -2262,18 +2270,6 @@ XXX
   $url.=';Action=mogrify';
   print <<XXX;
 <div class="eastbar">
-  <script type="text/javascript">
-  <!--
-    google_ad_client = "pub-3129977114552745";
-    /* 160x600, created 7/27/10 */
-    google_ad_slot = "0574824969";
-    google_ad_width = 160;
-    google_ad_height = 600;
-  //-->
-  </script>
-  <script type="text/javascript"
-    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-  </script>
 </div>
 <div class="main">
 XXX
@@ -2285,7 +2281,7 @@ XXX
       #
       print <<XXX;
 <br />
-<center>
+<div style="text-align: center">
   <a href="$url;ToolType=Input"> <img width="66" height="21" border="0" vspace="2" src="$DocumentDirectory/images/$tools{'Input'}.png" /></a>
   <a href="$url;ToolType=Output"> <img width="76" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Output'}.png" /></a>
   <a href="$url;ToolType=View"> <img width="67" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'View'}.png" /></a>
@@ -2305,7 +2301,7 @@ XXX
   <a href="$url;ToolType=Draw"> <img width="69" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Draw'}.png" /></a>
   <a href="$url;ToolType=Composite"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Composite'}.png" /></a>
   <a href="$url;ToolType=Compare"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Compare'}.png" /></a>
-</center>
+</div>
 XXX
       ;
     }
@@ -2624,6 +2620,7 @@ sub InputForm
   $q->param(-name=>'ToolType',-value=>'Input');
   Header("ImageMagick Studio");
   print <<XXX;
+<br />
 <p>To convert or manipulate your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
 XXX
   ;
@@ -2638,7 +2635,7 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/URL.html\" target=\"help\">URL</a>:</td>\n";
-  print '<td>', $q->textfield(-name=>'URL',-size=>50,-selected), "</td>\n";
+  print '<td>', $q->textfield(-name=>'URL',-size=>50), "</td>\n";
   $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
     $q->param('SessionID')  . '.mpc';
   if ((-e $filename) && defined($q->param('SessionID')))
@@ -2652,7 +2649,7 @@ XXX
     ' your image or ', $q->reset(-name=>'reset'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?File=$DocumentRoot$DocumentDirectory/images/rose.jpg;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
+An example <a href="$url?File=$DocumentRoot$DocumentDirectory/images/wizard.jpg;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>
@@ -2821,7 +2818,7 @@ sub Output
   $image->Set(colorspace=>'CMYK') if
     $q->param('CMYK') && ($q->param('CMYK') eq 'on');
   $value=$q->param('Alpha');
-  $image->Set(alpha=>$value) unless $value eq 'Undefined';;
+  $image->Set(alpha=>$value) unless $value eq 'Undefined';
   $value=$q->param('Comment');
   $image->Comment($value) if length($value) > 0;
   if ($q->param('Option') eq 'append')
@@ -2834,10 +2831,27 @@ sub Output
       if (ref($append_image))
         {
           #
-          # Replace image sequence with morph sequence.
+          # Append the image sequence.
           #
           undef $image;
           $image=$append_image;
+        }
+    }
+  if ($q->param('Option') eq 'smush')
+    {
+      my($offset,$smush_image);
+
+      $offset=$q->param('offset');
+      $value='True';
+      $value='False' if $q->param('Stack') eq 'on';
+      $image=$image->Smush(stack=>$value,offset=>$offset);
+      if (ref($smush_image))
+        {
+          #
+          # Smush the image sequence.
+          #
+          undef $image;
+          $image=$smush_image;
         }
     }
   $prefix='';
@@ -2954,7 +2968,7 @@ XXX
 <map name=Montage>
 XXX
   ;
-  $montage->Get('montage')=~/(\d+)x(\d+)\+(\d+)\+(\d+)/;
+  $montage->Get('montage')=~/(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/;
   $width=$1;
   $height=$2;
   $x=$3;
@@ -3038,12 +3052,13 @@ sub OutputForm
 
   @OptionTypes=
   [
-    'single file',
     'append',
-    'preview',
-    'histogram',
     'clipboard',
-    'multi-frame file'
+    'histogram',
+    'multi-frame file',
+    'preview',
+    'single file',
+    'smush'
   ];
 
   #
@@ -3073,7 +3088,7 @@ XXX
   print "<dt><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
   $format=$q->param('Magick');
   @formats=grep(SelectFormats($image),$image->QueryFormat());
-  print '<dd>', $q->scrolling_list(-name=>'Format',-values=>[@formats],-size=>5,
+  print '<dd>', $q->scrolling_list(-name=>'Format',-values=>[@formats],-size=>7,
     -default=>$format), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
@@ -3139,6 +3154,9 @@ XXX
   print "<dt>Image Depth</dt>\n";
   print '<dd>', $q->textfield(-name=>'Depth',-size=>25,
     -value=>$image->Get('depth')), "</dd><br />\n";
+  print "<dt>Smush Offset</dt>\n";
+  print '<dd>', $q->textfield(-name=>'Offset',-size=>25,-value=>2),
+    "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
     "Page Geometry</a></dt>\n";
   print '<dd>', $q->textfield(-name=>'Page',-size=>25), "</dd><br />\n";
@@ -3149,8 +3167,8 @@ XXX
   print '<dd>', $q->textarea(-name=>'Comment',-columns=>50,-rows=>3,
     -value=>$image->Get('comment')), "</dd><br />\n";
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-label=>' reset page geometry.'),
-    "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
+    -label=>' reset page geometry.'), "</dd>\n";
   print '<dd>', $q->checkbox(-name=>'Strip',
     -label=>' strip image of any comments or profiles.'), "</dd>\n";
   print '<dd> ', $q->checkbox(-name=>'CMYK',
@@ -3405,9 +3423,10 @@ XXX
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
 <span id="footer-west">
-<a href="$url"> <img alt="home" src=$home width="40" height="40" border="0" /></a>
+<a href="$url"> <img alt="home" src=\"$home\" width="40" height="40" border="0" /></a>
 <a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5">
 <img alt="comment" src="$DocumentDirectory/images/mail.png" width="40" height="40" border="0" /></a>
+<div class="g-plusone" data-size="standard" data-count="false"></div>
 </span>
 <span id="footer-east">
 XXX
@@ -3444,7 +3463,6 @@ XXX
 </span>
 </div>
 <div style="clear: both; margin: 0; width: 100%; "></div>
-</td>
 XXX
   ;
   if ($Debug)
@@ -3538,7 +3556,7 @@ sub Transform
   $image->Rotate(-90) if $q->param('Option') eq 'rotate left';
   $color='none';
   $color=$q->param('BackgroundColor') if $q->param('BackgroundColor');
-  $image->Rotate(degrees=>$parameter,color=>$color) if
+  $image->Rotate(degrees=>$parameter,background=>$color) if
     $q->param('Option') eq 'rotate *';
   $image->Shave("$parameter") if $q->param('Option') eq 'shave *';
   $image->Shear("$parameter") if $q->param('Option') eq 'shear *';
@@ -3641,8 +3659,8 @@ XXX
   print "</tr>\n";
   print '</table><br />';
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-label=>' reset page geometry.'),
-    "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
+    -label=>' reset page geometry.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -3766,7 +3784,7 @@ sub View
       my $x=$q->param("$basename.x");
       my $y=$q->param("$basename.y");
       my $page=$image->Get('page');
-      if ($page =~ /(\d+)x(\d+)\+(\d+)\+(\d+)/)
+      if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
           $width=$1;
           $height=$2;
@@ -3881,7 +3899,7 @@ XXX
       my $y=$q->param("$basename.y");
       print "<pre class=\"text\">$x,$y: ";
       my $page=$coalesce->Get('page');
-      if ($page =~ /(\d+)x(\d+)\+(\d+)\+(\d+)/)
+      if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
           $width=$1;
           $height=$2;

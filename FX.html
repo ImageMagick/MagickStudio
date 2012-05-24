@@ -13,9 +13,47 @@ vlink="#800080" alink="#0085C0">
 <dl>
 <dd>
 <dl>
+
+<dt><b>channel F(x)</b></dt>
+<dd>exchange, extract, or copy one or more image channels.
+<p>The expression consists of one or more channels, either mnemonic or numeric (e.g. red, 1), separated by certain operation symbols as follows:</p>
+
+<pre class="text">
+  <=>     exchange two channels (e.g. red<=>blue)
+  =>      copy one channel to another channel (e.g. red=>green)
+  =       assign a constant value to a channel (e.g. red=50%)
+  ,       write new image with channels in the specified order (e.g. red, green)
+  |       replace the specified channel in the first image with the specified
+          channel in the second image (e.g. red | green)
+  ;       separate each specified channel to its own image (e.g. red; green;
+          blue)
+</pre>
+
+<p>For example, to create 3 grayscale images from the red, green, and blue channels of an image, use:</p>
+
+<pre class="text">
+  -channel-fx "red; green; blue"
+</pre>
+
+<p>A channel without an operation symbol implies separate (i.e, semicolon).</p>
+
+<pre class="text">
+  red; green; blue
+</pre>
+</dd>
+
 <dt><b>Charcoal drawing</b></dt>
 <dd>simulate a charcoal drawing. Good parameter values are odd
 numbers from 3 to 31</dd><br />
+<dt><b>Clut</b></dt>
+<dd>apply the clipboard image as a color lookup table to the image.</dd><br />
+<dt><b>Color-matrix</b></dt>
+<dd>This option permits saturation changes, hue rotation, luminance to alpha, and various other effects.  Although variable-sized transformation matrices can be used, typically one uses a 5x5 matrix for an RGBA image and a 6x6 for CMYKA (or RGBA with offsets).  The matrix is similar to those used by Adobe Flash except offsets are in column 6 rather than 5 (in support of CMYKA images) and offsets are normalized (divide Flash offset by 255).
+
+As an example, to add contrast to an image with offsets, try this
+<pre>
+  <i>1.5 0.0 0.0 0.0, 0.0, -0.157 0.0 1.5 0.0 0.0, 0.0, -0.157 0.0 0.0 1.5 0.0, 0.0, -0.157 0.0 0.0 0.0 1.0, 0.0,  0.0 0.0 0.0 0.0 0.0, 1.0,  0.0 0.0 0.0 0.0 0.0, 0.0,  1.0</i>
+</pre></dd><br />
 <dt><b>Convolve</b></dt>
 <dd>apply a convolution kernel to the image. Given the kernel
 <i>order</i>, you would supply <i>order*order</i> float values. For
@@ -27,6 +65,12 @@ kernel:</dd><br />
 </pre></dd><br />
 <dt><b>Distort</b></dt>
 <dd>distort an image with as defined by a source and destination quadrilateral.</dd><br />
+<dd>The parameter is a set of coordinate pairs (e.g. x1,y1,u1,v1 x2,y2,u2,v2 ...).</dd><br />
+<dt><b>Evaluate</b></dt>
+<dd>evaluate an arithmetic, relational, or logical expression.</dd><br />
+<dd>The parameter is a value to evaluate against each pixel.</dd><br />
+<dt><b>Function</b></dt>
+<dd>apply function to image.</dd><br />
 <dd>The parameter is a set of coordinate pairs (e.g. x1,y1,u1,v1 x2,y2,u2,v2 ...).</dd><br />
 <dt><b>Fx</b></dt>
 <dd>evaluate expression for each pixel in the specified channel.  The Fx expressions includes any combination of the following:<br />
@@ -99,6 +143,8 @@ kernel:</dd><br />
 <li>an assignment starts a statement, it is not an operator</li>
 <li>assignments to built-ins do not throw errors and have no effect;  e.g. <kbd>r=3.0; r</kbd> returns the pixel red color value, not 3.0</li>
 </dd><br />
+<dt><b>Hald-Clut</b></dt>
+<dd>apply the clipboard image as a Hald color lookup table to the image.</dd><br />
 <dt><b>Implode</b></dt>
 <dd>implode/explode image pixels about the center. A positive
 parameter implodes while a negative parameter explodes the
@@ -115,11 +161,6 @@ sequence, the clipboard image is used as the morph anchor.</dd><br />
 <dd>simulate an oil painting. Each pixel is replaced by the most
 frequent color in a circular neighborhood whose width is specified
 as a radius. Good parameter values are odd numbers from 3 to 31</dd><br />
-<dt><b>Recolor</b></dt>
-<dd>translate, scale, shear, or rotate image colors.  Although you can use variable sized matrices, typically you use a 5 x 5 for an RGBA image and a 6x6 for CMYKA.  Populate the last row with normalized values to translate.  For example to double the red component and add 20% to each of red, green, and blue, use:
-<pre>
-  <i>2.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.2,0.2,0.2,0.0,1.0</i>
-</pre></dd><br />
 <dt><b>Sepia Tone</b></dt>
 <dd>apply a special effect to the image, similar to the effect achieved in a photo darkroom by sepia toning.  Threshold ranges from 0 to MaxRGB and is a measure of the extent of the sepia toning.  A threshold of 80% is a good starting point for a reasonable tone.</dd><br />
 <dt><b>Shadow</b></dt>

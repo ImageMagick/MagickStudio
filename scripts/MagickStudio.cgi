@@ -267,7 +267,7 @@ XXX
   print "<tr>\n";
   $image=new Image::Magick;
   @fonts=$image->QueryFont();
-  print '<td>', $q->scrolling_list(-name=>'Font',-values=>[@fonts],-size=>7),
+  print '<td>', $q->scrolling_list(-name=>'Font',-values=>[@fonts],-size=>10),
     "</td><br />\n";
   my @types=Image::Magick->QueryOption('direction');
   print '<td>', $q->popup_menu(-name=>'Direction',-values=>[@types]), "</td>\n";
@@ -714,7 +714,7 @@ sub Compare
   $filename=Untaint($q->param('CompareFile')) if $q->param('CompareFile');
   $filename=$q->param('CompareFile') if $q->param('CompareFile');
   $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
-    $q->param('SessionID') if $filename eq 'clipboard:';
+    $q->param('SessionID') if $q->param('Clipboard') eq 'on';
   copy($filename,'MagickStudio.dat') ||
     copy(\*$filename,'MagickStudio.dat') ||
       (getstore($filename,'MagickStudio.dat') eq '200') ||
@@ -813,6 +813,9 @@ XXX
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
+  print "<dt>Miscellaneous options:</dt>\n";
+  print '<dd> ', $q->checkbox(-name=>'Clipboard',
+    -label=>' use clipboard image as source for compare.'), "</dd>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
   print <<XXX;
@@ -850,7 +853,7 @@ sub Composite
   $filename=Untaint($q->param('CompositeFile')) if $q->param('CompositeFile');
   $filename=$q->param('CompositeFile') if $q->param('CompositeFile');
   $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
-    $q->param('SessionID') if $filename eq 'clipboard:';
+    $q->param('SessionID') if $q->param('Clipboard') eq 'on';
   copy($filename,'MagickStudio.dat') ||
     copy(\*$filename,'MagickStudio.dat') ||
       (getstore($filename,'MagickStudio.dat') eq '200') ||
@@ -900,6 +903,8 @@ sub Composite
   for ($i=0; $image->[$i]; $i++)
   {
     $slice=$composite->[$i % ($#$composite+1)];
+    $slice->Resize(width=>$image->[$i]->Get('width'),
+      height=>$image->[$i]->Get('height')) if $q->param('Resize') eq 'on';
     $image->[$i]->Composite(compose=>$compose,image=>$slice,gravity=>$gravity,
       geometry=>$geometry,rotate=>$rotate,color=>$color,tile=>$tile);
   }
@@ -990,6 +995,10 @@ XXX
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Tile',
     -label=>' tile across and down the image canvas.'), "</dd>\n";
+  print '<dd> ', $q->checkbox(-name=>'Resize',-label=>' resize to fit.'),
+    "</dd>\n";
+  print '<dd> ', $q->checkbox(-name=>'Clipboard',
+    -label=>' use clipboard image as source for composite.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -1118,7 +1127,7 @@ XXX
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('compose');
   print '<td>', $q->popup_menu(-name=>'ComposeType',-values=>[@types],
-    -default=>'Copy'), "</td>\n";
+    -default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -1381,6 +1390,44 @@ sub Effects
   $image->Emboss(geometry=>$parameter) if $q->param('Option') eq 'emboss *';
   $image->ForwardFourierTransform("$parameter") if
     $q->param('Option') eq 'forward Fourier transform';
+  if ($q->param('Option') eq 'Channel F(x) *')
+    {
+      my($channel);
+
+      $channel=$q->param('Channel');
+      if ($q->param('Clipboard') ne 'on')
+        {
+          my $fx;
+
+          if ($channel eq 'All')
+            { $image = $image->ChannelFx(expression=>$parameter); }
+          else
+            { $image = $image->ChannelFx(channel=>$channel,
+              expression=>$parameter); }
+          Error($image) if !ref($image);
+        }
+      else
+        {
+          my($source);
+
+          #
+          # Read clipboard image.
+          #
+          $source=Image::Magick->new;
+          $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+            $q->param('SessionID') . '.mpc';
+          $status=$source->Read($filename);
+          Error($status) if $#$source < 0;
+          if ($channel eq 'All')
+            { $image->ChannelFx(image=>$source,expression=>$parameter); }
+          else
+            {
+              $image->ChannelFx(image=>$source,channel=>$channel,
+                expression=>$parameter);
+            }
+          Error($image) if !ref($image);
+        }
+    }
   if ($q->param('Option') eq 'F(x) *')
     {
       my($channel);
@@ -2010,6 +2057,7 @@ sub FXForm
 {
   my @OptionTypes =
   [
+    'channel F(x) *',
     'charcoal drawing *',
     'clut',
     'color-matrix *',
@@ -2596,6 +2644,7 @@ sub InputForm
     'label',
     'mono',
     'netscape',
+    'pango',
     'pattern',
     'plasma',
     'rgb',

@@ -2673,7 +2673,10 @@ sub InputForm
 <p>To convert or manipulate your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
 XXX
   ;
-  $version=Image::Magick->new()->VERSION;
+  $version=Image::Magick->VERSION;
+  $version=Image::Magick::Q8->VERSION if !defined($version);
+  $version=Image::Magick::Q16->VERSION if !defined($version);
+  $version=Image::Magick::Q32->VERSION if !defined($version);
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
   print $q->start_multipart_form(-action=>$action);
   print $q->hidden(-name=>'SessionID'), "\n";
@@ -2861,7 +2864,7 @@ sub Output
   $image->Set(interlace=>$value);
   $value=$q->param('Preview');
   $image->Set(preview=>$value);
-  $image->Set(pointsize=>24);
+  $image->Set(pointsize=>10);
   $image->Set(adjoin=>1);
   $image->Set(adjoin=>0) if $q->param('Option') eq 'single file';
   $image->Set(colorspace=>'CMYK') if
@@ -2920,6 +2923,7 @@ sub Output
     {
       $format='gif';
       $coalesce->Set(loop=>0,delay=>800) if $coalesce->Get('iterations') == 1;
+      $image=$coalesce if $q->param('Coalesce') eq 'on';
     }
   $status=$coalesce->Write("$basename.$format");
   Error($status) if "$status";
@@ -3216,8 +3220,10 @@ XXX
   print '<dd>', $q->textarea(-name=>'Comment',-columns=>50,-rows=>3,
     -value=>$image->Get('comment')), "</dd><br />\n";
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
+  print '<dd>', $q->checkbox(-name=>'Repage',
     -label=>' reset page geometry.'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Coalesce',checked=>'true',
+    -label=>' coalesce multi-frame images.'), "</dd>\n";
   print '<dd>', $q->checkbox(-name=>'Strip',
     -label=>' strip image of any comments or profiles.'), "</dd>\n";
   print '<dd> ', $q->checkbox(-name=>'CMYK',

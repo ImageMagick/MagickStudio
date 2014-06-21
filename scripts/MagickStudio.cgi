@@ -2292,6 +2292,8 @@ sub Header
   print $q->start_html(-title=>$title,
     -style=>{-src=>"$DocumentDirectory/style/magick.css"},
     -author=>$ContactInfo,-encoding=>'UTF-8'), "\n";
+  print "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>\n";
+  print "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>\n";
   print <<XXX;
 <link rel="canonical" href="http://www.imagemagick.org" />
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>

@@ -1337,6 +1337,8 @@ sub Effects
     $q->param('Option') eq 'black threshold *';
   $image->Blur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'blur *';
+  $image->CannyEdge(geometry=>"$parameter") if $q->param('Option') eq
+    'canny edge *';
   $image->Charcoal("$parameter") if $q->param('Option') eq 'charcoal drawing *';
   if ($q->param('Option') eq 'clut')
     {
@@ -1483,9 +1485,13 @@ sub Effects
         { $image->HaldClut(image=>$source,channel=>$channel); }
       Error($image) if !ref($image);
     }
+  $image->HoughLine(geometry=>"$parameter") if $q->param('Option') eq
+    'hough line *';
   $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
   $image->InverseFourierTransform("$parameter") if
     $q->param('Option') eq 'inverse Fourier transform';
+  $image->MeanShift(geometry=>"$parameter") if $q->param('Option') eq
+    'mean shift *';
   $image->Mode("$parameter") if $q->param('Option') eq 'mode *';
   if ($q->param('Option') eq 'morph *')
     {
@@ -1648,11 +1654,14 @@ sub EffectsForm
     'adaptive threshold *',
     'black threshold *',
     'blur *',
+    'canny edge *',
     'despeckle',
     'edge detect *',
     'emboss *',
     'gaussian blur *',
     'gray shade *',
+    'hough line *',
+    'mean shift *',
     'median filter *',
     'mode *',
     'motion blur *',
@@ -2675,8 +2684,11 @@ XXX
   ;
   $version=Image::Magick->VERSION;
   $version=Image::Magick::Q8->VERSION if !defined($version);
+  $version=Image::Magick::Q8HDRI->VERSION if !defined($version);
   $version=Image::Magick::Q16->VERSION if !defined($version);
+  $version=Image::Magick::Q16HDRI->VERSION if !defined($version);
   $version=Image::Magick::Q32->VERSION if !defined($version);
+  $version=Image::Magick::Q32HDRI->VERSION if !defined($version);
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
   print $q->start_multipart_form(-action=>$action);
   print $q->hidden(-name=>'SessionID'), "\n";

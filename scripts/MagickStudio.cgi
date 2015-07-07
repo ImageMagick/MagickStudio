@@ -106,7 +106,7 @@ sub Annotate
   #
   $antialias='false';
   $antialias='true' if $q->param('Antialias') eq 'on';
-  $density='72';
+  $density='90';
   $density=$q->param('Density') if $q->param('Density');
   $direction=$q->param('Direction');
   $fill='none';
@@ -139,8 +139,7 @@ sub Annotate
   $skew_y=$q->param('SkewY') if $q->param('SkewY');
   $strokewidth=1;
   $strokewidth=$q->param('StrokeWidth') if $q->param('StrokeWidth');
-  $text=$q->param('Name');
-  $text=$q->param('Text') if $q->param('Text');
+  $text=$q->param('Text');
   $translate='0.0, 0.0';
   $translate=$q->param('Translate') if $q->param('Translate');
   $undercolor='none';
@@ -183,10 +182,10 @@ sub AnnotateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <b>annotate</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <b>annotate</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -194,72 +193,74 @@ XXX
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dt>Text:</dt>\n";
-  print '<dd>', $q->textarea(-name=>'Text',-columns=>50,-rows=>3), "</dd><br />\n";
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
+    -rows=>3), "</dd><br />\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
   print "<th>Gravity</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Geometry',-size=>25,-value=>'+0+0'),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Geometry',
+    -size=>25,-value=>'+0+0'), "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types],
-    -default=>'Center'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
+    -values=>[@types],-default=>'Center'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'annotate'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'annotate'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Annotate Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Undercolor</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Fill',-value=>'white',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Stroke',-value=>'none',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Undercolor',-value=>'none',-size=>25),
-   "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fill',
+    -value=>'white',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Stroke',
+    -value=>'none',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Undercolor',
+    -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>PointSize</th>\n";
   print "<th>Density</th>\n";
   print "<th>Stroke Width</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Pointsize',-value=>'24',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Density',-value=>'72',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'StrokeWidth',-value=>'0',-size=>25),
-   "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Pointsize',
+    -value=>'24',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Density',
+    -value=>'90',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
+    -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Kerning</th>\n";
   print "<th>Interline Spacing</th>\n";
   print "<th>Interword Spacing</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Kerning',-value=>'0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'InterlineSpacing',-value=>'0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'InterwordSpacing',-value=>'0',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Kerning',
+    -value=>'0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'InterlineSpacing',
+    -value=>'0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'InterwordSpacing',
+    -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
   print "<th>Direction</th>\n";
@@ -267,57 +268,58 @@ XXX
   print "<tr>\n";
   $image=new Image::Magick;
   @fonts=$image->QueryFont();
-  print '<td>', $q->scrolling_list(-name=>'Font',-values=>[@fonts],-size=>10),
-    "</td><br />\n";
+  print '<td>', $q->scrolling_list(-class=>'form-control',-name=>'Font',
+    -values=>[@fonts],-size=>10), "</td><br />\n";
   my @types=Image::Magick->QueryOption('direction');
-  print '<td>', $q->popup_menu(-name=>'Direction',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Direction',
+    -values=>[@types]), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'FontURL',-value=>'http://',-size=>25),
-    "</td><br />\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'FontURL',
+    -value=>'http://',-size=>25), "</td><br />\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
   print "<th>Scale</th>\n";
   print "<th>Rotate</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Translate',-value=>'0.0, 0.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Scale',-value=>'1.0, 1.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Rotate',-value=>'0.0',-size=>25),
-   "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Translate',
+    -value=>'0.0, 0.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scale',
+    -value=>'1.0, 1.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
+    -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
   print "<th>Skew Y</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'SkewX',-value=>'0.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'SkewY',-value=>'0.0',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewX',
+    -value=>'0.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
+    -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'BackgroundColor',-value=>'none',
-    -size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
+    -value=>'none', -size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print "<dt>Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Antialias',-label=>' antialias text.',
-    -checked=>'true'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Polaroid',-label=>
-    ' simulate a Polaroid picture.'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Antialias',
+    -label=>' antialias text.',-checked=>'true'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Polaroid',
+    -label=>' simulate a Polaroid picture.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -366,7 +368,7 @@ sub CheckStudioStatus
 <i>suspended</i> the processing of your image.  The current studio status is:
 <br />
 <center>
-<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">
+<table class=\"table table-condensed table-striped\">
 <tr>
   <th>Load Average</th>
   <th>Threshold</th>
@@ -536,35 +538,38 @@ sub ColormapForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <b>quantize</b> to continue.</p>
+<p class="lead magick-description">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <b>quantize</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'quantize'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'quantize'), "\n";
   print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Parameter',-size=>25,-value=>'256'), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+    -size=>25,-value=>'256'), "</dd><br />\n";
   print "<dt>Choose from these options:</dt>\n";
   print '<dd>', $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,
     -columns=>3,-default=>'dither'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'quantize'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'quantize'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Transparent Color</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'TransparentColor',-value=>'none',
-    -size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'TransparentColor',
+    -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -582,7 +587,7 @@ XXX
 #
 sub Comment
 {
-  use Digest::SHA2;
+  use Digest::SHA3;
 
   no strict 'subs';
 
@@ -592,7 +597,7 @@ sub Comment
 
   umask(002);
   $path=$DocumentRoot . $DocumentDirectory . "/comments";
-  $digest=Digest::SHA2->new(512);
+  $digest=Digest::SHA3->new(512);
   $digest->add($HashDigestSalt,$q->remote_addr(),time(),{},rand(),$$);
   $filename=$path . '/' . $digest->hexdigest . '.txt';
   open(DATA,">$filename") || Error('Unable to save your comments',$filename);
@@ -613,7 +618,7 @@ sub Comment
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/style/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -646,7 +651,7 @@ sub CommentForm
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/style/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -662,7 +667,7 @@ address if you require a response.
 XXX
   ;
   $q->delete('Comment');
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -671,12 +676,13 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dl>\n";
   print "<dl>\n";
-  print '<dd>', $q->textarea(-name=>'Comment',-columns=>50,-rows=>10,
-    -wrap=>'horizontal'), "<br />\n";
+  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
+    -columns=>50,-rows=>10,-wrap=>'horizontal'), "<br />\n";
   print "</dl>\n";
   print "</dl>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'send'),
-    ' your comment or ', $q->reset(-name=>'reset'), " the form.\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'send'), ' your comment or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.\n";
   print $q->endform, "\n";
   print <<XXX;
 XXX
@@ -772,12 +778,12 @@ sub CompareForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <b>compare</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <b>compare</b> to continue.</p>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
     ";Action=compare";
-  print $q->start_multipart_form(-action=>$action);
+  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
@@ -789,27 +795,30 @@ XXX
     "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'CompareURL',-size=>50), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'compare'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompareURL',
+    -size=>50), "</dd><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'compare'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Compare Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\"  cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Metric.html\" target=\"help\">Metric</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel Type</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Fuzz',-size=>25,-value=>'0%'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
+    -value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('metric');
-  print '<td>', $q->popup_menu(-name=>'MetricType',-values=>[@types],
-    default=>'NCC'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'MetricType',
+    -values=>[@types], default=>'NCC'), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'ChannelType',-values=>[@channels],
-    default=>'Default'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ChannelType',
+    -values=>[@channels],default=>'Default'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -930,12 +939,12 @@ sub CompositeForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Composite.html" target="help">composite</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the composite image and the type of composite operation.  Finally, press <b>composite</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Composite.html" target="help">composite</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the composite image and the type of composite operation.  Finally, press <b>composite</b> to continue.</p>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
     ";Action=composite";
-  print $q->start_multipart_form(-action=>$action);
+  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
@@ -947,56 +956,59 @@ XXX
     -maxlength=>1024), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'CompositeURL',-size=>50), "</dd><br />\n";
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
+    -size=>50), "</dd><br />\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
   print "<th>Gravity</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Geometry',-size=>25,-value=>'+0+0'),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Geometry',
+    -size=>25,-value=>'+0+0'), "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types],
-    -default=>'Center'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
+    -values=>[@types],-default=>'Center'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'composite'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'composite'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Composite Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Blend</th>\n";
   print "<th>Compose</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Blend',-size=>25,-value=>'0%'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Blend',-size=>25,
+    -value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('compose');
-  print '<td>', $q->popup_menu(-name=>'ComposeType',-values=>[@types],
-    -default=>'SrcOver'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
+    -values=>[@types],-default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Rotate</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
     "Background Color</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Rotate',-size=>25,-value=>'0.0'),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'BackgroundColor',-value=>'none',
-    -size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',-size=>25,
+    -value=>'0.0'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
+    -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Tile',
     -label=>' tile across and down the image canvas.'), "</dd>\n";
-  print '<dd> ', $q->checkbox(-name=>'Resize',-label=>' resize to fit.'),
-    "</dd>\n";
+  print '<dd> ', $q->checkbox(-name=>'Resize',
+    -label=>' resize to fit.'),"</dd>\n";
   print '<dd> ', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for composite.'), "</dd>\n";
   print "</dd></dl>\n";
@@ -1013,7 +1025,7 @@ XXX
 #
 sub CreateWorkDirectory
 {
-  use Digest::SHA2;
+  use Digest::SHA3;
 
   my($check) = @_;
 
@@ -1024,7 +1036,7 @@ sub CreateWorkDirectory
   $path=$DocumentRoot . $DocumentDirectory . '/workarea';
   chdir($path) || Error('Your image has expired',$path);
   umask(002);
-  $digest=Digest::SHA2->new(512);
+  $digest=Digest::SHA3->new(512);
   $digest->add($HashDigestSalt,$q->remote_addr(),time(),{},rand(),$$);
   $path.='/' . $digest->hexdigest;
   $ENV{TMPDIR}=$path;
@@ -1096,10 +1108,10 @@ sub DecorateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <b>decorate</b>.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <b>decorate</b>.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1107,27 +1119,29 @@ XXX
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dt>Decoration geometry:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Geometry',-size=>25,-value=>'15x15+3+3'),
-    "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
+    -size=>25,-value=>'15x15+3+3'), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Color</a>:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Color',-size=>25,-value=>'gray'), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,
+    -value=>'gray'), "</dd><br />\n";
   print "<dt>Choose from these decorations:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>5,-default=>'frame *'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'decorate'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'decorate'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Decorate Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Compose</th>\n";
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('compose');
-  print '<td>', $q->popup_menu(-name=>'ComposeType',-values=>[@types],
-    -default=>'SrcOver'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
+    -values=>[@types],-default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -1226,10 +1240,10 @@ sub DrawForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <b>draw</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <b>draw</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1238,64 +1252,67 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dt>Primitive:</dt>\n";
   my @types=Image::Magick->QueryOption('primitive');
-  print '<dd>', $q->popup_menu(-name=>'Primitive',-values=>[@types],
-    -default=>'Line'), "</dd><br />\n";
+  print '<dd>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
+    -values=>[@types],-default=>'Line'), "</dd><br />\n";
   print "<dt>Coordinates:</dt>\n";
-  print '<dd>', $q->textarea(-name=>'Coordinates',-columns=>50,-rows=>2,
-    -value=>'+10+10  +60+60',-wrap=>'horizontal'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'draw'),
-    ' on your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Coordinates',
+    -columns=>50,-rows=>2,-value=>'+10+10  +60+60',-wrap=>'horizontal'),
+    "</dd><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'draw'), ' on your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Draw Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
   print "<th>Stroke Width</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Fill',-value=>'white',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Stroke',-value=>'none',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'StrokeWidth',-size=>25,-value=>'1'),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fill',
+    -value=>'white',-size=>25),"</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Stroke',
+    -value=>'none',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
+    -size=>25,-value=>'1'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
   print "<th>Scale</th>\n";
   print "<th>Rotate</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Translate',-value=>'0.0, 0.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Scale',-value=>'1.0, 1.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'Rotate',-value=>'0.0',-size=>25),
-   "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Translate',
+    -value=>'0.0, 0.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scale',
+    -value=>'1.0, 1.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
+    -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
   print "<th>Skew Y</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'SkewX',-value=>'0.0',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'SkewY',-value=>'0.0',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewX',
+    -value=>'0.0',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
+    -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Tile',
-    -label=>' paint the drawing primitive with the clipboard image.'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Antialias',-label=>' antialias text.',
-    -checked=>'true'), "</dd>\n";
+    -label=>' paint the drawing primitive with the clipboard image.'),
+    "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Antialias',
+    -label=>' antialias text.',-checked=>'true'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -1337,8 +1354,6 @@ sub Effects
     $q->param('Option') eq 'black threshold *';
   $image->Blur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'blur *';
-  $image->CannyEdge(geometry=>"$parameter") if $q->param('Option') eq
-    'canny edge *';
   $image->Charcoal("$parameter") if $q->param('Option') eq 'charcoal drawing *';
   if ($q->param('Option') eq 'clut')
     {
@@ -1356,6 +1371,8 @@ sub Effects
         { $image->Clut(image=>$source,channel=>$channel); }
       Error($image) if !ref($image);
     }
+  $image->ConnectedComponents("$parameter") if $q->param('Option') eq
+    'connected components *';
   if ($q->param('Option') eq 'convolve *')
     {
       my(@coefficients);
@@ -1388,6 +1405,7 @@ sub Effects
       $function=$q->param('FunctionType');
       $image->Function(function=>$function,parameters=>\@parameters);
     }
+  $image->CannyEdge("$parameter") if $q->param('Option') eq 'canny edge *';
   $image->Edge("$parameter") if $q->param('Option') eq 'edge detect *';
   $image->Emboss(geometry=>$parameter) if $q->param('Option') eq 'emboss *';
   $image->ForwardFourierTransform("$parameter") if
@@ -1485,13 +1503,13 @@ sub Effects
         { $image->HaldClut(image=>$source,channel=>$channel); }
       Error($image) if !ref($image);
     }
-  $image->HoughLine(geometry=>"$parameter") if $q->param('Option') eq
-    'hough line *';
+  $image->HoughLine("$parameter") if $q->param('Option') eq 'hough line *';
   $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
   $image->InverseFourierTransform("$parameter") if
     $q->param('Option') eq 'inverse Fourier transform';
-  $image->MeanShift(geometry=>"$parameter") if $q->param('Option') eq
-    'mean shift *';
+  $image->Kuwahara(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'kuwahara *';
+  $image->MeanShift("$parameter") if $q->param('Option') eq 'mean shift *';
   $image->Mode("$parameter") if $q->param('Option') eq 'mode *';
   if ($q->param('Option') eq 'morph *')
     {
@@ -1552,7 +1570,6 @@ sub Effects
     $q->param('Option') eq 'motion blur *';
   $image->MedianFilter("$parameter") if
     $q->param('Option') eq 'median filter *';
-  $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
   $image->OilPaint("$parameter") if $q->param('Option') eq 'oil paint *';
   if ($q->param('Option') eq 'color-matrix *')
     {
@@ -1561,8 +1578,11 @@ sub Effects
       @coefficients=split(/[ ,]+/,$parameter);
       $image->ColorMatrix(\@coefficients);
     }
+  $image->RotationalBlur(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'rotational blur *';
+  $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
   $image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
-    $q->param('Option') eq 'selective blur *';
+    $q->param('Option') eq '-class=>"checkbox",selective blur *';
   $image->SepiaTone("$parameter") if $q->param('Option') eq 'sepia tone *';
   $image->Shade(geometry=>$parameter,gray=>'false')
     if $q->param('Option') eq 'shade *';
@@ -1661,11 +1681,13 @@ sub EffectsForm
     'gaussian blur *',
     'gray shade *',
     'hough line *',
+    'kuwahara *',
     'mean shift *',
     'median filter *',
     'mode *',
     'motion blur *',
     'reduce noise *',
+    'rotational blur *',
     'selective blur *',
     'shade *',
     'sharpen *',
@@ -1680,41 +1702,43 @@ sub EffectsForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'effect'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
+    "\n";
   print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Parameter',-size=>25,-value=>'0.0x1.0'),
-    "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+    -size=>25,-value=>'0.0x1.0'), "</dd><br />\n";
   print "<dt>Choose from these effects:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'effect'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Effects Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Virtual Pixel Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
   my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-name=>'VirtualPixelMethod',-values=>[@methods]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',
+    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'Channel',-values=>[@channels],
-    -default=>'Default'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
+    -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -1833,38 +1857,40 @@ sub EnhanceForm
 <p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>enhance</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'enhance'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'enhance'), "\n";
   print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Parameter',-size=>25,-value=>'1.6'),
-    "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+    -size=>25,-value=>'1.6'), "</dd><br />\n";
   print "<dt>Choose from these enhancements:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'gamma *'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'enhance'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'enhance'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Enhance Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Virtual Pixel Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
   my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-name=>'VirtualPixelMethod',-values=>[@methods]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',
+    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'Channel',-values=>[@channels],
-    -default=>'Default'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
+    -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
@@ -2070,6 +2096,7 @@ sub FXForm
     'charcoal drawing *',
     'clut',
     'color-matrix *',
+    'connected components *',
     'convolve *',
     'distort *',
     'evaluate *',
@@ -2100,30 +2127,32 @@ sub FXForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
+<p class="lead magick-description">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'effect'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
+    "\n";
   print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Parameter',-size=>25,-value=>'60'),
-    "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+    -size=>25,-value=>'60'), "</dd><br />\n";
   print "<dt>Choose from these special effects:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'swirl *'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'effect'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>F/X Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Distort Type</th>\n";
   print "<th>Evaluate Type</th>\n";
@@ -2131,17 +2160,17 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @distorts=Image::Magick->QueryOption('distort');
-  print '<td>', $q->popup_menu(-name=>'DistortType',-values=>[@distorts],
-    -default=>'Arc'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'DistortType',
+    -values=>[@distorts],-default=>'Arc'), "</td>\n";
   my @operators=Image::Magick->QueryOption('evaluate');
-  print '<td>', $q->popup_menu(-name=>'EvaluateType',-values=>[@operators],
-    -default=>'Sin'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'EvaluateType',
+    -values=>[@operators], -default=>'Sin'), "</td>\n";
   my @functions=Image::Magick->QueryOption('function');
-  print '<td>', $q->popup_menu(-name=>'FunctionType',-values=>[@functions],
-    -default=>'Sin'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'FunctionType',
+    -values=>[@functions],-default=>'Sin'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Morphology Method</th>\n";
   print "<th>Virtual Pixel Method</th>\n";
@@ -2149,31 +2178,31 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @methods=Image::Magick->QueryOption('morphology');
-  print '<td>', $q->popup_menu(-name=>'MorphologyMethod',-values=>[@methods]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'MorphologyMethod',
+    -values=>[@methods]), "</td>\n";
   my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-name=>'VirtualPixelMethod',-values=>[@methods]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',
+    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'Channel',-values=>[@channels],
-    -default=>'Default'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
+    -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
   print "</tr>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "</tr>\n";
   print "<tr><br />\n";
-  print '<td>', $q->textfield(-name=>'BackgroundColor',-value=>'black',
-    -size=>25), "</td>\n";
-  print '<td>', $q->textfield(-name=>'FillColor',-value=>'white',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
+    -value=>'black', -size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'FillColor',
+    -value=>'white',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
-    -label=>' reset page geometry.'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Repage',
+    -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
   print '<dd>', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for F(x).'),"</dd>\n";
   print "</dd></dl>\n";
@@ -2264,62 +2293,39 @@ sub Header
   #
   # Initialize tool types.
   #
-  $tools{'Input'}='input';
-  $tools{'Output'}='output';
-  $tools{'View'}='view';
-  $tools{'Identify'}='identify';
-  $tools{'Colormap'}='colormap';
-  $tools{'Resize'}='resize';
-  $tools{'Transform'}='transform';
-  $tools{'Enhance'}='enhance';
-  $tools{'Effects'}='effects';
+  $tools{'Input'}='';
+  $tools{'Output'}='';
+  $tools{'View'}='';
+  $tools{'Identify'}='';
+  $tools{'Colormap'}='';
+  $tools{'Resize'}='';
+  $tools{'Transform'}='';
+  $tools{'Enhance'}='';
+  $tools{'Effects'}='';
   $tools{'FX'}='fx';
-  $tools{'Decorate'}='decorate';
-  $tools{'Annotate'}='annotate';
-  $tools{'Draw'}='draw';
-  $tools{'Composite'}='composite';
-  $tools{'Compare'}='compare';
+  $tools{'Decorate'}='';
+  $tools{'Annotate'}='';
+  $tools{'Draw'}='';
+  $tools{'Composite'}='';
+  $tools{'Compare'}='';
   $q->param(-name=>'ToolType',-value=>'View') unless
     defined($q->param('ToolType'));
   $tooltype=$q->param('ToolType');
-  $tools{$tooltype}.='_highlighted';
+  $tools{$tooltype}.='active';
   #
   # Print the standard HTML header with the MagickStudio logo.
   #
   $header=1;
   $|=1;
   print $q->header(-charset=>'UTF-8',-expires=>$ExpireCache,@attributes), "\n";
-  print $q->start_html(-title=>$title,
-    -style=>{-src=>"$DocumentDirectory/style/magick.css"},
-    -author=>$ContactInfo,-encoding=>'UTF-8'), "\n";
+  print $q->start_html(-title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
+    -meta=>{'http-equiv'=>'X-UA-Compaible',
+      'viewport'=>'width=device-width, initial-scale=1'},
+    -style=>[{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
+      {-src=>"$DocumentDirectory/css/bootstrap-theme.min.css"},
+      {-src=>"$DocumentDirectory/css/magick.css"}]), "\n";
   print "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>\n";
   print "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>\n";
-  print <<XXX;
-<link rel="canonical" href="http://www.imagemagick.org" />
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-<div class="titlebar">
-<div style="margin: 17px auto; float: left;">
-  <script type="text/javascript">
-  <!--
-    google_ad_client = "pub-3129977114552745";
-    google_ad_slot = "5439289906";
-    google_ad_width = 728;
-    google_ad_height = 90;
-  //-->
-  </script>
-  <script type="text/javascript"
-    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-  </script>
-</div>
-<a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5">
-  <img src="$DocumentDirectory/images/logo.jpg" alt=""
-  style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
-<a href="/ImageMagick/script/../index.php">
-  <img src="$DocumentDirectory/images/sprite.jpg" alt=""
-  style="width: 114px; height: 118px; border: 0px; float: right;" /></a>
-</div>
-XXX
-  ;
   $url=$q->script_name;
   $url.='?CacheID=' .  $q->param('CacheID') if $q->param('CacheID');
   $url.=';SessionID=' . $q->param('SessionID') if $q->param('SessionID');
@@ -2328,42 +2334,48 @@ XXX
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
-<div class="eastbar">
-</div>
+<link rel="canonical" href="http://www.imagemagick.org" />
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 <div class="main">
+<div class="magick-masthead">
+  <div class="container">
+  <script type="text/javascript">
+  <!--
+    google_ad_client = "pub-3129977114552745";
+    google_ad_slot = "5439289906";
+    google_ad_width = 728;
+    google_ad_height = 90;
+  //-->
+  </script>
+  <center><script type="text/javascript"
+    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script></center>
+  <nav class="magick-nav">
+    <a class="magick-nav-item $tools{'Input'}" href="$url;ToolType=Input">Input</a>
+    <a class="magick-nav-item $tools{'Output'}" href="$url;ToolType=Output">Output</a>
+    <a class="magick-nav-item $tools{'View'}" href="$url;ToolType=View">View</a>
+    <a class="magick-nav-item $tools{'Identify'}" href="$url;ToolType=Identify">Identify</a>
+    <a class="magick-nav-item $tools{'Colormap'}" href="$url;ToolType=Colormap">Colormap</a>
+    <a class="magick-nav-item $tools{'Resize'}" href="$url;ToolType=Resize">Resize</a>
+    <a class="magick-nav-item $tools{'Transform'}" href="$url;ToolType=Transform">Transform</a>
+    <a class="magick-nav-item $tools{'Enhance'}" href="$url;ToolType=Enhance">Enhance</a>
+    <a class="magick-nav-item $tools{'Effects'}" href="$url;ToolType=Effects">Effects</a>
+    <a class="magick-nav-item $tools{'FX'}" href="$url;ToolType=FX">F/X</a>
+    <a class="magick-nav-item $tools{'Decorate'}" href="$url;ToolType=Decorate">Decorate</a>
+    <a class="magick-nav-item $tools{'Annotate'}" href="$url;ToolType=Annotate">Annotate</a>
+    <a class="magick-nav-item $tools{'Draw'}" href="$url;ToolType=Draw">Draw</a>
+    <a class="magick-nav-item $tools{'Composite'}" href="$url;ToolType=Composite">Composite</a>
+    <a class="magick-nav-item $tools{'Compare'}" href="$url;ToolType=Compare">Compare</a>
+  </nav>
+</div>
+</div>
+<div class="container">
+<div class="magick-header">
 XXX
   ;
-  if ($q->param('ToolType') ne 'Input')
-    {
-      #
-      # Define toolbar.
-      #
-      print <<XXX;
-<br />
-<div style="text-align: center">
-  <a href="$url;ToolType=Input"> <img width="66" height="21" border="0" vspace="2" src="$DocumentDirectory/images/$tools{'Input'}.png" /></a>
-  <a href="$url;ToolType=Output"> <img width="76" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Output'}.png" /></a>
-  <a href="$url;ToolType=View"> <img width="67" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'View'}.png" /></a>
-  <a href="$url;ToolType=Identify"> <img width="79" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Identify'}.png" /></a>
-  <a href="$url;ToolType=Colormap"> <img width="94" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Colormap'}.png" /></a>
-  <a href="$url;ToolType=Resize"> <img width="74" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Resize'}.png" /></a>
-  <a href="$url;ToolType=Transform"> <img width="93" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Transform'}.png" /></a>
+  print <<XXX;
 XXX
-      ;
-      print "<br />\n" unless $q->user_agent() =~ /WebTV/;
-      print <<XXX;
-  <a href="$url;ToolType=Enhance"> <img width="85" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Enhance'}.png" /></a>
-  <a href="$url;ToolType=Effects"> <img width="74" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Effects'}.png" /></a>
-  <a href="$url;ToolType=FX"> <img width="59" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'FX'}.png" /></a>
-  <a href="$url;ToolType=Decorate"> <img width="88" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Decorate'}.png" /></a>
-  <a href="$url;ToolType=Annotate"> <img width="88" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Annotate'}.png" /></a>
-  <a href="$url;ToolType=Draw"> <img width="69" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Draw'}.png" /></a>
-  <a href="$url;ToolType=Composite"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Composite'}.png" /></a>
-  <a href="$url;ToolType=Compare"> <img width="97" height="21" border="0" vspace=2 src="$DocumentDirectory/images/$tools{'Compare'}.png" /></a>
-</div>
-XXX
-      ;
-    }
+  ;
 }
 
 #
@@ -2392,14 +2404,12 @@ sub Identify
   #
   Header(GetTitle($images));
   print <<XXX;
-<p>Here is a detailed description of your image, $filename:</p>
+<p class="lead magick-description">Here is a detailed description of your image, $filename:</p>
 XXX
   ;
-  print "<dl>\n";
-  print "<dd><pre class=\"text\">\n";
+  print "<pre class=\"pre-scrollable\">";
   $images->Identify();
   print "</pre>\n";
-  print "</dl>\n";
   Trailer(1);
 }
 
@@ -2415,7 +2425,7 @@ sub Input
   use LWP::Simple;
   use File::Basename;
   use File::Copy;
-  use Digest::SHA2;
+  use Digest::SHA3;
 
   my(@attributes, $basename, $digest, $extent, @extents, $filename, $format,
      $i, $image, $magick, $path, $session, $status, $scene);
@@ -2591,7 +2601,7 @@ sub Input
   $q->param(-name=>'Name',-value=>$basename);
   $magick=~tr/A-Z/a-z/;
   $q->param(-name=>'Magick',-value=>$magick);
-  $digest=Digest::SHA2->new(512);
+  $digest=Digest::SHA3->new(512);
   $digest->add($HashDigestSalt,$image->Get('signature'),$filename,
     $q->remote_addr(),time(),{},rand(),$$);
   $session=$digest->hexdigest;
@@ -2681,7 +2691,7 @@ sub InputForm
   Header("ImageMagick Studio");
   print <<XXX;
 <br />
-<p>To convert or manipulate your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
+<p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
 XXX
   ;
   $version=Image::Magick->VERSION;
@@ -2692,16 +2702,17 @@ XXX
   $version=Image::Magick::Q32->VERSION if !defined($version);
   $version=Image::Magick::Q32HDRI->VERSION if !defined($version);
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
-  print $q->start_multipart_form(-action=>$action);
+  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
   print $q->hidden(-name=>'SessionID'), "\n";
-  print "<table cellpadding=\"4\" cellspacing=\"10\" border=\"0\" summary=\"\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">Filename</a>:</td>\n";
   print '<td>', $q->filefield(-name=>'File',-size=>50,maxlength=>1024), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/URL.html\" target=\"help\">URL</a>:</td>\n";
-  print '<td>', $q->textfield(-name=>'URL',-size=>50), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'URL',-size=>50),
+    "</td>\n";
   $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
     $q->param('SessionID')  . '.mpc';
   if ((-e $filename) && defined($q->param('SessionID')))
@@ -2711,20 +2722,21 @@ XXX
     }
   print "</tr>\n";
   print "</table><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'view'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'view'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
 An example <a href="$url?File=$DocumentRoot$DocumentDirectory/images/wizard.jpg;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>
-Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are automatically removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.
+<p class="text-warning">Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are automatically removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.</p>
 </fieldset>
 <br />
 <fieldset>
 <legend>Liability Notice</legend>
-By using this service, you agree not to hold ImageMagick Studio LLC liable for any data loss, subsequent damages, or privacy issues resulting from the use of this service.
+<p class="text-warning">By using this service, you agree not to hold ImageMagick Studio LLC liable for any data loss, subsequent damages, or privacy issues resulting from the use of this service.</p>
 </fieldset>
 <br />
 XXX
@@ -2732,52 +2744,56 @@ XXX
   print "<fieldset>\n";
   print "<legend>Input Properties</legend>\n";
   print <<XXX;
-You rarely need to set these parameters.  The scene specification is useful when you want to view only a few frames from a multi-frame image.  The remaining options are only necessary for raw image formats such as RGB or GRAY.
+<p>You rarely need to set these parameters.  The scene specification is useful when you want to view only a few frames from a multi-frame image.  The remaining options are only necessary for raw image formats such as RGB or GRAY.</p>
 <dl><dd>
 XXX
   ;
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Size.html\" target=\"help\">Size</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'SizeGeometry',-size=>25,
-    -value=>'320x240'), "</td>\n";
-  print '<td>', $q->popup_menu(-name=>'Format',-values=>[@InputTypes]),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SizeGeometry',
+    -size=>25,-value=>'320x240'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Format',
+    -values=>[@InputTypes]), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Meta.html\" target=\"help\">Meta</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Meta',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Meta',-size=>25),
+    "</td>\n";
   my @types=Image::Magick->QueryOption('interlace');
-  print '<td>', $q->popup_menu(-name=>'Interlace',-values=>[@types],
-    -default=>'None'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
+    -values=>[@types],-default=>'None'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Scene.html\" target=\"help\">Scene</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Scene',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scene',
+    -size=>25), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'Channel',-values=>[@channels],
-    -default=>'All'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
+    -values=>[@channels],-default=>'All'), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">Passphrase</a></th>\n";
   print "<th>Density</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Passphrase',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-name=>'Density',-size=>8,-value=>72), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Passphrase',
+    -size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Density',
+    -size=>8,-value=>90), "</td>\n";
   print "</tr>\n";
   print '</table>';
   print '</dd></dl>';
@@ -3064,37 +3080,39 @@ XXX
   # Image upload form.
   #
   RestoreQueryState($q->param('SessionID'),$q->param('Path'),'Upload');
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'upload'), "\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'upload'),
-    ' your image to a remote site or ', $q->reset(-name=>'reset'),
-    " the form.<br /><br />\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'upload'), "\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'upload'), ' your image to a remote site or ', $q->reset(
+    -name=>'reset',-class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Upload Properties</legend>\n";
   print "<dl>\n";
   $hostname=GetHostname($q->remote_host());
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">FTP server name</a>:\n";
-  print '<dd>', $q->textfield(-name=>'Hostname',-size=>50,-value=>$hostname),
-    "<br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Hostname',
+    -size=>50,-value=>$hostname), "<br />\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account name</a>:\n";
   $username='anonymous';
   $username=$q->remote_user() if $q->remote_user();
-  print '<dd>', $q->textfield(-name=>'Username',-size=>25,-value=>$username),
-    "<br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Username',
+    -size=>25,-value=>$username), "<br />\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account password</a>:\n";
   print '<dd>', $q->password_field(-name=>'Password',-size=>25), "<br />\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Upload directory</a>:\n";
-  print '<dd>', $q->textfield(-name=>'Directory',-size=>50), "<br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Directory',
+    -size=>50), "<br />\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Filename</a>:\n";
-  print '<dd>', $q->textfield(-name=>'Filename',-size=>50,
-    -value=>"$basename.$format"), "<br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Filename',
+    -size=>50, -value=>"$basename.$format"), "<br />\n";
   print "</dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -3141,32 +3159,34 @@ sub OutputForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p>Choose an <a href="$DocumentDirectory/Output.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <b>output</b> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
+<p class="lead magick-description">Choose an <a href="$DocumentDirectory/Output.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <b>output</b> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'output'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'output'),
+    "\n";
   print "<dt><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
   $format=$q->param('Magick');
   @formats=grep(SelectFormats($image),$image->QueryFormat());
-  print '<dd>', $q->scrolling_list(-name=>'Format',-values=>[@formats],-size=>7,
-    -default=>$format), "</dd><br />\n";
+  print '<dd>', $q->scrolling_list(-class=>'form-control',-name=>'Format',
+    -values=>[@formats],-size=>7,-default=>$format), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'multi-frame file'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'output'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'output'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Output Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Image Type</th>\n";
   print "<th>Compress</th>\n";
@@ -3175,18 +3195,19 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('type');
-  print '<td>', $q->popup_menu(-name=>'Type',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Type',
+    -values=>[@types]), "</td>\n";
   my @types=Image::Magick->QueryOption('compress');
-  print '<td>', $q->popup_menu(-name=>'Compress',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Compress',-values=>[@types]), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-name=>'Channel',-values=>[@channels],
-    -default=>'All'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
+    -values=>[@channels],-default=>'All'), "</td>\n";
   my @types=Image::Magick->QueryOption('Alpha');
-  print '<td>', $q->popup_menu(-name=>'Alpha',-values=>[@types],
-   -default=>'Undefined'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Alpha',
+    -values=>[@types],-default=>'Undefined'), "</td>\n";
   print "</tr>\n";
   print "</table><br />\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Dispose</th>\n";
   print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
@@ -3194,50 +3215,53 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('dispose');
-  print '<td>', $q->popup_menu(-name=>'Dispose',-values=>[@types],
-   -default=>'Undefined'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Dispose',
+    -values=>[@types],-default=>'Undefined'), "</td>\n";
   my @types=Image::Magick->QueryOption('interlace');
-  print '<td>', $q->popup_menu(-name=>'Interlace',-values=>[@types],
-    -default=>'None'), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
+    -values=>[@types],-default=>'None'), "</td>\n";
   my @types=Image::Magick->QueryOption('preview');
-  print '<td>', $q->popup_menu(-name=>'Preview',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Preview',
+    -values=>[@types]), "</td>\n";
   print "</tr>\n";
   print "</table><br />\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Delay.html\" target=\"help\">Delay</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Loop.html\" target=\"help\">Loop</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Quality.html\" target=\"help\">Quality</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Delay',-size=>15,
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Delay',-size=>15,
     -value=>$image->Get('delay')), "</td>\n";
-  print '<td>', $q->textfield(-name=>'Loop',-size=>15,-value=>'0',
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Loop',-size=>15,
     -value=>$image->Get('loop')), "</td>\n";
-  print '<td>', $q->textfield(-name=>'Quality',-size=>15,
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Quality',-size=>15,
     -value=>$image->Get('quality')), "</td>\n";
   print "</tr>\n";
   print "</table><br />\n";
   print "<dt>Image Depth</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Depth',-size=>25,
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,
     -value=>$image->Get('depth')), "</dd><br />\n";
   print "<dt>Smush Offset</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Offset',-size=>25,-value=>2),
-    "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,
+    -value=>2), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
     "Page Geometry</a></dt>\n";
-  print '<dd>', $q->textfield(-name=>'Page',-size=>25), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Page',-size=>25),
+    "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">",
     "Passphrase</a></dt>\n";
-  print '<dd>', $q->textfield(-name=>'Passphrase',-size=>25), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Passphrase',
+    -size=>25), "</dd><br />\n";
   print "<dt>Comment:</dt>\n";
-  print '<dd>', $q->textarea(-name=>'Comment',-columns=>50,-rows=>3,
-    -value=>$image->Get('comment')), "</dd><br />\n";
+  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
+    -columns=>50,-rows=>3,-value=>$image->Get('comment')), "</dd><br />\n";
   print "<dt> Miscellaneous options:</dt>\n";
   print '<dd>', $q->checkbox(-name=>'Repage',
     -label=>' reset page geometry.'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Coalesce',checked=>'true',
-    -label=>' coalesce multi-frame images.'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Coalesce',
+    -checked=>'true',-label=>' coalesce multi-frame images.'), "</dd>\n";
   print '<dd>', $q->checkbox(-name=>'Strip',
     -label=>' strip image of any comments or profiles.'), "</dd>\n";
   print '<dd> ', $q->checkbox(-name=>'CMYK',
@@ -3350,30 +3374,32 @@ sub ResizeForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>resize</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>resize</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'resize'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
+    "\n";
   print "<dt>Image size:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Geometry',-size=>25,-value=>"$width" .
-    'x' . "$height"), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
+    -size=>25,-value=>"$width" . 'x' . "$height"), "</dd><br />\n";
   print "<dt>Choose from these scaling methods:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Algorithm',-values=>@OptionTypes,
     -columns=>3), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'resize'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'resize'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Resize Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Filter</th>\n";
   print "<th>Support</th>\n";
@@ -3381,14 +3407,15 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('filter');
-  print '<td>', $q->popup_menu(-name=>'Primitive',-values=>[@types]), "</td>\n";
-  print '<td>', $q->textfield(-name=>'SupportFactor',-size=>25,-value=>'0.0'),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'BlurFactor',-size=>25,-value=>'1.0'),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
+    -values=>[@types]), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'SupportFactor',
+    -size=>25,-value=>'0.0'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BlurFactor',
+    -size=>25,-value=>'1.0'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<dd><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Gravity</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
@@ -3396,9 +3423,10 @@ XXX
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types]), "</td>\n";
-  print '<td>', $q->textfield(-name=>'BackgroundColor',-value=>'none',
-    -size=>25), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
+    -values=>[@types]), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
+    -value=>'none', -size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print "</dd></dl>\n";
@@ -3449,6 +3477,7 @@ sub SaveQueryState
   $filename=Untaint("$path/$session.$tooltype");
   open(DATA,">$filename") || Error('Unable to view image',$filename);
   $q->save(DATA);
+  print DATA "pid: $$\n";
   print DATA "image locator: ", $q->param('File'), "\n" if $q->param('File');
   print DATA "image locator: ", $q->param('URL'), "\n" if $q->param('URL');
   $remote_host='localhost';
@@ -3475,9 +3504,6 @@ sub Trailer
 
   print <<XXX;
 </div>
-<div id="linkbar">
-</div>
-<div>
 XXX
   ;
   #
@@ -3491,13 +3517,8 @@ XXX
   $home="$DocumentDirectory/images/home-stop.png"
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
-<span id="footer-west">
-<a href="$url"> <img alt="home" src=\"$home\" width="40" height="40" border="0" /></a>
-<a href="http://www.imagemagick.org/discourse-server/viewforum.php?f=5">
-<img alt="comment" src="$DocumentDirectory/images/mail.png" width="40" height="40" border="0" /></a>
-<div class="g-plusone" data-size="standard" data-count="false"></div>
-</span>
-<span id="footer-east">
+  <footer class="magick-footer">
+    <div class="magick-nav-item pull-right">
 XXX
   ;
   if ($display)
@@ -3515,23 +3536,30 @@ XXX
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
           $url=substr($path,length($DocumentRoot));
-          print "<img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
-            "border=\"0\" width=\"$width\" height=\"$height\" />\n";
+          print "<p><img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
+            "border=\"0\" width=\"$width\" height=\"$height\" ",
+            "class=\"img-thumbnail\"/></p>\n";
         }
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.gif';
       if (-e $filename)
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
-          print "<img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
+          print "<p><img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
             "clipboard/", $q->param('SessionID'), ".gif\" border=\"0\" ",
-            "width=\"$width\" height=\"$height\" />\n";
+            "width=\"$width\" height=\"$height\" class=\"img-thumbnail\"/></p>\n";
         }
     }
   print <<XXX;
-</span>
+    </div>
+    <div class="magick-nav-item">
+      <p><a href="#">Back to top</a> •
+         <a href="http://www.imagemagick.org/script/contact.php">Contact Us</a> •
+         <a href="http://www.imagemagick.org/script/support.php">Donate</a></p>
+    </div>
+    <p><small>&copy; 1999-2015 ImageMagick Studio LLC</small></p>
+  </footer>
 </div>
-<div style="clear: both; margin: 0; width: 100%; "></div>
 XXX
   ;
   if ($Debug)
@@ -3681,55 +3709,60 @@ sub TransformForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>transform</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>transform</b> to continue.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'resize'), "\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
+    "\n";
   print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-name=>'Parameter',-size=>25), "</dd><br />\n";
+  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+    -size=>25), "</dd><br />\n";
   print "<dt>Choose from these transforms:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'trim'), "</dd><br />\n";
-  print 'Press to ', $q->submit(-name=>'Action',-value=>'transform'),
-    ' your image or ', $q->reset(-name=>'reset'), " the form.<br /><br />\n";
+  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
+    -value=>'transform'), ' your image or ', $q->reset(-name=>'reset',
+    -class=>'btn btn-warning'), " the form.<br /><br />\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th>Gravity</th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Fuzz',-size=>25,-value=>'0%'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
+    -value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-name=>'Gravity',-values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
+    -values=>[@types]), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<table cellpadding=\"2\" cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Layer Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
   my @types=Image::Magick->QueryOption('layers');
-  print '<td>', $q->popup_menu(-name=>'LayerMethod',-values=>[@types],
-    -default=>'Optimize'), "</td>\n";
-  print '<td>', $q->textfield(-name=>'BackgroundColor',-value=>'none',
-    -size=>25), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'LayerMethod',
+    -values=>[@types],-default=>'Optimize'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
+    -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',-checked=>'true',
-    -label=>' reset page geometry.'), "</dd>\n";
+  print '<dd>', $q->checkbox(-name=>'Repage',
+    -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->endform, "\n";
@@ -3942,24 +3975,22 @@ sub ViewForm
   ($width,$height)=$coalesce->Get('width','height');
   $url=substr($path,length($DocumentRoot));
   print <<XXX;
-<p>Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <b>Back</b> to undo your last image transformation.  For more information, see <a href="http://www.imagemagick.org/">ImageMagick</a>.</p>
+<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <b>Back</b> to undo your last image transformation.  For more information, see <a href="http://www.imagemagick.org/">ImageMagick</a>.</p>
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;
-  print $q->startform;
+  print $q->startform(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-value=>'view'), "\n";
-  print "<center>\n";
-  print "<div class=\"viewport\">\n" if ($width > 480) || ($height > 480);
-  print $q->image_button(-name=>$basename,-src=>"$url/$basename.$format",
-    -border=>1,-width=>$width,-height=>$height,-style=>"cursor:crosshair",
-    -cursor), "<br />\n";
-  print "</div>\n" if ($width > 480) || ($height > 480);
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'view'),
+    "\n";
+  print $q->image_button(-class=>'img-responsive center-block',-name=>$basename,
+    -src=>"$url/$basename.$format",-border=>1,-width=>$width,-height=>$height,
+    -style=>"cursor:crosshair",-cursor), "<br />\n";
   if (defined($q->param("$basename.x")) || defined($q->param("$basename.y")))
     {
       my $width=$coalesce->Get('columns');
@@ -3977,10 +4008,10 @@ XXX
         }
       my $color=$coalesce->Get("pixel[$x,$y]");
       my ($red,$green,$blue,$alpha)=split(/[ ,]+/,$color);
-      $red=100.0*$red/QuantumRange;
-      $green=100.0*$green/QuantumRange;
-      $blue=100.0*$blue/QuantumRange;
-      $alpha=1.0-1.0*$alpha/QuantumRange;
+      $red=100.0*$red/(Image::Magick->QuantumRange);
+      $green=100.0*$green/(Image::Magick->QuantumRange);
+      $blue=100.0*$blue/(Image::Magick->QuantumRange);
+      $alpha=1.0-1.0*$alpha/(Image::Magick->QuantumRange);
       print $coalesce->QueryColorname("rgba($red,$green,$blue,$alpha%)");
       my $depth=$coalesce->Get('depth');
       my $matte=$coalesce->Get('matte');
@@ -4011,40 +4042,41 @@ XXX
   if ($image->Get('error') != 0.0)
     {
       my $error=$image->Get('error');
-      $error*=QuantumRange;
+      $error*=(Image::Magick->QuantumRange);
       print '<pre class="text">';
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
       print "</pre>\n";
     }
-  print "</center>\n";
   print "<br />\n";
   print "<fieldset>\n";
   print "<legend>Paint Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table cellpadding=\"2\"  cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Paint.html\" target=\"help\">Method</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Paint.html\" target=\"help\">Paint Type</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Fuzz',-size=>25,-value=>'0%'), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
+    -value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('method');
-  print '<td>', $q->popup_menu(-name=>'Method',-values=>[@types]), "</td>\n";
-  print '<td>', $q->popup_menu(-name=>'Primitive',-values=>[@PrimitiveTypes]),
-    "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Method',
+    -values=>[@types]), "</td>\n";
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
+    -values=>[@PrimitiveTypes]),"</td>\n";
   print "</tr>\n";
   print '</table><br />';
-  print "<table cellpadding=\"2\"  cellspacing=\"2\" border=\"0\">\n";
+  print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Border Color</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-name=>'Color',-value=>'none',-size=>25),
-    "</td>\n";
-  print '<td>', $q->textfield(-name=>'BorderColor',-value=>'none',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Color',
+    -value=>'none',-size=>25), "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'BorderColor',
+    -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table>';
   print "</dd></dl>\n";

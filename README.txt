@@ -3,7 +3,7 @@ INSTALL INSTRUCTIONS
 
   ImageMagick Studio requires both ImageMagick and PerlMagick.  See
 
-      http://www.imagemagick.org/
+      https://www.imagemagick.org/
 
   for details.
 
@@ -41,7 +41,7 @@ INSTALL INSTRUCTIONS
   Under Windows, copy all IM*dll and *.mgk files to C:\ImageMagick and
   the remaining excutables and DLL's to the directory where perl.exe resides
   (typically C:\Perl\bin).
-  
+
   The workarea and session_info directory must be writable.  On my
   system, Apache runs as UID apache so I type
 
@@ -49,9 +49,8 @@ INSTALL INSTRUCTIONS
       chgrp -R apache ../MagickStudio
 
   Next, point your browser to the ImageMagick Studio script.  For example,
-  
-      http://www.imagemagick.org/MagickStudio/scripts/MagickStudio.cgi
-      http://www.win2k.org/MagickStudio/scripts/MagickStudio.pl
+
+      https://www.imagemagick.org/MagickStudio
 
   and press the sample image URL.  Report any problems to
   magick-user@imagemagick.org.
@@ -70,16 +69,16 @@ INSTALL INSTRUCTIONS
 
 COPYRIGHT
 
-  Copyright 1999-2008 ImageMagick Studio LLC, a non-profit organization       
-  dedicated to making software imaging solutions freely available.            
-                                                                               
-  You may not use this file except in compliance with the License.  You may   
-  obtain a copy of the License at                                             
-                                                                               
-    http://www.imagemagick.org/script/license.php                             
-                                                                               
-  Unless required by applicable law or agreed to in writing, software         
-  distributed under the License is distributed on an "AS IS" BASIS,           
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.    
-  See the License for the specific language governing permissions and         
-  limitations under the License.                                              
+  Copyright 1999-2017 ImageMagick Studio LLC, a non-profit organization
+  dedicated to making software imaging solutions freely available.
+
+  You may not use this file except in compliance with the License.  You may
+  obtain a copy of the License at
+
+    https://www.imagemagick.org/script/license.php
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.

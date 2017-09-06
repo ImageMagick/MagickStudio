@@ -25,13 +25,13 @@
 #                            November 1997                                    #
 #                                                                             #
 #                                                                             #
-#  Copyright (C) 1999-2004 ImageMagick Studio LLC, a non-profit organization  #
+#  Copyright (C) 1999-2017 ImageMagick Studio LLC, a non-profit organization  #
 #  dedicated to making software imaging solutions freely available.           #
 #                                                                             #
 #  You may not use this file except in compliance with the License.  You may  #
 #  obtain a copy of the License at                                            #
 #                                                                             #
-#    http://www.imagemagick.org/www/Copyright.html                            #
+#    https://www.imagemagick.org/script/license.php                           #
 #                                                                             #
 #  Unless required by applicable law or agreed to in writing, software        #
 #  distributed under the License is distributed on an "AS IS" BASIS,          #
@@ -60,18 +60,17 @@ use strict;
 my($action, %Functions, $header, $length, $prefix, $q, %seen, $timer,
    $user_agent);
 
-our($AreaLimit, $ContactInfo, $Debug, $DefaultFont, $DiskLimit,
-    $DocumentDirectory, $DocumentRoot, $ExpireCache, $ExpireThreshold,
-    $HashDigestSalt, $IconSize, $LoadAverageThreshold, $MapLimit, $MaxFilesize,
-    $MaxImageArea, $MaxImageExtent, $MaxWorkFiles, $MemoryLimit, $MinExpireAge,
-    $RedirectURL, $SponsorIcon, $SponsorURL, $ThreadLimit, $TimeLimit,
+our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot,
+    $ExampleImage, $ExpireCache, $ExpireThreshold, $HashDigestSalt, $IconSize,
+    $LoadAverageThreshold, $MaxFilesize, $MaxImageArea, $MaxImageExtent,
+    $MaxWorkFiles, $MinExpireAge, $RedirectURL, $SponsorIcon, $SponsorURL,
     $Timeout);
 
 #
 # Change these variables to reflect your environment.
 #
-#$ENV{'ftp_proxy'}='http://webproxy-ae.dupont.com/';
-#$ENV{'http_proxy'}='http://webproxy-ae.dupont.com/';
+#$ENV{'ftp_proxy'}='http://webproxy.imagemagick.org/';
+#$ENV{'http_proxy'}='http://webproxy.imagemagick.org/';
 $ENV{DISPLAY}="$ENV{REMOTE_HOST}:0" if $ENV{REMOTE_HOST};
 $ENV{LD_LIBRARY_PATH}='/usr/lib:/usr/openwin/lib:/usr/local/lib';
 $ENV{MAGICK_FONT_PATH}=$DocumentRoot . $DocumentDirectory . "/fonts";
@@ -185,7 +184,7 @@ sub AnnotateForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <b>annotate</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -322,7 +321,7 @@ XXX
     -label=>' simulate a Polaroid picture.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -343,7 +342,7 @@ sub CheckStudioHours
   print <<XXX;
 <b>ImageMagick Studio</b> has restricted access from 6PM until 11PM EST.
 We have temporarily <i>suspended</i> the processing of your image.
-Shortly after 11PM, processing automatically continues and your image is
+Shortly after 11PM, processing <var>automagically</var> continues and your image is
 returned.
 XXX
   ;
@@ -382,7 +381,7 @@ sub CheckStudioStatus
 </center>
 <br />
 When the studio load average becomes less than the threshold, processing
-automatically continues and your image is returned.  The studio status will
+<var>automagically</var> continues and your image is returned.  The studio status will
 be refreshed in $refresh_rate seconds.
 XXX
   ;
@@ -453,8 +452,9 @@ sub Colormap
   $dither='true' if $options{'dither'};
   $global_colormap='false';
   $global_colormap='true' if $options{'global colormap'};
-  $colorspace='RGB';
+  $colorspace='sRGB';
   $colorspace='Gray' if $options{'gray'};
+  $colorspace=$q->param('Colorspace') if $q->param('Colorspace');
   $measure_error='False';
   $measure_error='True' if $options{'measure error'};
   $parameter=$q->param('Parameter');
@@ -541,7 +541,7 @@ sub ColormapForm
 <p class="lead magick-description">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <b>quantize</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -566,15 +566,19 @@ XXX
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Transparent Color</a></th>\n";
+  print "<th><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\">Colorspace</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
   print '<td>', $q->textfield(-class=>'form-control',-name=>'TransparentColor',
     -value=>'none',-size=>25), "</td>\n";
+  my @types=Image::Magick->QueryOption('colorspace');
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
+    -values=>[@types],-default=>'sRGB'), "</td>\n";
   print "</tr>\n";
   print '</table><br />';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br /> <br /> <br /> <br />
 XXX
@@ -618,7 +622,7 @@ sub Comment
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
+    -style=>{-src=>"$DocumentDirectory/css/magick.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -651,7 +655,7 @@ sub CommentForm
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
+    -style=>{-src=>"$DocumentDirectory/css/magick.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -667,7 +671,7 @@ address if you require a response.
 XXX
   ;
   $q->delete('Comment');
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -683,7 +687,7 @@ XXX
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'send'), ' your comment or ', $q->reset(-name=>'reset',
     -class=>'btn btn-warning'), " the form.\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -716,15 +720,18 @@ sub Compare
   #
   # Read compare image.
   #
-  $filename=Untaint($q->param('CompareURL'));
-  $filename=Untaint($q->param('CompareFile')) if $q->param('CompareFile');
-  $filename=$q->param('CompareFile') if $q->param('CompareFile');
-  $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
-    $q->param('SessionID') if $q->param('Clipboard') eq 'on';
-  copy($filename,'MagickStudio.dat') ||
-    copy(\*$filename,'MagickStudio.dat') ||
-      (getstore($filename,'MagickStudio.dat') eq '200') ||
-        Error('Unable to compare image',$filename);
+  if ($q->param('CompareURL')) {
+    $filename=Untaint($q->param('CompareURL'));
+    getstore($filename,'MagickStudio.dat');
+  } else {
+    $filename=Untaint($q->param('CompareFile')) if $q->param('CompareFile');
+    $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+      $q->param('SessionID') if $q->param('Clipboard') eq 'on';
+    copy($q->upload('CompareFile'),'MagickStudio.dat') ||
+      copy(\*$filename,'MagickStudio.dat') ||
+        (getstore($filename,'MagickStudio.dat') eq '200') ||
+          Error('Unable to compare image',$filename);
+  }
   Error('Unable to read image file',$filename)
     unless (-f 'MagickStudio.dat') && (-s 'MagickStudio.dat');
   Error('Image size exceeds maximum allowable',$filename)
@@ -738,9 +745,9 @@ sub Compare
   $status=$compare->Read('MagickStudio.dat');
   Error("unable to read your image",$filename) if $#$compare < 0;
   unlink('MagickStudio.dat');
-  Error('Image width or height differ') if $image->Get('width') ne 
+  Error('Image width or height differ') if $image->Get('width') ne
    $compare->Get('width');
-  Error('Image width or height differ') if $image->Get('height') ne 
+  Error('Image width or height differ') if $image->Get('height') ne
    $compare->Get('height');
   #
   # Compare image.
@@ -815,7 +822,7 @@ XXX
     -value=>'0%'), "</td>\n";
   my @types=Image::Magick->QueryOption('metric');
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'MetricType',
-    -values=>[@types], default=>'NCC'), "</td>\n";
+    -values=>[@types],-default=>'NCC'), "</td>\n";
   my @channels=Image::Magick->QueryOption('channel');
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ChannelType',
     -values=>[@channels],default=>'Default'), "</td>\n";
@@ -826,7 +833,7 @@ XXX
   print '<dd> ', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for compare.'), "</dd>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
 XXX
@@ -858,15 +865,18 @@ sub Composite
   #
   # Read composite image.
   #
-  $filename=Untaint($q->param('CompositeURL'));
-  $filename=Untaint($q->param('CompositeFile')) if $q->param('CompositeFile');
-  $filename=$q->param('CompositeFile') if $q->param('CompositeFile');
-  $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
-    $q->param('SessionID') if $q->param('Clipboard') eq 'on';
-  copy($filename,'MagickStudio.dat') ||
-    copy(\*$filename,'MagickStudio.dat') ||
-      (getstore($filename,'MagickStudio.dat') eq '200') ||
-        Error('Unable to composite image',$filename);
+  if ($q->param('CompositeURL')) {
+    $filename=Untaint($q->param('CompositeURL'));
+    getstore($filename,'MagickStudio.dat');
+  } else {
+    $filename=Untaint($q->param('CompositeFile')) if $q->param('CompositeFile');
+    $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
+      $q->param('SessionID') if $q->param('Clipboard') eq 'on';
+    copy($q->upload('CompositeFile'),'MagickStudio.dat') ||
+      copy(\*$filename,'MagickStudio.dat') ||
+        (getstore($filename,'MagickStudio.dat') eq '200') ||
+          Error('Unable to composite image',$filename);
+  }
   Error('Unable to read image file',$filename)
     unless (-f 'MagickStudio.dat') && (-s 'MagickStudio.dat');
   Error('Image size exceeds maximum allowable',$filename)
@@ -1013,7 +1023,7 @@ XXX
     -label=>' use clipboard image as source for composite.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -1111,7 +1121,7 @@ sub DecorateForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <b>decorate</b>.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1146,7 +1156,7 @@ XXX
   print '</table><br />';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
 XXX
@@ -1243,7 +1253,7 @@ sub DrawForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <b>draw</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1315,7 +1325,7 @@ XXX
     -label=>' antialias text.',-checked=>'true'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -1640,6 +1650,7 @@ sub Effects
   $image->Swirl("$parameter") if $q->param('Option') eq 'swirl *';
   $image->AdaptiveThreshold("$parameter") if
     $q->param('Option') eq 'adaptive threshold *';
+  $image->AutoThreshold() if $q->param('Option') eq 'auto-threshold';
   $image->Threshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'threshold *';
   $image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
@@ -1649,6 +1660,8 @@ sub Effects
   $image->Vignette(geometry=>"$parameter",background=>
     $q->param('BackgroundColor')) if $q->param('Option') eq 'vignette *';
   $image->Wave("$parameter") if $q->param('Option') eq 'wave *';
+  $image->WaveletDenoise("$parameter") if
+    $q->param('Option') eq 'wavelet denoise *';
   $image->WhiteThreshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'white threshold *';
   $image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
@@ -1672,6 +1685,7 @@ sub EffectsForm
     'adaptive blur *',
     'adaptive sharpen *',
     'adaptive threshold *',
+    'auto-threshold',
     'black threshold *',
     'blur *',
     'canny edge *',
@@ -1705,7 +1719,7 @@ sub EffectsForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1743,7 +1757,7 @@ XXX
   print '</table><br />';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br />
 XXX
@@ -1857,7 +1871,7 @@ sub EnhanceForm
 <p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>enhance</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1895,7 +1909,7 @@ XXX
   print '</table><br />';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br />
 XXX
@@ -2119,7 +2133,8 @@ sub FXForm
     'swirl *',
     'tint',
     'vignette *',
-    'wave *'
+    'wave *',
+    'wavelet denoise *'
   ];
 
   #
@@ -2130,7 +2145,7 @@ sub FXForm
 <p class="lead magick-description">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -2207,7 +2222,7 @@ XXX
     -label=>' use clipboard image as source for F(x).'),"</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -2319,11 +2334,9 @@ sub Header
   $|=1;
   print $q->header(-charset=>'UTF-8',-expires=>$ExpireCache,@attributes), "\n";
   print $q->start_html(-title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
-    -meta=>{'http-equiv'=>'X-UA-Compaible',
+    -meta=>{'http-equiv'=>'X-UA-Compatible',
       'viewport'=>'width=device-width, initial-scale=1'},
-    -style=>[{-src=>"$DocumentDirectory/css/bootstrap.min.css"},
-      {-src=>"$DocumentDirectory/css/bootstrap-theme.min.css"},
-      {-src=>"$DocumentDirectory/css/magick.css"}]), "\n";
+    -style=>{-src=>"$DocumentDirectory/css/magick.css"}), "\n";
   print "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>\n";
   print "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>\n";
   $url=$q->script_name;
@@ -2334,38 +2347,39 @@ sub Header
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
-<link rel="canonical" href="http://www.imagemagick.org" />
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<link rel="canonical" href="https://www.imagemagick.org" />
+XXX
+  if (!($q->virtual_host() =~ /transloadit.imagemagick.org/)) {
+    print '<script async="async" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
+  }
+  print <<XXX;
 <div class="main">
 <div class="magick-masthead">
   <div class="container">
-  <script type="text/javascript">
-  <!--
-    google_ad_client = "pub-3129977114552745";
-    google_ad_slot = "5439289906";
-    google_ad_width = 728;
-    google_ad_height = 90;
-  //-->
-  </script>
-  <center><script type="text/javascript"
-    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-  </script></center>
-  <nav class="magick-nav">
-    <a class="magick-nav-item $tools{'Input'}" href="$url;ToolType=Input">Input</a>
-    <a class="magick-nav-item $tools{'Output'}" href="$url;ToolType=Output">Output</a>
-    <a class="magick-nav-item $tools{'View'}" href="$url;ToolType=View">View</a>
-    <a class="magick-nav-item $tools{'Identify'}" href="$url;ToolType=Identify">Identify</a>
-    <a class="magick-nav-item $tools{'Colormap'}" href="$url;ToolType=Colormap">Colormap</a>
-    <a class="magick-nav-item $tools{'Resize'}" href="$url;ToolType=Resize">Resize</a>
-    <a class="magick-nav-item $tools{'Transform'}" href="$url;ToolType=Transform">Transform</a>
-    <a class="magick-nav-item $tools{'Enhance'}" href="$url;ToolType=Enhance">Enhance</a>
-    <a class="magick-nav-item $tools{'Effects'}" href="$url;ToolType=Effects">Effects</a>
-    <a class="magick-nav-item $tools{'FX'}" href="$url;ToolType=FX">F/X</a>
-    <a class="magick-nav-item $tools{'Decorate'}" href="$url;ToolType=Decorate">Decorate</a>
-    <a class="magick-nav-item $tools{'Annotate'}" href="$url;ToolType=Annotate">Annotate</a>
-    <a class="magick-nav-item $tools{'Draw'}" href="$url;ToolType=Draw">Draw</a>
-    <a class="magick-nav-item $tools{'Composite'}" href="$url;ToolType=Composite">Composite</a>
-    <a class="magick-nav-item $tools{'Compare'}" href="$url;ToolType=Compare">Compare</a>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3129977114552745"
+         data-ad-slot="6345125851"
+         data-ad-format="auto"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  <nav class="nav magick-nav">
+    <a class="nav-link $tools{'Input'}" href="$url;ToolType=Input">Input</a>
+    <a class="nav-link $tools{'Output'}" href="$url;ToolType=Output">Output</a>
+    <a class="nav-link $tools{'View'}" href="$url;ToolType=View">View</a>
+    <a class="nav-link $tools{'Identify'}" href="$url;ToolType=Identify">Identify</a>
+    <a class="nav-link $tools{'Colormap'}" href="$url;ToolType=Colormap">Colormap</a>
+    <a class="nav-link $tools{'Resize'}" href="$url;ToolType=Resize">Resize</a>
+    <a class="nav-link $tools{'Transform'}" href="$url;ToolType=Transform">Transform</a>
+    <a class="nav-link $tools{'Enhance'}" href="$url;ToolType=Enhance">Enhance</a>
+    <a class="nav-link $tools{'Effects'}" href="$url;ToolType=Effects">Effects</a>
+    <a class="nav-link $tools{'FX'}" href="$url;ToolType=FX">F/X</a>
+    <a class="nav-link $tools{'Decorate'}" href="$url;ToolType=Decorate">Decorate</a>
+    <a class="nav-link $tools{'Annotate'}" href="$url;ToolType=Annotate">Annotate</a>
+    <a class="nav-link $tools{'Draw'}" href="$url;ToolType=Draw">Draw</a>
+    <a class="nav-link $tools{'Composite'}" href="$url;ToolType=Composite">Composite</a>
+    <a class="nav-link $tools{'Compare'}" href="$url;ToolType=Compare">Compare</a>
   </nav>
 </div>
 </div>
@@ -2457,17 +2471,14 @@ sub Input
   $image->Set(size=>$q->param('SizeGeometry')) if $q->param('SizeGeometry');
   if ($q->param('File'))
     {
-      my ($file);
-
       #
       # Copy data file to workarea.
       #
       $filename=Untaint($q->param('File'));
-      $file=$q->param($filename);
-      copy($file,'MagickStudio.mpc') ||
-        copy(\*$filename,'MagickStudio.mpc') ||
-          getstore($filename,'MagickStudio.mpc');
-      if (-z 'MagickStudio.mpc')
+      copy($q->upload('File'),'MagickStudio.dat') ||
+        copy(\*$filename,'MagickStudio.dat') ||
+          getstore($filename,'MagickStudio.dat');
+      if (-z 'MagickStudio.dat')
         {
           $q->param('SizeGeometry')=~/(\d+)\D*(\d*)/;
           Error('Image area exceeds maximum allowable') if $1 && $2 &&
@@ -2479,7 +2490,7 @@ sub Input
           $format=$q->param('Format') . ':' if $q->param('Format');
           $status=$image->Read("$format$filename$scene");
           Error($status) if $#$image < 0;
-          $status=$image->Write('MagickStudio.mpc');
+          $status=$image->Write('MagickStudio.dat');
           Error($status) if "$status";
           $format='';
         }
@@ -2492,10 +2503,10 @@ sub Input
           if (!($filename =~ /\/$/))
             {
               #
-              # Copy HTTP content to MagickStudio.mpc.
+              # Copy HTTP content to MagickStudio.dat.
               #
-              getstore($filename,'MagickStudio.mpc');
-              if ((-f 'MagickStudio.mpc') && (-s 'MagickStudio.mpc'))
+              getstore($filename,'MagickStudio.dat');
+              if ((-f 'MagickStudio.dat') && (-s 'MagickStudio.dat'))
                 {
                   if (($filename =~ /.html$/) || ($filename =~ /.htm$/))
                     {
@@ -2510,7 +2521,7 @@ sub Input
                         $extent && ($extent > (1024*$MaxImageExtent));
                       $status=$image->Read($filename);
                       Error($status) if $#$image < 0;
-                      $status=$image->Write('MagickStudio.mpc');
+                      $status=$image->Write('MagickStudio.dat');
                       Error($status) if "$status";
                     }
                 }
@@ -2518,7 +2529,7 @@ sub Input
           else
             {
               #
-              # Copy all images in HTTP directory to MagickStudio.mpc.
+              # Copy all images in HTTP directory to MagickStudio.dat.
               #
               FetchImages($filename,undef,0);
               @extents=$image->Ping("*");
@@ -2529,7 +2540,7 @@ sub Input
                 ($extent > (1024*$MaxImageExtent));
               $status=$image->Read("*");
               Error($status) if $#$image < 0;
-              $status=$image->Write('MagickStudio.mpc');
+              $status=$image->Write('MagickStudio.dat');
               Error($status) if "$status";
               chop($filename);
             }
@@ -2549,7 +2560,7 @@ sub Input
               $format=$q->param('Format') . ':' if $q->param('Format');
               $status=$image->Read("$format$filename$scene");
               Error($status) if $#$image < 0;
-              $status=$image->Write('MagickStudio.mpc');
+              $status=$image->Write('MagickStudio.dat');
               Error($status) if "$status";
               $image->Set(magick=>'mpc');
               $format='';
@@ -2558,9 +2569,9 @@ sub Input
     }
   $magick=$image->Get('magick');
   Error('Unable to read image file',$filename)
-    unless (-f 'MagickStudio.mpc') && (-s 'MagickStudio.mpc');
+    unless (-f 'MagickStudio.dat') && (-s 'MagickStudio.dat');
   Error('Image size exceeds maximum allowable',$filename)
-    unless (-s 'MagickStudio.mpc') < (1024*$MaxFilesize);
+    unless (-s 'MagickStudio.dat') < (1024*$MaxFilesize);
   #
   # Read image.
   #
@@ -2568,17 +2579,17 @@ sub Input
   $image->Set(font=>$DefaultFont);
   $image->Set(density=>$q->param('Density')) if $q->param('Density');
   $image->Set(size=>$q->param('SizeGeometry')) if $q->param('SizeGeometry');
-  @extents=$image->Ping("$format$path/MagickStudio.mpc$scene");
+  @extents=$image->Ping("$format$path/MagickStudio.dat$scene");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
   Error('Image extents exceeds maximum allowable') if $extent &&
     ($extent > (1024*$MaxImageExtent));
   $image=Image::Magick->new;
   $image->Set(density=>$q->param('Density')) if $q->param('Density');
-  $status=$image->Read("$format$path/MagickStudio.mpc$scene");
+  $status=$image->Read("$format$path/MagickStudio.dat$scene");
   Error($status) if $#$image < 0;
   $magick=$image->Get('magick') if $image->Get('magick') ne 'MPC';
-  unlink('MagickStudio.mpc');
+  unlink('MagickStudio.dat');
   if (length($q->param('Passphrase')) > 0)
     {
       my($passphrase);
@@ -2688,7 +2699,7 @@ sub InputForm
   $url=$q->script_name();
   $q->delete('ToolType');
   $q->param(-name=>'ToolType',-value=>'Input');
-  Header("ImageMagick Studio");
+  Header("Online Studio @ ImageMagick");
   print <<XXX;
 <br />
 <p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
@@ -2707,7 +2718,7 @@ XXX
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">Filename</a>:</td>\n";
-  print '<td>', $q->filefield(-name=>'File',-size=>50,maxlength=>1024), "</td>\n";
+  print '<td>', $q->filefield(-name=>'File',-size=>50,-maxlength=>1024), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/URL.html\" target=\"help\">URL</a>:</td>\n";
@@ -2727,11 +2738,11 @@ XXX
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?File=$DocumentRoot$DocumentDirectory/images/wizard.jpg;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
+An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>
-<p class="text-warning">Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are automatically removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.</p>
+<p class="text-warning">Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are <var>automagically</var> removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.</p>
 </fieldset>
 <br />
 <fieldset>
@@ -2798,7 +2809,7 @@ XXX
   print '</table>';
   print '</dd></dl>';
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -3080,7 +3091,7 @@ XXX
   # Image upload form.
   #
   RestoreQueryState($q->param('SessionID'),$q->param('Path'),'Upload');
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3115,22 +3126,13 @@ XXX
     -size=>50, -value=>"$basename.$format"), "<br />\n";
   print "</dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   Trailer(undef);
 }
 
 #
 # Output image form.
 #
-
-sub SelectFormats
-{
-  my($image) = @_;
-
-  return undef unless ($image->QueryFormat($_))[4];
-  $_;
-}
-
 sub OutputForm
 {
   my($format, @formats, $image, @OptionTypes, $path, $status);
@@ -3162,7 +3164,7 @@ sub OutputForm
 <p class="lead magick-description">Choose an <a href="$DocumentDirectory/Output.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <b>output</b> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3173,7 +3175,7 @@ XXX
     "\n";
   print "<dt><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
   $format=$q->param('Magick');
-  @formats=grep(SelectFormats($image),$image->QueryFormat());
+  @formats=$image->QueryFormat();
   print '<dd>', $q->scrolling_list(-class=>'form-control',-name=>'Format',
     -values=>[@formats],-size=>7,-default=>$format), "</dd><br />\n";
   print "<dt><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
@@ -3271,7 +3273,7 @@ XXX
     "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -3377,7 +3379,7 @@ sub ResizeForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>resize</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3431,7 +3433,7 @@ XXX
   print '</table></dd><br />';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br />
 XXX
@@ -3518,7 +3520,7 @@ XXX
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
   <footer class="magick-footer">
-    <div class="magick-nav-item pull-right">
+    <div class="nav-link pull-right">
 XXX
   ;
   if ($display)
@@ -3552,12 +3554,17 @@ XXX
     }
   print <<XXX;
     </div>
-    <div class="magick-nav-item">
+    <div class="nav-link">
       <p><a href="#">Back to top</a> •
-         <a href="http://www.imagemagick.org/script/contact.php">Contact Us</a> •
-         <a href="http://www.imagemagick.org/script/support.php">Donate</a></p>
+         <a href="https://www.imagemagick.org/discourse-server/viewforum.php?f=5">Contact Us</a> •
+         <a href="https://www.imagemagick.org/script/support.php">Donate</a></p>
     </div>
-    <p><small>&copy; 1999-2015 ImageMagick Studio LLC</small></p>
+XXX
+  if ($q->virtual_host() =~ /transloadit.imagemagick.org/) {
+    print '<p><small>Sponsored by <a href="https://transloadit.com">Transloadit</a> - the file uploading &amp; processing service</small></p>';
+  }
+  print <<XXX;
+    <p><small>&copy; 1999-2017 ImageMagick Studio LLC</small></p>
   </footer>
 </div>
 XXX
@@ -3642,6 +3649,8 @@ sub Transform
   $image->Crop("$parameter") if $q->param('Option') eq 'crop *';
   $image->Chop("$parameter") if $q->param('Option') eq 'chop *';
   $image=$image->Coalesce() if $q->param('Option') eq 'coalesce';
+  $image->Colorspace($q->param('Colorspace')) if
+    $q->param('Option') eq 'colorspace';
   $image->Deconstruct() if $q->param('Option') eq 'deconstruct';
   $image->Deskew($parameter) if $q->param('Option') eq 'deskew';
   $image=$image->Flatten() if $q->param('Option') eq 'flatten';
@@ -3683,6 +3692,7 @@ sub TransformForm
     'affine *',
     'auto-orient',
     'chop *',
+    'colorspace',
     'coalesce',
     'crop *',
     'deconstruct',
@@ -3712,7 +3722,7 @@ sub TransformForm
 <p class="lead magick-description">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>transform</b> to continue.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3746,6 +3756,14 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
     -values=>[@types]), "</td>\n";
   print "</tr>\n";
+  print "<tr>\n";
+  print "<th><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\">Colorspace</a></th>\n";
+  print "</tr>\n";
+  print "<tr>\n";
+  my @types=Image::Magick->QueryOption('colorspace');
+  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
+    -values=>[@types],-default=>'sRGB'), "</td>\n";
+  print "<tr>\n";
   print '</table><br />';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
@@ -3765,7 +3783,7 @@ XXX
     -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 XXX
   ;
@@ -3975,11 +3993,11 @@ sub ViewForm
   ($width,$height)=$coalesce->Get('width','height');
   $url=substr($path,length($DocumentRoot));
   print <<XXX;
-<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <b>Back</b> to undo your last image transformation.  For more information, see <a href="http://www.imagemagick.org/">ImageMagick</a>.</p>
+<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <b>Back</b> to undo your last image transformation.  For more information, see <a href="https://www.imagemagick.org/">ImageMagick</a>.</p>
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;
-  print $q->startform(-class=>'form-horizontal');
+  print $q->start_form(-class=>'form-horizontal');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3988,7 +4006,7 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'view'),
     "\n";
-  print $q->image_button(-class=>'img-responsive center-block',-name=>$basename,
+  print $q->image_button(-class=>'img-fluid mx-auto d-block',-name=>$basename,
     -src=>"$url/$basename.$format",-border=>1,-width=>$width,-height=>$height,
     -style=>"cursor:crosshair",-cursor), "<br />\n";
   if (defined($q->param("$basename.x")) || defined($q->param("$basename.y")))
@@ -4081,7 +4099,7 @@ XXX
   print '</table>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
-  print $q->endform, "\n";
+  print $q->end_form, "\n";
   print <<XXX;
 <br /> <br /> <br /> <br />
 XXX
@@ -4124,18 +4142,15 @@ $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
 $q->private_tempfiles(1);
-if ((hostname =~ /sans.imagemagick.org/) ||
-    (hostname =~ /sans.imagemagick.net/))
+if (($q->virtual_host() =~ /www.imagemagick.org/) ||
+    ($q->virtual_host() =~ /legacy.imagemagick.org/) ||
+    ($q->virtual_host() =~ /studio.imagemagick.org/))
   {
-    print $q->redirect(
-      'http://www.imagemagick.org/MagickStudio/scripts/MagickStudio.cgi');
+    print $q->redirect('http://transloadit.imagemagick.org/MagickStudio');
     exit;
   }
 $q->delete('CacheID');
 $q->param(-name=>'CacheID',-value=>rand($timer+$$));
-Image::Magick->new('area-limit'=>$AreaLimit,'disk-limit'=>$DiskLimit,
-  'map-limit'=>$MapLimit,'memory-limit'=>$MemoryLimit,
-  'thread-limit'=>$ThreadLimit,'time-limit'=>$TimeLimit);
 #
 # Choose function as determined by the query and environment.
 #

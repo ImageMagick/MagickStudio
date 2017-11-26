@@ -637,7 +637,7 @@ XXX
   print "<dl>\n";
   print "<dl>\n";
   print "<dt>You said:<br />\n";
-  print '<dd><pre class=\"text\">', $q->param('Comment'), "</pre><br />\n";
+  print '<dd><pre class=\"highlight\">', $q->param('Comment'), "</pre><br />\n";
   print "<dt>An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
   print "</dl>\n";
@@ -3520,7 +3520,6 @@ XXX
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
   <footer class="magick-footer">
-    <div class="nav-link pull-right">
 XXX
   ;
   if ($display)
@@ -3538,22 +3537,22 @@ XXX
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
           $url=substr($path,length($DocumentRoot));
-          print "<p><img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
+          print "<img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
             "border=\"0\" width=\"$width\" height=\"$height\" ",
-            "class=\"img-thumbnail\"/></p>\n";
+            "class=\"img-thumbnail img-fluid float-right\"/>\n";
         }
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.gif';
       if (-e $filename)
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
-          print "<p><img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
+          print "<img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
             "clipboard/", $q->param('SessionID'), ".gif\" border=\"0\" ",
-            "width=\"$width\" height=\"$height\" class=\"img-thumbnail\"/></p>\n";
+            "width=\"$width\" height=\"$height\" ",
+            "class=\"img-thumbnail img-fluid float-right\"/>\n";
         }
     }
   print <<XXX;
-    </div>
     <div class="nav-link">
       <p><a href="#">Back to top</a> •
          <a href="https://www.imagemagick.org/discourse-server/viewforum.php?f=5">Contact Us</a> •
@@ -4015,7 +4014,7 @@ XXX
       my $height=$coalesce->Get('rows');
       my $x=$q->param("$basename.x");
       my $y=$q->param("$basename.y");
-      print "<pre class=\"text\">$x,$y: ";
+      print "<pre class=\"highlight\">$x,$y: ";
       my $page=$coalesce->Get('page');
       if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
@@ -4061,7 +4060,7 @@ XXX
     {
       my $error=$image->Get('error');
       $error*=(Image::Magick->QuantumRange);
-      print '<pre class="text">';
+      print '<pre class="highlight">';
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
       print "</pre>\n";
     }

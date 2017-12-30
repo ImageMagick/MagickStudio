@@ -2885,11 +2885,11 @@ XXX
           <a class="dropdown-item" href="$url;ToolType=Resize">Resize</a>
         </div>
       </li>
-      <li class="nav-item $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'} dropdown">
+      <li class="nav-item $tools{'Effects'} $tools{'FX'} $tools{'Enhance'} $tools{'Colormap'} dropdown">
         <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-effects" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Effects</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-effects">
           <a class="dropdown-item" href="$url;ToolType=Effects">Effects</a>
-          <a class="dropdown-item" href="$url;ToolType=F/X">F/X</a>
+          <a class="dropdown-item" href="$url;ToolType=FX">F/X</a>
           <a class="dropdown-item" href="$url;ToolType=Enhance">Enhance</a>
           <a class="dropdown-item" href="$url;ToolType=Colormap">Colormap</a>
         </div>

@@ -2858,16 +2858,16 @@ XXX
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
-    <form class="form-inline my-2 my-lg-0" action="$script">
-      <input type="hidden" name="CacheID" value="$cacheID" />
-      <input type="hidden" name="SessionID" value="$sessionID" />
-      <input type="hidden" name="Path" value="$path" />
-      <input type="hidden" name="Name" value="$name" />
-      <input type="hidden" name="Magick" value="$magick" />
-      <input type="hidden" name="ToolType" value="Upload" />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
-    </form>
     <ul class="navbar-nav mr-auto">
+      <form class="form-inline my-2 my-lg-0" action="$script">
+        <input type="hidden" name="CacheID" value="$cacheID" />
+        <input type="hidden" name="SessionID" value="$sessionID" />
+        <input type="hidden" name="Path" value="$path" />
+        <input type="hidden" name="Name" value="$name" />
+        <input type="hidden" name="Magick" value="$magick" />
+        <input type="hidden" name="ToolType" value="Upload" />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
+      </form>
       <li class="nav-item $tools{'View'} $tools{'Identify'} $tools{'Compare'} dropdown">
         <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-view">

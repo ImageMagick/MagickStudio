@@ -1053,7 +1053,6 @@ sub CreateWorkDirectory
   mkdir($path,0775);
   chdir($path) || Error('Your image has expired',$path);
   $q->param(-name=>'Path',-value=>$path);
-  $q->param(-name=>'ToolType',-value=>'View');
 }
 
 #
@@ -2800,21 +2799,21 @@ sub Header
   #
   # Initialize tool types.
   #
-  $tools{'Upload'}='';
-  $tools{'Download'}='';
-  $tools{'View'}='';
-  $tools{'Identify'}='';
+  $tools{'Annotate'}='';
   $tools{'Colormap'}='';
+  $tools{'Compare'}='';
+  $tools{'Composite'}='';
+  $tools{'Decorate'}='';
+  $tools{'Download'}='';
+  $tools{'Draw'}='';
+  $tools{'Effects'}='';
+  $tools{'Enhance'}='';
+  $tools{'FX'}='';
+  $tools{'Identify'}='';
   $tools{'Resize'}='';
   $tools{'Transform'}='';
-  $tools{'Enhance'}='';
-  $tools{'Effects'}='';
-  $tools{'FX'}='';
-  $tools{'Decorate'}='';
-  $tools{'Annotate'}='';
-  $tools{'Draw'}='';
-  $tools{'Composite'}='';
-  $tools{'Compare'}='';
+  $tools{'Upload'}='';
+  $tools{'View'}='';
   $q->param(-name=>'ToolType',-value=>'View') unless
     defined($q->param('ToolType'));
   $tooltype=$q->param('ToolType');

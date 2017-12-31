@@ -2860,7 +2860,6 @@ XXX
   </button>
   <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
     <form class="form-inline my-2 my-lg-0" action="$script">
-      <input type="hidden" name="Action" value="mogrify" />
       <input type="hidden" name="CacheID" value="$cacheID" />
       <input type="hidden" name="SessionID" value="$sessionID" />
       <input type="hidden" name="Path" value="$path" />

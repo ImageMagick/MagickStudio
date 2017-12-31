@@ -181,7 +181,7 @@ sub AnnotateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <b>annotate</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <code>annotate</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -340,7 +340,7 @@ sub CheckStudioHours
   $url=$q->self_url . "&Action=" . $action;
   Header("Please Stand By...",-refresh=>"600; URL=$url");
   print <<XXX;
-<b>ImageMagick Studio</b> has restricted access from 6PM until 11PM EST.
+<code>ImageMagick Studio</code> has restricted access from 6PM until 11PM EST.
 We have temporarily <i>suspended</i> the processing of your image.
 Shortly after 11PM, processing <var>automagically</var> continues and your image is
 returned.
@@ -363,7 +363,7 @@ sub CheckStudioStatus
   Header("Please Stand By...",-refresh=>"$refresh_rate; URL=$url",
     -status=>'502 Service Temporarily Overloaded');
   print <<XXX;
-<b>ImageMagick Studio</b> is busy serving other requests.  We have temporarily
+<code>ImageMagick Studio</code> is busy serving other requests.  We have temporarily
 <i>suspended</i> the processing of your image.  The current studio status is:
 <br />
 <center>
@@ -538,7 +538,7 @@ sub ColormapForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <b>quantize</b> to continue.</p>
+<p class="lead magick-description">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <code>quantize</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -665,8 +665,8 @@ sub CommentForm
 <img alt="ImageMagick Studio" src="$DocumentDirectory/images/magick.png" align=bottom width="114" height="118" border="0" />
 </center>
 <p><hr /></p>
-If you have a comment or problem with <b>ImageMagick Studio</b>, enter
-any details below and press <b>send</b>.  Be sure to include a valid e-mail
+If you have a comment or problem with <code>ImageMagick Studio</code>, enter
+any details below and press <code>send</code>.  Be sure to include a valid e-mail
 address if you require a response.
 XXX
   ;
@@ -785,7 +785,7 @@ sub CompareForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <b>compare</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <code>Browse</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <code>compare</code> to continue.</p>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
@@ -949,7 +949,7 @@ sub CompositeForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Composite.html" target="help">composite</a> your image, press <b>Browse</b> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the composite image and the type of composite operation.  Finally, press <b>composite</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Composite.html" target="help">composite</a> your image, press <code>Browse</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the composite image and the type of composite operation.  Finally, press <code>composite</code> to continue.</p>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
@@ -1117,7 +1117,7 @@ sub DecorateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <b>decorate</b>.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <code>decorate</code>.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -1352,7 +1352,7 @@ sub Download
   #
   $url=substr($q->param('Path'),length($DocumentRoot));
   print <<XXX;
-<p>Here is your converted image (or images).  Click on any image to view or precede your click by the shift key to download it to your local area or press <b>upload</b> to transfer the image to a remote site.</p>
+<p>Here is your converted image (or images).  Click on any image to view or precede your click by the shift key to download it to your local area or press <code>upload</code> to transfer the image to a remote site.</p>
 <center>
 XXX
   ;
@@ -1472,7 +1472,7 @@ sub DownloadForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p class="lead magick-description">Choose an <a href="$DocumentDirectory/Download.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <b>output</b> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
+<p class="lead magick-description">Choose an <a href="$DocumentDirectory/Download.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <code>output</code> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -1677,7 +1677,7 @@ sub DrawForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <b>draw</b>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <code>draw</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -2143,7 +2143,7 @@ sub EffectsForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -2295,7 +2295,7 @@ sub EnhanceForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>enhance</b> to continue.</p>
+<p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>enhance</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -2372,7 +2372,7 @@ sub Error
 <br />
 <br />
 <br />
-Press <b>Back</b> to correct the error or press a tab above to continue.
+Press <code>Back</code> to correct the error or press a tab above to continue.
 XXX
   ;
   Trailer(0);
@@ -2632,7 +2632,7 @@ sub FXForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>effect</b> to continue.</p>
+<p class="lead magick-description">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -3100,7 +3100,7 @@ sub ResizeForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>resize</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>resize</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -3317,29 +3317,29 @@ XXX
       print "<br />\n";
       print "Environment state:\n";
       print "<ul>\n";
-      print "<li><b>SponsorURL</b>: ", $SponsorURL, "<br />\n";
-      print "<li><b>SponsorIcon</b>: ", $SponsorIcon, "<br />\n";
-      print "<li><b>accept</b>: ", $q->Accept(), "<br />\n";
-      print "<li><b>auth type</b>: ", $q->auth_type(), "<br />\n";
-      print "<li><b>raw cookie</b>: ", $q->raw_cookie(), "<br />\n";
-      print "<li><b>path info</b>: ", $q->path_info(), "<br />\n";
-      print "<li><b>path translated</b>: ", $q->path_translated(), "<br />\n";
-      print "<li><b>referer</b>: ", $q->referer(), "<br />\n";
-      print "<li><b>remote addr</b>: ", $q->remote_addr(), "<br />\n";
-      print "<li><b>remote ident</b>: ", $q->remote_ident(), "<br />\n";
-      print "<li><b>remote host</b>: ", GetHostname($q->remote_host()), "<br />\n";
-      print "<li><b>remote user</b>: ", $q->remote_user(), "<br />\n";
-      print "<li><b>request method</b>: ", $q->request_method(), "<br />\n";
-      print "<li><b>script name</b>: ", $q->script_name(), "<br />\n";
-      print "<li><b>server name</b>: ", $q->server_name(), "<br />\n";
-      print "<li><b>server software</b>: ", $q->server_software(), "<br />\n";
-      print "<li><b>server port</b>: ", $q->server_port(), "<br />\n";
-      print "<li><b>temporary directory</b>: ", $ENV{TMPDIR}, "<br />\n";
-      print "<li><b>user agent</b>: ", $q->user_agent(), "<br />\n";
-      print "<li><b>user name</b>: ", $q->user_name(), "<br />\n";
-      print "<li><b>virtual host</b>: ", $q->virtual_host(), "<br />\n";
-      print "<li><b>environment</b>: ", $q->http(), "<br />\n";
-      print "<li><b>time stamp</b>: ", scalar(localtime), "<br />\n";
+      print "<li><code>SponsorURL</code>: ", $SponsorURL, "<br />\n";
+      print "<li><code>SponsorIcon</code>: ", $SponsorIcon, "<br />\n";
+      print "<li><code>accept</code>: ", $q->Accept(), "<br />\n";
+      print "<li><code>auth type</code>: ", $q->auth_type(), "<br />\n";
+      print "<li><code>raw cookie</code>: ", $q->raw_cookie(), "<br />\n";
+      print "<li><code>path info</code>: ", $q->path_info(), "<br />\n";
+      print "<li><code>path translated</code>: ", $q->path_translated(), "<br />\n";
+      print "<li><code>referer</code>: ", $q->referer(), "<br />\n";
+      print "<li><code>remote addr</code>: ", $q->remote_addr(), "<br />\n";
+      print "<li><code>remote ident</code>: ", $q->remote_ident(), "<br />\n";
+      print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "<br />\n";
+      print "<li><code>remote user</code>: ", $q->remote_user(), "<br />\n";
+      print "<li><code>request method</code>: ", $q->request_method(), "<br />\n";
+      print "<li><code>script name</code>: ", $q->script_name(), "<br />\n";
+      print "<li><code>server name</code>: ", $q->server_name(), "<br />\n";
+      print "<li><code>server software</code>: ", $q->server_software(), "<br />\n";
+      print "<li><code>server port</code>: ", $q->server_port(), "<br />\n";
+      print "<li><code>temporary directory</code>: ", $ENV{TMPDIR}, "<br />\n";
+      print "<li><code>user agent</code>: ", $q->user_agent(), "<br />\n";
+      print "<li><code>user name</code>: ", $q->user_name(), "<br />\n";
+      print "<li><code>virtual host</code>: ", $q->virtual_host(), "<br />\n";
+      print "<li><code>environment</code>: ", $q->http(), "<br />\n";
+      print "<li><code>time stamp</code>: ", scalar(localtime), "<br />\n";
       print "</ul>\n";
     }
   print $q->end_html;
@@ -3447,7 +3447,7 @@ sub TransformForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <b>transform</b> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>transform</code> to continue.</p>
 XXX
   ;
   print $q->start_form(-class=>'form-horizontal');
@@ -3808,7 +3808,7 @@ sub UploadForm
   Header("Online Studio @ ImageMagick");
   print <<XXX;
 <br />
-<p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <b>Browse</b> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <b>view</b> to continue.</p>
+<p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <code>Browse</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
 XXX
   ;
   $version=Image::Magick->VERSION;
@@ -3844,7 +3844,7 @@ XXX
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <b>ImageMagick Studio</b>, version $version.
+An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>ImageMagick Studio</code>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>
@@ -4047,7 +4047,7 @@ sub ViewForm
   ($width,$height)=$coalesce->Get('width','height');
   $url=substr($path,length($DocumentRoot));
   print <<XXX;
-<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <b>Back</b> to undo your last image transformation.  For more information, see <a href="https://www.imagemagick.org/">ImageMagick</a>.</p>
+<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <code>Back</code> to undo your last image transformation.  For more information, see <a href="https://www.imagemagick.org/">ImageMagick</a>.</p>
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;

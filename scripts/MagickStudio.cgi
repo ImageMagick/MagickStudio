@@ -2868,12 +2868,11 @@ XXX
         <input type="hidden" name="ToolType" value="Upload" />
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
       </form>
-      <li class="nav-item $tools{'View'} $tools{'Identify'} $tools{'Compare'} dropdown">
+      <li class="nav-item $tools{'View'} $tools{'Identify'} dropdown">
         <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-view">
           <a class="dropdown-item" href="$url;ToolType=View">View</a>
           <a class="dropdown-item" href="$url;ToolType=Identify">Identify</a>
-          <a class="dropdown-item" href="$url;ToolType=Compare">Compare</a>
         </div>
       </li>
       <li class="nav-item $tools{'Transform'} $tools{'Resize'} dropdown">
@@ -2898,6 +2897,13 @@ XXX
           <a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a>
           <a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a>
           <a class="dropdown-item" href="$url;ToolType=Draw">Draw</a>
+        </div>
+      </li>
+      <li class="nav-item $tools{'Composite'} $tools{'Compare'} dropdown">
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Composite</a>
+        <div class="dropdown-menu" aria-labelledby="nav-item-view">
+          <a class="dropdown-item" href="$url;ToolType=Composite">Composite</a>
+          <a class="dropdown-item" href="$url;ToolType=Compare">Compare</a>
         </div>
       </li>
     </ul>

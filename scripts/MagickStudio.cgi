@@ -3850,7 +3850,7 @@ XXX
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>ImageMagick Studio</code>, version $version.
+An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>Online Studio @ ImageMagick</code>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>

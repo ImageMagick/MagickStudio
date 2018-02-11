@@ -1378,7 +1378,7 @@ XXX
   $height=$2;
   $x=$3;
   $y=$4;
-  for (split(/\n/,$montage->Get('directory')))
+  for (split(/\xff/,$montage->Get('directory')))
   {
     print "  <area href=\"$url/$_\"", " shape=rect coords=$x,$y,",
       $x+$width-1, ',', $y+$height-1, " target=\"", rand($timer+$$), "\">\n";

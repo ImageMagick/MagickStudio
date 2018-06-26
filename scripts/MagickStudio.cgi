@@ -785,7 +785,7 @@ sub CompareForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead magick-description">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <code>Browse</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <code>compare</code> to continue.</p>
+<p class="lead magick-description">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <code>Choose File</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <code>compare</code> to continue.</p>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
@@ -4202,6 +4202,7 @@ $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
 if (($q->virtual_host() =~ /www.imagemagick.org/) ||
+    ($q->virtual_host() =~ /mirror.imagemagick.org/) ||
     ($q->virtual_host() =~ /legacy.imagemagick.org/) ||
     ($q->virtual_host() =~ /studio.imagemagick.org/))
   {

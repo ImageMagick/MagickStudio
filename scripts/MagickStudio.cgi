@@ -2015,9 +2015,11 @@ sub Effects
       @coefficients=split(/[ ,]+/,$parameter);
       $image->ColorMatrix(\@coefficients);
     }
+  $image->RangeThreshold(geomery=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'range threshold *';
+  $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
   $image->RotationalBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'rotational blur *';
-  $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
   $image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq '-class=>"checkbox",selective blur *';
   $image->SepiaTone("$parameter") if $q->param('Option') eq 'sepia tone *';
@@ -2127,6 +2129,7 @@ sub EffectsForm
     'median filter *',
     'mode *',
     'motion blur *',
+    'range threshold *',
     'reduce noise *',
     'rotational blur *',
     'selective blur *',

@@ -31,7 +31,7 @@
 #  You may not use this file except in compliance with the License.  You may  #
 #  obtain a copy of the License at                                            #
 #                                                                             #
-#    https://www.imagemagick.org/script/license.php                           #
+#    https://imagemagick.org/script/license.php                               #
 #                                                                             #
 #  Unless required by applicable law or agreed to in writing, software        #
 #  distributed under the License is distributed on an "AS IS" BASIS,          #
@@ -204,7 +204,7 @@ XXX
     -size=>25,-value=>'+0+0'), "</td>\n";
   my @types=Image::Magick->QueryOption('gravity');
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
-    -values=>[@types],-default=>'Center'), "</td>\n";
+    -values=>[@types],-default=>'SouthEast'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br />';
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
@@ -2849,11 +2849,8 @@ sub Header
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
-<link rel="canonical" href="https://www.imagemagick.org" />
+<link rel="canonical" href="https://imagemagick.org" />
 XXX
-  if (!($q->virtual_host() =~ /transloadit.imagemagick.org/)) {
-    print '<script async="async" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
-  }
   print <<XXX;
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="logo" name="ImageMagick" alt="ImageMagick" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
@@ -3288,13 +3285,10 @@ XXX
   print <<XXX;
     <div class="nav-link">
       <p><a href="#">Back to top</a> •
-         <a href="https://www.imagemagick.org/discourse-server/viewforum.php?f=5">Contact Us</a> •
-         <a href="https://www.imagemagick.org/script/support.php">Donate</a></p>
+         <a href="https://imagemagick.org/discourse-server/viewforum.php?f=5">Contact Us</a> •
+         <a href="https://imagemagick.org/script/support.php">Donate</a></p>
     </div>
 XXX
-  if ($q->virtual_host() =~ /transloadit.imagemagick.org/) {
-    print '<p><small>Sponsored by <a href="https://transloadit.com">Transloadit</a> - the file uploading &amp; processing service</small></p>';
-  }
   print <<XXX;
     <p><small>&copy; 1999-2018 ImageMagick Studio LLC</small></p>
   </footer>
@@ -3675,6 +3669,7 @@ sub Upload
               $format=$q->param('Format') . ':' if $q->param('Format');
               $status=$image->Read("$format$filename$scene");
               Error($status) if $#$image < 0;
+              $image->Set(magick=>'mpc');
               $status=$image->Write('MagickStudio.dat');
               Error($status) if "$status";
               $image->Set(magick=>'mpc');
@@ -3892,8 +3887,8 @@ XXX
   print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
   print "</tr>\n";
   print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Meta',-size=>25),
-    "</td>\n";
+  print '<td>', $q->textfield(-class=>'form-control',-name=>'Meta',-size=>25,
+    -value=>'white'), "</td>\n";
   my @types=Image::Magick->QueryOption('interlace');
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
     -values=>[@types],-default=>'None'), "</td>\n";
@@ -4056,7 +4051,7 @@ sub ViewForm
   ($width,$height)=$coalesce->Get('width','height');
   $url=substr($path,length($DocumentRoot));
   print <<XXX;
-<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <code>Back</code> to undo your last image transformation.  For more information, see <a href="https://www.imagemagick.org/">ImageMagick</a>.</p>
+<p class="lead magick-description">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <code>Back</code> to undo your last image transformation.  For more information, see <a href="https://imagemagick.org/">ImageMagick</a>.</p>
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;
@@ -4205,11 +4200,12 @@ $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
 if (($q->virtual_host() =~ /www.imagemagick.org/) ||
+    ($q->virtual_host() =~ /transloadit.imagemagick.org/) ||
     ($q->virtual_host() =~ /mirror.imagemagick.org/) ||
     ($q->virtual_host() =~ /legacy.imagemagick.org/) ||
     ($q->virtual_host() =~ /studio.imagemagick.org/))
   {
-    print $q->redirect('http://transloadit.imagemagick.org/MagickStudio');
+    print $q->redirect('https://imagemagick.org/MagickStudio');
     exit;
   }
 $q->delete('CacheID');

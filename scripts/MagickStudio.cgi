@@ -48,6 +48,15 @@
 #  the same or differing image format.
 #
 #
+
+BEGIN {
+  use File::Basename;
+  $dir=dirname($0);
+  chdir $dir or die "Can't chdir to $dir: $!\n";
+  # safe now
+  push @INC, '.';
+}
+
 use CGI;
 use CGI::Carp qw/fatalsToBrowser/;
 use Sys::Hostname;
@@ -622,7 +631,7 @@ sub Comment
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/css/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/assets/magick.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -655,7 +664,7 @@ sub CommentForm
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/css/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/assets/magick.css"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -2080,6 +2089,7 @@ sub Effects
   $image->AdaptiveThreshold("$parameter") if
     $q->param('Option') eq 'adaptive threshold *';
   $image->AutoThreshold() if $q->param('Option') eq 'auto-threshold';
+  $image->CLAHE("$parameter") if $q->param('Option') eq 'calhe *';
   $image->Threshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'threshold *';
   $image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
@@ -2118,6 +2128,7 @@ sub EffectsForm
     'black threshold *',
     'blur *',
     'canny edge *',
+    'clahe *',
     'despeckle',
     'edge detect *',
     'emboss *',
@@ -2720,6 +2731,21 @@ XXX
 XXX
   ;
   Trailer(1);
+}
+
+#
+# Return hostname from host address.
+#
+sub GetAddress
+{
+  use Socket;
+
+  my($hostname) = @_;
+
+  my $address = inet_ntoa(
+    scalar gethostbyname( $hostname || 'localhost' )
+  );
+  $address;
 }
 
 #
@@ -3328,6 +3354,7 @@ XXX
       print "<li><code>path info</code>: ", $q->path_info(), "<br />\n";
       print "<li><code>path translated</code>: ", $q->path_translated(), "<br />\n";
       print "<li><code>referer</code>: ", $q->referer(), "<br />\n";
+      print "<li><code>local addr</code>: ", GetAddress($q->virtual_host()), "<br />\n";
       print "<li><code>remote addr</code>: ", $q->remote_addr(), "<br />\n";
       print "<li><code>remote ident</code>: ", $q->remote_ident(), "<br />\n";
       print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "<br />\n";
@@ -4199,13 +4226,9 @@ $CGI::POST_MAX=1024*$MaxFilesize;
 $timer=time;
 $q=new CGI;
 $q->autoEscape(undef);
-if (($q->virtual_host() =~ /www.imagemagick.org/) ||
-    ($q->virtual_host() =~ /transloadit.imagemagick.org/) ||
-    ($q->virtual_host() =~ /mirror.imagemagick.org/) ||
-    ($q->virtual_host() =~ /legacy.imagemagick.org/) ||
-    ($q->virtual_host() =~ /studio.imagemagick.org/))
+if (GetAddress($q->virtual_host) == '198.72.81.86')
   {
-    print $q->redirect('https://imagemagick.org/MagickStudio');
+    print $q->redirect('https://magick.imagemagick.org/MagickStudio');
     exit;
   }
 $q->delete('CacheID');

@@ -3321,7 +3321,7 @@ XXX
   <!-- Javascript assets -->
   <script src="$DocumentDirectory/assets/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
   <script src="$DocumentDirectory/assets/popper.min.js" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="$DocumentDirectory/assets/jquery.min.js"><\\/script>')</script>
+  <script>window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"><\\/script>')</script>
   <script src="$DocumentDirectory/assets/bootstrap.min.js"></script>
 </div>
 XXX

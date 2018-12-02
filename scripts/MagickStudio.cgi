@@ -25,7 +25,7 @@
 #                            November 1997                                    #
 #                                                                             #
 #                                                                             #
-#  Copyright (C) 1999-2018 ImageMagick Studio LLC, a non-profit organization  #
+#  Copyright (C) 1999-2019 ImageMagick Studio LLC, a non-profit organization  #
 #  dedicated to making software imaging solutions freely available.           #
 #                                                                             #
 #  You may not use this file except in compliance with the License.  You may  #
@@ -2089,7 +2089,6 @@ sub Effects
   $image->AdaptiveThreshold("$parameter") if
     $q->param('Option') eq 'adaptive threshold *';
   $image->AutoThreshold() if $q->param('Option') eq 'auto-threshold';
-  $image->CLAHE("$parameter") if $q->param('Option') eq 'calhe *';
   $image->Threshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'threshold *';
   $image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
@@ -2128,7 +2127,6 @@ sub EffectsForm
     'black threshold *',
     'blur *',
     'canny edge *',
-    'clahe *',
     'despeckle',
     'edge detect *',
     'emboss *',
@@ -2248,6 +2246,7 @@ sub Enhance
   $image->AutoLevel() if $q->param('Option') eq 'auto-level';
   $image->BrightnessContrast(geometry=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'brightness-contrast *';
+  $image->CLAHE("$parameter") if $q->param('Option') eq 'calhe *';
   $image->Contrast(sharpen=>'true') if $q->param('Option') eq 'spiff';
   $image->Contrast(sharpen=>'false') if $q->param('Option') eq 'dull';
   $image->ContrastStretch(geometry=>$parameter,channel=>$channel) if
@@ -2289,6 +2288,7 @@ sub EnhanceForm
     'auto-level',
     'brightness *',
     'brightness-contrast *',
+    'clahe *',
     'clipboard as CLUT',
     'contrast-stretch *',
     'dull',
@@ -3316,7 +3316,7 @@ XXX
     </div>
 XXX
   print <<XXX;
-    <p><small>&copy; 1999-2018 ImageMagick Studio LLC</small></p>
+    <p><small>&copy; 1999-2019 ImageMagick Studio LLC</small></p>
   </footer>
   <!-- Javascript assets -->
   <script src="$DocumentDirectory/assets/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>

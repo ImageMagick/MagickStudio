@@ -4228,7 +4228,7 @@ $q=new CGI;
 $q->autoEscape(undef);
 if (GetAddress($q->virtual_host) == '198.72.81.86')
   {
-    print $q->redirect('https://magick.imagemagick.org/MagickStudio');
+    print $q->redirect('https://warrior.imagemagick.org/MagickStudio');
     exit;
   }
 $q->delete('CacheID');

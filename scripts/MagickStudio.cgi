@@ -25,7 +25,7 @@
 #                            November 1997                                    #
 #                                                                             #
 #                                                                             #
-#  Copyright (C) 1999-2019 ImageMagick Studio LLC, a non-profit organization  #
+#  Copyright (C) 1999-2020 ImageMagick Studio LLC, a non-profit organization  #
 #  dedicated to making software imaging solutions freely available.           #
 #                                                                             #
 #  You may not use this file except in compliance with the License.  You may  #
@@ -3316,7 +3316,7 @@ XXX
     </div>
 XXX
   print <<XXX;
-    <p><small>&copy; 1999-2019 ImageMagick Studio LLC</small></p>
+    <p><small>&copy; 1999-2020 ImageMagick Studio LLC</small></p>
   </footer>
   <!-- Javascript assets -->
   <script src="$DocumentDirectory/assets/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>

@@ -508,6 +508,7 @@ sub Colormap
   $image->OrderedDither($parameter) if $options{'ordered dither'};
   $image->Posterize(levels=>$levels,dither=>$dither) if $options{'posterize'};
   $image->Segment(colorspace=>$colorspace) if $options{'segment'};
+  $image->Kmeans($parameter) if $options{'kmeans'};
   $image->Quantize(colors=>$colors,dither=>$dither,colorspace=>$colorspace,
     'transparent-color'=>$transparent_color,measure_error=>$measure_error);
   #
@@ -533,6 +534,7 @@ sub ColormapForm
     'dither',
     'global colormap',
     'gray',
+    'kmeans',
     'measure error',
     'map to clipboard',
     'netscape color cube',

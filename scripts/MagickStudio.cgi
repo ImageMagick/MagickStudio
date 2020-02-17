@@ -2982,7 +2982,7 @@ sub Identify
   #
   $path=Untaint($q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
-  $images=Image::Magick->new;
+  $images=Image::Magick->new(precision=>6);
   $status=$images->Read("$path/MagickStudio.mpc");
   Error($status) if $#$images < 0;
   $magick=$q->param('Magick');
@@ -2997,7 +2997,7 @@ sub Identify
 XXX
   ;
   print "<pre class=\"pre-scrollable\">";
-  $images->Identify();
+  $images->Identify(features=>1,moments=>1);
   print "</pre>\n";
   Trailer(1);
 }

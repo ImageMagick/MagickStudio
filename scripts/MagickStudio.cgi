@@ -2997,7 +2997,7 @@ sub Identify
 XXX
   ;
   print "<pre class=\"pre-scrollable\">";
-  $images->Identify(features=>1,moments=>1);
+  $images->Identify();
   print "</pre>\n";
   Trailer(1);
 }

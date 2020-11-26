@@ -1798,8 +1798,8 @@ sub Effects
     $q->param('Option') eq 'adaptive blur *';
   $image->AdaptiveSharpen(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'adaptive sharpen *';
-  $image->BilateralFilter(geometry=>"$parameter",channel=>$channel) if
-    $q->param('Option') eq 'bilateral filter *';
+  $image->BilateralSmoothing(geometry=>"$parameter",channel=>$channel) if
+    $q->param('Option') eq 'bilateral smoothing *';
   $image->BlackThreshold(geomery=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'black threshold *';
   $image->Blur(geometry=>"$parameter",channel=>$channel) if
@@ -2128,7 +2128,7 @@ sub EffectsForm
     'adaptive sharpen *',
     'adaptive threshold *',
     'auto-threshold',
-    'bilateral filter *',
+    'bilateral smoothing *',
     'black threshold *',
     'blur *',
     'canny edge *',

@@ -2861,7 +2861,7 @@ sub Header
   print $q->start_html(
     -meta=>{
       'charset'=>'utf-8', 
-      'viewport'=>'width=device-width,minimum-scale=1,initial-scale=1,shrink-to-fit=no'
+      'viewport'=>'width=device-width, initial-scale=1, shrink-to-fit=no'
     },
     -head=>[
       "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>",

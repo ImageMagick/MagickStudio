@@ -2860,7 +2860,7 @@ sub Header
   print $q->header(-charset=>'UTF-8',-expires=>$ExpireCache,@attributes), "\n";
   print $q->start_html(-title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
     -meta=>{'http-equiv'=>'X-UA-Compatible',
-      'viewport'=>'width=device-width, initial-scale=1, shrink-to-fit=no'},
+      'viewport'=>'width=device-width,minimum-scale=1,initial-scale=1,shrink-to-fit=no'},
     -head=>[
       "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>",
       "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>"

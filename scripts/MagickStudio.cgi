@@ -2858,13 +2858,16 @@ sub Header
   $header=1;
   $|=1;
   print $q->header(-charset=>'UTF-8',-expires=>$ExpireCache,@attributes), "\n";
-  print $q->start_html(-title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
-    -meta=>{'http-equiv'=>'X-UA-Compatible',
-      'viewport'=>'width=device-width,minimum-scale=1,initial-scale=1,shrink-to-fit=no'},
+  print $q->start_html(
+    -meta=>{
+      'charset'=>'utf-8', 
+      'viewport'=>'width=device-width,minimum-scale=1,initial-scale=1,shrink-to-fit=no'
+    },
     -head=>[
       "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>",
       "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>"
     ],
+    -title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
     -style=>{-src=>"$DocumentDirectory/assets/magick.css"}), "\n";
   $script=$q->script_name;
   $cacheID=$q->param('CacheID');

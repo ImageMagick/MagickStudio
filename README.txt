@@ -7,8 +7,8 @@ INSTALL INSTRUCTIONS
 
   for details.
 
-  MagickStudio can read and write many of the more popular image
-  formats directly from a Web page including JPEG, TIFF, PNM, GIF, and
+  ImageMagick - Online Studio can read and write many of the more popular
+  image formats directly from a Web page including JPEG, TIFF, PNM, GIF, and
   Photo CD.  In addition you can interactively resize, rotate, sharpen,
   color reduce, or add special effects to an image and save your
   completed work in the same or differing image format.
@@ -50,7 +50,7 @@ INSTALL INSTRUCTIONS
 
   Next, point your browser to the ImageMagick Studio script.  For example,
 
-      https://www.imagemagick.org/MagickStudio
+      https://mywebsite.org/MagickStudio
 
   and press the sample image URL.  Report any problems to
   https://github.com/ImageMagick/ImageMagick/discussions.
@@ -69,7 +69,7 @@ INSTALL INSTRUCTIONS
 
 COPYRIGHT
 
-  Copyright 1999-2020 ImageMagick Studio LLC, a non-profit organization
+  Copyright 1999-2021 ImageMagick Studio LLC, a non-profit organization
   dedicated to making software imaging solutions freely available.
 
   You may not use this file except in compliance with the License.  You may

@@ -3319,12 +3319,12 @@ XXX
   print <<XXX;
     <div class="nav-link">
       <p><a href="#">Back to top</a> •
-         <a href="https://imagemagick.org/discourse-server/viewforum.php?f=5">Contact Us</a> •
-         <a href="https://imagemagick.org/script/support.php">Donate</a></p>
+         <a href="https://github.com/ImageMagick/ImageMagick/discussions">Community</a> •
+         <a href="https://github.com/sponsors/ImageMagick?o=esb">Donate</a></p>
     </div>
 XXX
   print <<XXX;
-    <p><small>&copy; 1999-2020 ImageMagick Studio LLC</small></p>
+    <p><small>&copy; 1999-2021 ImageMagick Studio LLC</small></p>
   </footer>
   <!-- Javascript assets -->
   <script src="$DocumentDirectory/assets/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
@@ -3844,7 +3844,7 @@ sub UploadForm
   $url=$q->script_name();
   $q->delete('ToolType');
   $q->param(-name=>'ToolType',-value=>'Upload');
-  Header("Online Studio @ ImageMagick");
+  Header("ImageMagick - Online Studio");
   print <<XXX;
 <br />
 <p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <code>Browse</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
@@ -3883,7 +3883,7 @@ XXX
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>Online Studio @ ImageMagick</code>, version $version.
+An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>ImageMagick - Online Studio</code>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>

@@ -2066,6 +2066,7 @@ sub Effects
     $q->param('Option') eq 'sharpen *';
   $image->Sketch("$parameter") if $q->param('Option') eq 'sketch *';
   $image->Solarize("$parameter") if $q->param('Option') eq 'solarize *';
+  $image->SortPixels("$parameter") if $q->param('Option') eq 'sort-pixels *';
   $image->Spread("$parameter") if $q->param('Option') eq 'spread *';
   if ($q->param('Option') eq 'stegano *')
     {
@@ -2637,6 +2638,7 @@ sub FXForm
     'shadow *',
     'sketch *',
     'solarize *',
+    'sort-pixels *',
     'stegano *',
     'stereo',
     'swirl *',

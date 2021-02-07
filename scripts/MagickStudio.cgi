@@ -2892,32 +2892,32 @@ XXX
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
+    <form class="form-inline my-2 my-lg-0" action="$script">
+      <input type="hidden" name="CacheID" value="$cacheID" />
+      <input type="hidden" name="SessionID" value="$sessionID" />
+      <input type="hidden" name="Path" value="$path" />
+      <input type="hidden" name="Name" value="$name" />
+      <input type="hidden" name="Magick" value="$magick" />
+      <input type="hidden" name="ToolType" value="Upload" />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
+    </form>
     <ul class="navbar-nav mr-auto">
-      <form class="form-inline my-2 my-lg-0" action="$script">
-        <input type="hidden" name="CacheID" value="$cacheID" />
-        <input type="hidden" name="SessionID" value="$sessionID" />
-        <input type="hidden" name="Path" value="$path" />
-        <input type="hidden" name="Name" value="$name" />
-        <input type="hidden" name="Magick" value="$magick" />
-        <input type="hidden" name="ToolType" value="Upload" />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
-      </form>
       <li class="nav-item $tools{'View'} $tools{'Identify'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-view">
           <a class="dropdown-item" href="$url;ToolType=View">View</a>
           <a class="dropdown-item" href="$url;ToolType=Identify">Identify</a>
         </div>
       </li>
       <li class="nav-item $tools{'Transform'} $tools{'Resize'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-transform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transform</a>
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="transform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transform</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-transform">
           <a class="dropdown-item" href="$url;ToolType=Transform">Transform</a>
           <a class="dropdown-item" href="$url;ToolType=Resize">Resize</a>
         </div>
       </li>
       <li class="nav-item $tools{'Effects'} $tools{'FX'} $tools{'Enhance'} $tools{'Colormap'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-effects" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Effects</a>
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="effects" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Effects</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-effects">
           <a class="dropdown-item" href="$url;ToolType=Effects">Effects</a>
           <a class="dropdown-item" href="$url;ToolType=FX">F/X</a>
@@ -2926,7 +2926,7 @@ XXX
         </div>
       </li>
       <li class="nav-item $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-decorate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Decorate</a>
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="decorate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Decorate</a>
         <div class="dropdown-menu" aria-labelledby="nav-item-decorate">
           <a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a>
           <a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a>
@@ -2934,8 +2934,8 @@ XXX
         </div>
       </li>
       <li class="nav-item $tools{'Composite'} $tools{'Compare'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="nav-item-view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Composite</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-view">
+        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="composite" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Composite</a>
+        <div class="dropdown-menu" aria-labelledby="nav-item-composite">
           <a class="dropdown-item" href="$url;ToolType=Composite">Composite</a>
           <a class="dropdown-item" href="$url;ToolType=Compare">Compare</a>
         </div>
@@ -2962,8 +2962,7 @@ XXX
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
-  </div>
-</header>
+</div>
 <main role="main" class="container">
   <div class="magick-template">
 XXX
@@ -3269,7 +3268,8 @@ sub Trailer
   my($home, $load_average, $url);
 
   print <<XXX;
-</div>
+  </div>
+</main>
 XXX
   ;
   #
@@ -3331,7 +3331,6 @@ XXX
   <script src="$DocumentDirectory/assets/popper.min.js" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"><\\/script>')</script>
   <script src="$DocumentDirectory/assets/bootstrap.min.js"></script>
-</div>
 XXX
   ;
   if ($Debug)

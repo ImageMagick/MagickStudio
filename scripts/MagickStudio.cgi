@@ -3846,7 +3846,7 @@ sub UploadForm
   Header("ImageMagick - Online Studio");
   print <<XXX;
 <br />
-<p class="lead magick-description">To convert, edit, or compose your image directly from a Web page, press <code>Browse</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
+<p class="lead magick-description">To convert, edit, or compose your image online, press <code>Browse</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
 XXX
   ;
   $version=Image::Magick->VERSION;

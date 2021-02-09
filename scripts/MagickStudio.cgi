@@ -2956,10 +2956,11 @@ sub Header
 <div class="container">
   <script async="async" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-3129977114552745"
-       data-ad-slot="6345125851"
-       data-ad-format="auto"></ins>
+    style="display:block"
+    data-ad-client="ca-pub-3129977114552745"
+    data-ad-slot="6345125851"
+    data-full-width-responsive="true"
+    data-ad-format="horizontal"></ins>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
   </script>

@@ -633,7 +633,7 @@ sub Comment
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/assets/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -666,7 +666,7 @@ sub CommentForm
   $|=1;
   print $q->header(-charset=>'UTF-8');
   print $q->start_html(-title=>"ImageMagick Studio Comment Form",
-    -style=>{-src=>"$DocumentDirectory/assets/magick.css"},
+    -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
 <br />
@@ -2861,14 +2861,14 @@ sub Header
   print $q->start_html(
     -meta=>{
       'charset'=>'utf-8', 
-      'viewport'=>'width=device-width, initial-scale=1, shrink-to-fit=no'
+      'viewport'=>'width=device-width, initial-scale=1'
     },
     -head=>[
       "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>",
       "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>"
     ],
     -title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
-    -style=>{-src=>"$DocumentDirectory/assets/magick.css"}), "\n";
+    -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"}), "\n";
   $script=$q->script_name;
   $cacheID=$q->param('CacheID');
   $sessionID=$q->param('SessionID');
@@ -2883,77 +2883,78 @@ sub Header
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
-<link rel="canonical" href="https://imagemagick.org" />
-XXX
-  print <<XXX;
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="logo" name="ImageMagick" alt="ImageMagick" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
-  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="navbar-collapse collapse" id="navbarsExampleDefault" style="">
-    <form class="form-inline my-2 my-lg-0" action="$script">
-      <input type="hidden" name="CacheID" value="$cacheID" />
-      <input type="hidden" name="SessionID" value="$sessionID" />
-      <input type="hidden" name="Path" value="$path" />
-      <input type="hidden" name="Name" value="$name" />
-      <input type="hidden" name="Magick" value="$magick" />
-      <input type="hidden" name="ToolType" value="Upload" />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Upload</button>
-    </form>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item $tools{'View'} $tools{'Identify'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="view" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-view">
-          <a class="dropdown-item" href="$url;ToolType=View">View</a>
-          <a class="dropdown-item" href="$url;ToolType=Identify">Identify</a>
-        </div>
-      </li>
-      <li class="nav-item $tools{'Transform'} $tools{'Resize'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="transform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transform</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-transform">
-          <a class="dropdown-item" href="$url;ToolType=Transform">Transform</a>
-          <a class="dropdown-item" href="$url;ToolType=Resize">Resize</a>
-        </div>
-      </li>
-      <li class="nav-item $tools{'Effects'} $tools{'FX'} $tools{'Enhance'} $tools{'Colormap'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="effects" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Effects</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-effects">
-          <a class="dropdown-item" href="$url;ToolType=Effects">Effects</a>
-          <a class="dropdown-item" href="$url;ToolType=FX">F/X</a>
-          <a class="dropdown-item" href="$url;ToolType=Enhance">Enhance</a>
-          <a class="dropdown-item" href="$url;ToolType=Colormap">Colormap</a>
-        </div>
-      </li>
-      <li class="nav-item $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="decorate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Decorate</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-decorate">
-          <a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a>
-          <a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a>
-          <a class="dropdown-item" href="$url;ToolType=Draw">Draw</a>
-        </div>
-      </li>
-      <li class="nav-item $tools{'Composite'} $tools{'Compare'} dropdown">
-        <a class="nav-link dropdown-toggle" href="$DocumentDirectory/" id="composite" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Composite</a>
-        <div class="dropdown-menu" aria-labelledby="nav-item-composite">
-          <a class="dropdown-item" href="$url;ToolType=Composite">Composite</a>
-          <a class="dropdown-item" href="$url;ToolType=Compare">Compare</a>
-        </div>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0" action="$script">
-      <input type="hidden" name="Action" value="mogrify" />
-      <input type="hidden" name="CacheID" value="$cacheID" />
-      <input type="hidden" name="SessionID" value="$sessionID" />
-      <input type="hidden" name="Path" value="$path" />
-      <input type="hidden" name="Name" value="$name" />
-      <input type="hidden" name="Magick" value="$magick" />
-      <input type="hidden" name="ToolType" value="Download" />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Download</button>
-    </form>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="magick-navbars">
+      <form class="d-flex" action="$script">
+        <input type="hidden" name="CacheID" value="$cacheID" />
+        <input type="hidden" name="SessionID" value="$sessionID" />
+        <input type="hidden" name="Path" value="$path" />
+        <input type="hidden" name="Name" value="$name" />
+        <input type="hidden" name="Magick" value="$magick" />
+        <input type="hidden" name="ToolType" value="Upload" />
+        <button class="btn btn-outline-success" type="submit">Upload</button>
+      </form>
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item dropdown $tools{'View'} $tools{'Identify'}">
+          <a class="nav-link dropdown-toggle" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
+          <ul class="dropdown-menu" aria-labelledby="nav-items-view">
+            <li><a class="dropdown-item" href="$url;ToolType=View">View</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Identify">Identify</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown $tools{'Transform'} $tools{'Resize'}">
+          <a class="nav-link dropdown-toggle" href="#" id="transform" data-bs-toggle="dropdown" aria-expanded="false">Transform</a>
+          <ul class="dropdown-menu" aria-labelledby="nav-items-transform">
+            <li><a class="dropdown-item" href="$url;ToolType=Transform">Transform</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Resize">Resize</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'}">
+          <a class="nav-link dropdown-toggle" href="#" id="effects" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
+          <ul class="dropdown-menu" aria-labelledby="nav-items-effects">
+            <li><a class="dropdown-item" href="$url;ToolType=Effects">Effects</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=F/X">F/X</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Enhance">Enhance</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Colormap">Colormap</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'}">
+          <a class="nav-link dropdown-toggle" href="#" id="decorate" data-bs-toggle="dropdown" aria-expanded="false">Decorate</a>
+          <ul class="dropdown-menu" aria-labelledby="nav-items-decorate">
+            <li><a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Draw">Draw</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown $tools{'Composite'} $tools{'Compare'}">
+          <a class="nav-link dropdown-toggle" href="#" id="composite" data-bs-toggle="dropdown" aria-expanded="false">Composite</a>
+          <ul class="dropdown-menu" aria-labelledby="nav-items-composite">
+            <li><a class="dropdown-item" href="$url;ToolType=Composite">Composite</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=Compare">Compare</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex" action="$script">
+        <input type="hidden" name="Action" value="mogrify" />
+        <input type="hidden" name="CacheID" value="$cacheID" />
+        <input type="hidden" name="SessionID" value="$sessionID" />
+        <input type="hidden" name="Path" value="$path" />
+        <input type="hidden" name="Name" value="$name" />
+        <input type="hidden" name="Magick" value="$magick" />
+        <input type="hidden" name="ToolType" value="Download" />
+        <button class="btn btn-outline-success" type="submit">Download</button>
+      </form>
+    </div>
   </div>
-</nav>
+  </nav>
 <div class="container">
+  <script async="async" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <ins class="adsbygoogle"
        style="display:block"
        data-ad-client="ca-pub-3129977114552745"
@@ -2963,8 +2964,8 @@ XXX
     (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </div>
-<main role="main" class="container">
-  <div class="magick-template">
+<main class="container">
+	<div class="magick-template">
 XXX
   ;
   print <<XXX;
@@ -3284,6 +3285,7 @@ XXX
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
   <footer class="magick-footer">
+  <div class="container-fluid">
 XXX
   ;
   if ($display)
@@ -3325,12 +3327,10 @@ XXX
 XXX
   print <<XXX;
     <p><small>&copy; 1999-2021 ImageMagick Studio LLC</small></p>
+  </div>
   </footer>
   <!-- Javascript assets -->
-  <script src="$DocumentDirectory/assets/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
-  <script src="$DocumentDirectory/assets/popper.min.js" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"><\\/script>')</script>
-  <script src="$DocumentDirectory/assets/bootstrap.min.js"></script>
+  <script src="$DocumentDirectory/assets/magick-js.php"></script>
 XXX
   ;
   if ($Debug)

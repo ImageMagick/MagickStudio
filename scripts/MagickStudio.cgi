@@ -3306,7 +3306,7 @@ XXX
           $url=substr($path,length($DocumentRoot));
           print "<img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
             "border=\"0\" width=\"$width\" height=\"$height\" ",
-            "class=\"img-thumbnail img-fluid float-right\"/>\n";
+            "class=\"img-thumbnail img-fluid float-start\"/>\n";
         }
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.gif';
@@ -3316,7 +3316,7 @@ XXX
           print "<img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
             "clipboard/", $q->param('SessionID'), ".gif\" border=\"0\" ",
             "width=\"$width\" height=\"$height\" ",
-            "class=\"img-thumbnail img-fluid float-right\"/>\n";
+            "class=\"img-thumbnail img-fluid float-start\"/>\n";
         }
     }
   print <<XXX;

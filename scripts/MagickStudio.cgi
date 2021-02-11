@@ -2901,22 +2901,22 @@ sub Header
         <button class="btn btn-outline-success" type="submit">Upload</button>
       </form>
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item dropdown $tools{'View'} $tools{'Identify'}">
-          <a class="nav-link dropdown-toggle" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle  $tools{'View'} $tools{'Identify'}" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-view">
             <li><a class="dropdown-item" href="$url;ToolType=View">View</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Identify">Identify</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown $tools{'Transform'} $tools{'Resize'}">
-          <a class="nav-link dropdown-toggle" href="#" id="transform" data-bs-toggle="dropdown" aria-expanded="false">Transform</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle $tools{'Transform'} $tools{'Resize'}" href="#" id="transform" data-bs-toggle="dropdown" aria-expanded="false">Transform</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-transform">
             <li><a class="dropdown-item" href="$url;ToolType=Transform">Transform</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Resize">Resize</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'}">
-          <a class="nav-link dropdown-toggle" href="#" id="effects" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'}" href="#" id="effects" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-effects">
             <li><a class="dropdown-item" href="$url;ToolType=Effects">Effects</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=F/X">F/X</a></li>
@@ -2924,16 +2924,16 @@ sub Header
             <li><a class="dropdown-item" href="$url;ToolType=Colormap">Colormap</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'}">
-          <a class="nav-link dropdown-toggle" href="#" id="decorate" data-bs-toggle="dropdown" aria-expanded="false">Decorate</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'}" href="#" id="decorate" data-bs-toggle="dropdown" aria-expanded="false">Decorate</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-decorate">
             <li><a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Draw">Draw</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown $tools{'Composite'} $tools{'Compare'}">
-          <a class="nav-link dropdown-toggle" href="#" id="composite" data-bs-toggle="dropdown" aria-expanded="false">Composite</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle $tools{'Composite'} $tools{'Compare'}" href="#" id="composite" data-bs-toggle="dropdown" aria-expanded="false">Composite</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-composite">
             <li><a class="dropdown-item" href="$url;ToolType=Composite">Composite</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Compare">Compare</a></li>

@@ -2920,7 +2920,7 @@ sub Header
           <a class="nav-link dropdown-toggle $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'}" href="#" id="effects" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-effects">
             <li><a class="dropdown-item" href="$url;ToolType=Effects">Effects</a></li>
-            <li><a class="dropdown-item" href="$url;ToolType=F/X">F/X</a></li>
+            <li><a class="dropdown-item" href="$url;ToolType=FX">F/X</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Enhance">Enhance</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Colormap">Colormap</a></li>
           </ul>

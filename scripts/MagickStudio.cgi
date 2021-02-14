@@ -648,7 +648,8 @@ XXX
   print "<dl>\n";
   print "<dl>\n";
   print "<dt>You said:<br />\n";
-  print '<dd><pre class=\"highlight\">', $q->param('Comment'), "</pre><br />\n";
+  print '<dd><ul><pre class=\"highlight\"><samp>', $q->param('Comment'),
+    "</samp></pre></ul><br />\n";
   print "<dt>An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
   print "</dl>\n";
@@ -4108,7 +4109,7 @@ XXX
       my $height=$coalesce->Get('rows');
       my $x=$q->param("$basename.x");
       my $y=$q->param("$basename.y");
-      print "<pre class=\"highlight\">$x,$y: ";
+      print "<ul><pre class=\"highlight\"><samp>$x,$y: ";
       my $page=$coalesce->Get('page');
       if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
@@ -4148,15 +4149,15 @@ XXX
                 $matte != 0;
             }
         }
-      print "</pre>\n";
+      print "</samp></pre></ul>\n";
     }
   if ($image->Get('error') != 0.0)
     {
       my $error=$image->Get('error');
       $error*=(Image::Magick->QuantumRange);
-      print '<pre class="highlight">';
+      print '<ul><pre class="highlight"><samp>';
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
-      print "</pre>\n";
+      print "</samp></pre></ul>\n";
     }
   print "<br />\n";
   print "<fieldset>\n";

@@ -3000,12 +3000,12 @@ sub Identify
   #
   Header(GetTitle($images));
   print <<XXX;
-<p class="lead magick-description">Here is a detailed description of your image, $filename:</p>
+<p class="lead magick-description">Here is a detailed description of your image, <code>$filename</code>:</p>
 XXX
   ;
-  print "<pre class=\"pre-scrollable\">";
+  print "<ul><pre class=\"pre-scrollable\"><samp>";
   $images->Identify();
-  print "</pre>\n";
+  print "</samp></pre></ul>\n";
   Trailer(1);
 }
 
@@ -3844,7 +3844,7 @@ sub UploadForm
   $url=$q->script_name();
   $q->delete('ToolType');
   $q->param(-name=>'ToolType',-value=>'Upload');
-  Header("ImageMagick - Online Studio");
+  Header("Magick Online Studio");
   print <<XXX;
 <br />
 <p class="lead magick-description">To convert, edit, or compose your image online, press <code>Choose File</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
@@ -3883,7 +3883,7 @@ XXX
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
 <br /> <br />
-An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>ImageMagick - Online Studio</code>, version $version.
+An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>Magick Online Studio</code>, version $version.
 <br /> <br />
 <fieldset>
 <legend>Privacy Notice</legend>

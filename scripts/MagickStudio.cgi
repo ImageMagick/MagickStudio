@@ -1956,6 +1956,7 @@ sub Effects
     }
   $image->HoughLine("$parameter") if $q->param('Option') eq 'hough line *';
   $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
+  $image->Integral() if $q->param('Option') eq 'integral';
   $image->InverseFourierTransform("$parameter") if
     $q->param('Option') eq 'inverse Fourier transform';
   $image->Kuwahara(geometry=>"$parameter",channel=>$channel) if
@@ -2178,7 +2179,7 @@ XXX
     -size=>25,-value=>'0.0x1.0'), "</dd><br />\n";
   print "<dt>Choose from these effects:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3), "</dd><br />\n";
+    -columns=>3,-default=>'sharpen'), "</dd><br />\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
     -class=>'btn btn-warning'), " the form.<br /><br />\n";
@@ -2629,6 +2630,7 @@ sub FXForm
     'F(x) *',
     'hald-clut',
     'implode *',
+    'integral',
     'inverse Fourier transform',
     'morph *',
     'morphology *',

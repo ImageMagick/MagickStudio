@@ -1243,7 +1243,7 @@ sub Download
 
       $value='True';
       $value='False' if $q->param('Stack') eq 'on';
-      $image=$image->Append(stack=>$value);
+      $append_image=$image->Append(stack=>$value);
       if (ref($append_image))
         {
           #

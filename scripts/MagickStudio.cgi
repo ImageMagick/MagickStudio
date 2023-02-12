@@ -1253,6 +1253,20 @@ sub Download
           $image=$append_image;
         }
     }
+  if ($q->param('Option') eq 'coalesce')
+    {
+      my($coalesce_image);
+
+      $coalesce_image=$image->Coalesce();
+      if (ref($coalesce_image))
+        {
+          #
+          # Coalesce the image sequence.
+          #
+          undef $image;
+          $image=$coalesce_image;
+        }
+    }
   if ($q->param('Option') eq 'smush')
     {
       my($offset,$smush_image);
@@ -1260,7 +1274,7 @@ sub Download
       $offset=$q->param('offset');
       $value='True';
       $value='False' if $q->param('Stack') eq 'on';
-      $image=$image->Smush(stack=>$value,offset=>$offset);
+      $smush_image=$image->Smush(stack=>$value,offset=>$offset);
       if (ref($smush_image))
         {
           #
@@ -1464,6 +1478,7 @@ sub DownloadForm
   [
     'append',
     'clipboard',
+    'coalesce',
     'histogram',
     'multi-frame file',
     'preview',

@@ -17,15 +17,15 @@
 #                 SSSSS    T     UUU   DDDD   IIIII   OOO                     #
 #                                                                             #
 #                                                                             #
-#                Image Convert, Edit, and Compose on the Web                  #
+#           Image Convert, Edit, or Compose Digital Images Online             #
 #                                                                             #
 #                                                                             #
 #                           Software Design                                   #
-#                             John Cristy                                     #
+#                               Cristy                                        #
 #                            November 1997                                    #
 #                                                                             #
 #                                                                             #
-#  Copyright (C) 1999-2020 ImageMagick Studio LLC, a non-profit organization  #
+#  Copyright (C) 1999 ImageMagick Studio LLC, a non-profit organization       #
 #  dedicated to making software imaging solutions freely available.           #
 #                                                                             #
 #  You may not use this file except in compliance with the License.  You may  #

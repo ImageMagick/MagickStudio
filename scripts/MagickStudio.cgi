@@ -154,20 +154,23 @@ sub Annotate
   $undercolor=$q->param('Undercolor') if $q->param('Undercolor');
   if ($q->param('Polaroid') eq 'on')
     {
-      $image->Polaroid(caption=>$text,font=>$font,fill=>$fill,stroke=>$stroke,
-        strokewidth=>$strokewidth,pointsize=>$pointsize,angle=>$rotate,
-        gravity=>$gravity,background=>$q->param('BackgroundColor'));
+      $status=$image->Polaroid(caption=>$text,font=>$font,fill=>$fill,
+        stroke=>$stroke,strokewidth=>$strokewidth,pointsize=>$pointsize,
+        angle=>$rotate,gravity=>$gravity,
+        background=>$q->param('BackgroundColor'));
     }
   else
     {
-      $image->Annotate(text=>$text,geometry=>$geometry,font=>$font,fill=>$fill,
-        stroke=>$stroke,strokewidth=>$strokewidth,undercolor=>$undercolor,
-        pointsize=>$pointsize,density=>$density,gravity=>$gravity,
-        kerning=>$kerning,'interline-spacing'=>$interline_spacing,
+      $status=$image->Annotate(text=>$text,geometry=>$geometry,font=>$font,
+        fill=>$fill,stroke=>$stroke,strokewidth=>$strokewidth,
+        undercolor=>$undercolor,pointsize=>$pointsize,density=>$density,
+        gravity=>$gravity,kerning=>$kerning,
+        'interline-spacing'=>$interline_spacing,
         'interword-spacing'=>$interword_spacing,translate=>$translate,
         scale=>$scale,rotate=>$rotate,skewX=>$skew_x,skewY=>$skew_y,
         antialias=>$antialias,direction=>$direction);
     }
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -505,12 +508,15 @@ sub Colormap
   for ($levels=1; (($levels+1)*($levels+1)*($levels+1)) < $colors; $levels++)
   {
   }
-  $image->OrderedDither($parameter) if $options{'ordered dither'};
-  $image->Posterize(levels=>$levels,dither=>$dither) if $options{'posterize'};
-  $image->Segment(colorspace=>$colorspace) if $options{'segment'};
-  $image->Kmeans($parameter) if $options{'kmeans'};
-  $image->Quantize(colors=>$colors,dither=>$dither,colorspace=>$colorspace,
-    'transparent-color'=>$transparent_color,measure_error=>$measure_error);
+  $status=$image->OrderedDither($parameter) if $options{'ordered dither'};
+  $status=$image->Posterize(levels=>$levels,dither=>$dither) if
+    $options{'posterize'};
+  $status=$image->Segment(colorspace=>$colorspace) if $options{'segment'};
+  $status=$image->Kmeans($parameter) if $options{'kmeans'};
+  $status=$image->Quantize(colors=>$colors,dither=>$dither,
+    colorspace=>$colorspace,'transparent-color'=>$transparent_color,
+    measure_error=>$measure_error);
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -934,10 +940,12 @@ sub Composite
   for ($i=0; $image->[$i]; $i++)
   {
     $slice=$composite->[$i % ($#$composite+1)];
-    $slice->Resize(width=>$image->[$i]->Get('width'),
+    $status=$slice->Resize(width=>$image->[$i]->Get('width'),
       height=>$image->[$i]->Get('height')) if $q->param('Resize') eq 'on';
-    $image->[$i]->Composite(compose=>$compose,image=>$slice,gravity=>$gravity,
-      geometry=>$geometry,rotate=>$rotate,color=>$color,tile=>$tile);
+    $status=$image->[$i]->Composite(compose=>$compose,image=>$slice,
+      gravity=>$gravity,geometry=>$geometry,rotate=>$rotate,color=>$color,
+      tile=>$tile);
+    Error($status) if "$status";
   }
   #
   # Write image.
@@ -1093,14 +1101,15 @@ sub Decorate
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $color='none';
   $color=$q->param('Color') if $q->param('Color');
-  $image->Border(geometry=>$geometry,bordercolor=>$color,compose=>$compose)
-    if $q->param('Option') eq 'border *';
-  $image->Frame(geometry=>$geometry,fill=>$color,compose=>$compose)
+  $status=$image->Border(geometry=>$geometry,bordercolor=>$color,
+    compose=>$compose) if $q->param('Option') eq 'border *';
+  $status=$image->Frame(geometry=>$geometry,fill=>$color,compose=>$compose)
     if $q->param('Option') eq 'frame *';
-  $image->Raise(geometry=>$geometry,raise=>'true')
+  $status=$image->Raise(geometry=>$geometry,raise=>'true')
     if $q->param('Option') eq 'raise *';
-  $image->Raise(geometry=>$geometry,raise=>'False')
+  $status=$image->Raise(geometry=>$geometry,raise=>'False')
     if $q->param('Option') eq 'sunken *';
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -1665,7 +1674,7 @@ sub Draw
   ($x,$y)=split(/[ ,]+/,$q->param('Translate')) if $q->param('Translate');
   if (!$q->param('Tile') || ($q->param('Tile') ne 'on'))
     {
-      $image->Draw(primitive=>$primitive,fill=>$fill,stroke=>$stroke,
+      $status=$image->Draw(primitive=>$primitive,fill=>$fill,stroke=>$stroke,
         strokewidth=>$strokewidth,points=>$points,x=>$x,y=>$y,
         translate=>$translate,scale=>$scale,rotate=>$rotate,skewX=>$skew_x,
         skewY=>$skew_y,antialias=>$antialias);
@@ -1679,11 +1688,12 @@ sub Draw
       $tile=Image::Magick->new;
       $status=$tile->Read($filename);
       Error($status) if $#$tile < 0;
-      $image->Draw(primitive=>$primitive,fill=>$fill,stroke=>$stroke,
+      $status=$image->Draw(primitive=>$primitive,fill=>$fill,stroke=>$stroke,
         strokewidth=>$strokewidth,tile=>$tile,points=>$points,x=>$x,y=>$y,
         translate=>$translate,scale=>$scale,rotate=>$rotate,skewX=>$skew_x,
         skewY=>$skew_y,antialias=>$antialias);
     }
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -1810,17 +1820,18 @@ sub Effects
   $image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
     $q->param('VirtualPixelMethod');
   $image->Set(label=>$q->param('Label')) if $q->param('Label');
-  $image->AdaptiveBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->AdaptiveBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'adaptive blur *';
-  $image->AdaptiveSharpen(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->AdaptiveSharpen(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'adaptive sharpen *';
-  $image->BilateralBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->BilateralBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'bilateral blur *';
-  $image->BlackThreshold(geomery=>"$parameter",channel=>$channel) if
+  $status=$image->BlackThreshold(geomery=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'black threshold *';
-  $image->Blur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->Blur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'blur *';
-  $image->Charcoal("$parameter") if $q->param('Option') eq 'charcoal drawing *';
+  $status=$image->Charcoal("$parameter") if $q->param('Option') eq
+     'charcoal drawing *';
   if ($q->param('Option') eq 'clut')
     {
       my($channel, $source);
@@ -1837,23 +1848,23 @@ sub Effects
         { $image->Clut(image=>$source,channel=>$channel); }
       Error($image) if !ref($image);
     }
-  $image->ConnectedComponents("$parameter") if $q->param('Option') eq
+  $status=$image->ConnectedComponents("$parameter") if $q->param('Option') eq
     'connected components *';
   if ($q->param('Option') eq 'convolve *')
     {
       my(@coefficients);
 
       @coefficients=split(/[ ,]+/,$parameter);
-      $image->Convolve(\@coefficients);
+      $status=$image->Convolve(\@coefficients);
     }
-  $image->Despeckle() if $q->param('Option') eq 'despeckle';
+  $status=$image->Despeckle() if $q->param('Option') eq 'despeckle';
   if ($q->param('Option') eq 'distort *')
     {
       my(@points, $method);
 
       @points=split(/[ ,]+/,$parameter);
       $method=$q->param('DistortType');
-      $image->Distort(method=>$method,points=>\@points);
+      $status=$image->Distort(method=>$method,points=>\@points);
     }
   if ($q->param('Option') eq 'evaluate *')
     {
@@ -1861,7 +1872,7 @@ sub Effects
 
       @values=split(/[ ,]+/,$parameter);
       $operator=$q->param('EvaluateType');
-      $image->Evaluate(operator=>$operator,value=>\@values);
+      $status=$image->Evaluate(operator=>$operator,value=>\@values);
     }
   if ($q->param('Option') eq 'function *')
     {
@@ -1869,12 +1880,14 @@ sub Effects
 
       @parameters=split(/[ ,]+/,$parameter);
       $function=$q->param('FunctionType');
-      $image->Function(function=>$function,parameters=>\@parameters);
+      $status=$image->Function(function=>$function,parameters=>\@parameters);
     }
-  $image->CannyEdge("$parameter") if $q->param('Option') eq 'canny edge *';
-  $image->Edge("$parameter") if $q->param('Option') eq 'edge detect *';
-  $image->Emboss(geometry=>$parameter) if $q->param('Option') eq 'emboss *';
-  $image->ForwardFourierTransform("$parameter") if
+  $status=$image->CannyEdge("$parameter") if $q->param('Option') eq
+    'canny edge *';
+  $status=$image->Edge("$parameter") if $q->param('Option') eq 'edge detect *';
+  $status=$image->Emboss(geometry=>$parameter) if $q->param('Option') eq
+    'emboss *';
+  $status=$image->ForwardFourierTransform("$parameter") if
     $q->param('Option') eq 'forward Fourier transform';
   if ($q->param('Option') eq 'Channel F(x) *')
     {
@@ -1905,10 +1918,12 @@ sub Effects
           $status=$source->Read($filename);
           Error($status) if $#$source < 0;
           if ($channel eq 'All')
-            { $image->ChannelFx(image=>$source,expression=>$parameter); }
+            {
+              $status=$image->ChannelFx(image=>$source,expression=>$parameter);
+            }
           else
             {
-              $image->ChannelFx(image=>$source,channel=>$channel,
+              $status=$image->ChannelFx(image=>$source,channel=>$channel,
                 expression=>$parameter);
             }
           Error($image) if !ref($image);
@@ -1942,16 +1957,16 @@ sub Effects
           $status=$source->Read($filename);
           Error($status) if $#$source < 0;
           if ($channel eq 'All')
-            { $image->Fx(image=>$source,expression=>$parameter); }
+            { $status=$image->Fx(image=>$source,expression=>$parameter); }
           else
             {
-              $image->Fx(image=>$source,channel=>$channel,
+              $status=$image->Fx(image=>$source,channel=>$channel,
                 expression=>$parameter);
             }
           Error($image) if !ref($image);
         }
     }
-  $image->GaussianBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->GaussianBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'gaussian blur *';
   if ($q->param('Option') eq 'hald-clut')
     {
@@ -1964,20 +1979,22 @@ sub Effects
       $status=$source->Read($filename);
       Error($status) if $#$source < 0;
       if ($channel eq 'All')
-        { $image->HaldClut(image=>$source); }
+        { $status=$image->HaldClut(image=>$source); }
       else
-        { $image->HaldClut(image=>$source,channel=>$channel); }
+        { $status=$image->HaldClut(image=>$source,channel=>$channel); }
       Error($image) if !ref($image);
     }
-  $image->HoughLine("$parameter") if $q->param('Option') eq 'hough line *';
-  $image->Implode("$parameter") if $q->param('Option') eq 'implode *';
-  $image->Integral() if $q->param('Option') eq 'integral';
-  $image->InverseFourierTransform("$parameter") if
+  $status=$image->HoughLine("$parameter") if $q->param('Option') eq
+    'hough line *';
+  $status=$image->Implode("$parameter") if $q->param('Option') eq 'implode *';
+  $status=$image->Integral() if $q->param('Option') eq 'integral';
+  $status=$image->InverseFourierTransform("$parameter") if
     $q->param('Option') eq 'inverse Fourier transform';
-  $image->Kuwahara(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->Kuwahara(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'kuwahara *';
-  $image->MeanShift("$parameter") if $q->param('Option') eq 'mean shift *';
-  $image->Mode("$parameter") if $q->param('Option') eq 'mode *';
+  $status=$image->MeanShift("$parameter") if $q->param('Option') eq
+    'mean shift *';
+  $status=$image->Mode("$parameter") if $q->param('Option') eq 'mode *';
   if ($q->param('Option') eq 'morph *')
     {
       my($morph_image);
@@ -2007,7 +2024,8 @@ sub Effects
       my($method);
 
       $method=$q->param('MorphologyMethod');
-      $image->Morphology(kernel=>$parameter,method=>$method,channel=>$channel);
+      $status=$image->Morphology(kernel=>$parameter,method=>$method,
+        channel=>$channel);
     }
   if ($q->param('Option') eq 'mosaic')
     {
@@ -2033,29 +2051,32 @@ sub Effects
           $image=$mosaic_image;
         }
     }
-  $image->MotionBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->MotionBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'motion blur *';
-  $image->MedianFilter("$parameter") if
+  $status=$image->MedianFilter("$parameter") if
     $q->param('Option') eq 'median filter *';
-  $image->OilPaint("$parameter") if $q->param('Option') eq 'oil paint *';
+  $status=$image->OilPaint("$parameter") if $q->param('Option') eq
+    'oil paint *';
   if ($q->param('Option') eq 'color-matrix *')
     {
       my(@coefficients);
 
       @coefficients=split(/[ ,]+/,$parameter);
-      $image->ColorMatrix(\@coefficients);
+      $status=$image->ColorMatrix(\@coefficients);
     }
-  $image->RangeThreshold(geomery=>"$parameter",channel=>$channel) if
+  $status=$image->RangeThreshold(geomery=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'range threshold *';
-  $image->ReduceNoise("$parameter") if $q->param('Option') eq 'reduce noise *';
-  $image->RotationalBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->ReduceNoise("$parameter") if $q->param('Option') eq
+    'reduce noise *';
+  $status=$image->RotationalBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'rotational blur *';
-  $image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->SelectiveBlur(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq '-class=>"checkbox",selective blur *';
-  $image->SepiaTone("$parameter") if $q->param('Option') eq 'sepia tone *';
-  $image->Shade(geometry=>$parameter,gray=>'false')
+  $status=$image->SepiaTone("$parameter") if $q->param('Option') eq
+    'sepia tone *';
+  $status=$image->Shade(geometry=>$parameter,gray=>'false')
     if $q->param('Option') eq 'shade *';
-  $image->Shade(geometry=>$parameter,gray=>'true')
+  $status=$image->Shade(geometry=>$parameter,gray=>'true')
     if $q->param('Option') eq 'gray shade *';
   if ($q->param('Option') eq 'shadow *')
     {
@@ -2079,11 +2100,11 @@ sub Effects
           $image=$mosaic_image;
         }
     }
-  $image->Sharpen(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->Sharpen(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'sharpen *';
-  $image->Sketch("$parameter") if $q->param('Option') eq 'sketch *';
-  $image->Solarize("$parameter") if $q->param('Option') eq 'solarize *';
-  $image->Spread("$parameter") if $q->param('Option') eq 'spread *';
+  $status=$image->Sketch("$parameter") if $q->param('Option') eq 'sketch *';
+  $status=$image->Solarize("$parameter") if $q->param('Option') eq 'solarize *';
+  $status=$image->Spread("$parameter") if $q->param('Option') eq 'spread *';
   if ($q->param('Option') eq 'stegano *')
     {
       my($clipboard);
@@ -2096,7 +2117,7 @@ sub Effects
       $clipboard=Image::Magick->new(size=>"256x256+$parameter");
       $status=$clipboard->Read($filename);
       Error("unable to stegano image, no clipboard image") if $#$clipboard < 0;
-      $image->Stegano(image=>$clipboard);
+      $status=$image->Stegano(image=>$clipboard);
     }
   if ($q->param('Option') eq 'stereo')
     {
@@ -2104,26 +2125,27 @@ sub Effects
 
       $stereo=$image->Clone();
       $stereo->Roll('+4+4');
-      $image->Stereo(image=>$stereo);
+      $status=$image->Stereo(image=>$stereo);
     }
-  $image->Swirl("$parameter") if $q->param('Option') eq 'swirl *';
-  $image->AdaptiveThreshold("$parameter") if
+  $status=$image->Swirl("$parameter") if $q->param('Option') eq 'swirl *';
+  $status=$image->AdaptiveThreshold("$parameter") if
     $q->param('Option') eq 'adaptive threshold *';
-  $image->AutoThreshold() if $q->param('Option') eq 'auto-threshold';
-  $image->Threshold(threshold=>"$parameter",channel=>$channel) if
+  $status=$image->AutoThreshold() if $q->param('Option') eq 'auto-threshold';
+  $status=$image->Threshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'threshold *';
-  $image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
+  $status=$image->Tint(fill=>$q->param('FillColor'),opacity=>$parameter) if
     $q->param('Option') eq 'tint';
-  $image->UnsharpMask(geometry=>"$parameter",channel=>$channel) if
+  $status=$image->UnsharpMask(geometry=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'unsharp mask *';
-  $image->Vignette(geometry=>"$parameter",background=>
+  $status=$image->Vignette(geometry=>"$parameter",background=>
     $q->param('BackgroundColor')) if $q->param('Option') eq 'vignette *';
-  $image->Wave("$parameter") if $q->param('Option') eq 'wave *';
-  $image->WaveletDenoise("$parameter") if
+  $status=$image->Wave("$parameter") if $q->param('Option') eq 'wave *';
+  $status=$image->WaveletDenoise("$parameter") if
     $q->param('Option') eq 'wavelet denoise *';
-  $image->WhiteThreshold(threshold=>"$parameter",channel=>$channel) if
+  $status=$image->WhiteThreshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'white threshold *';
-  $image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
+  $status=$image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -2262,33 +2284,36 @@ sub Enhance
       Error($status) if $#$clut < 0;
       $image->Remap(image=>$clut,channel=>$channel);
     }
-  $image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
+  $status=$image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
     $q->param('VirtualPixelMethod');
-  $image->AutoGamma() if $q->param('Option') eq 'auto-gamma';
-  $image->AutoLevel() if $q->param('Option') eq 'auto-level';
-  $image->BrightnessContrast(geometry=>$parameter,channel=>$channel) if
+  $status=$image->AutoGamma() if $q->param('Option') eq 'auto-gamma';
+  $status=$image->AutoLevel() if $q->param('Option') eq 'auto-level';
+  $status=$image->BrightnessContrast(geometry=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'brightness-contrast *';
-  $image->CLAHE("$parameter") if $q->param('Option') eq 'calhe *';
-  $image->Contrast(sharpen=>'true') if $q->param('Option') eq 'spiff';
-  $image->Contrast(sharpen=>'false') if $q->param('Option') eq 'dull';
-  $image->ContrastStretch(geometry=>$parameter,channel=>$channel) if
+  $status=$image->CLAHE("$parameter") if $q->param('Option') eq 'calhe *';
+  $status=$image->Contrast(sharpen=>'true') if $q->param('Option') eq 'spiff';
+  $status=$image->Contrast(sharpen=>'false') if $q->param('Option') eq 'dull';
+  $status=$image->ContrastStretch(geometry=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'contrast-stretch *';
-  $image->Equalize(channel=>$channel) if $q->param('Option') eq 'equalize';
-  $image->Gamma(gamma=>$parameter,channel=>$channel) if
+  $status=$image->Equalize(channel=>$channel) if $q->param('Option') eq
+    'equalize';
+  $status=$image->Gamma(gamma=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'gamma *';
-  $image->Level(levels=>$parameter,channel=>$channel) if
+  $status=$image->Level(levels=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'level *';
-  $image->LinearStretch($parameter) if $q->param('Option') eq
+  $status=$image->LinearStretch($parameter) if $q->param('Option') eq
     'linear-stretch *';
-  $image->Modulate(hue=>$parameter) if $q->param('Option') eq 'hue *';
-  $image->Modulate(saturation=>$parameter)
+  $status=$image->Modulate(hue=>$parameter) if $q->param('Option') eq 'hue *';
+  $status=$image->Modulate(saturation=>$parameter)
     if $q->param('Option') eq 'saturation *';
-  $image->Modulate(brightness=>$parameter)
+  $status=$image->Modulate(brightness=>$parameter)
     if $q->param('Option') eq 'brightness *';
-  $image->Normalize(channel=>$channel) if $q->param('Option') eq 'normalize';
-  $image->Negate(channel=>$channel) if $q->param('Option') eq 'negate';
-  $image->SigmoidalContrast(geometry=>$parameter,channel=>$channel) if
+  $status=$image->Normalize(channel=>$channel) if $q->param('Option') eq
+    'normalize';
+  $status=$image->Negate(channel=>$channel) if $q->param('Option') eq 'negate';
+  $status=$image->SigmoidalContrast(geometry=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'sigmoidal-contrast *';
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -3098,21 +3123,23 @@ sub Resize
   $support=$q->param('SupportFactor') if $q->param('SupportFactor');
   $blur='1.0';
   $blur=$q->param('BlurFactor') if $q->param('BlurFactor');
-  $image->AdaptiveResize(geometry=>$geometry,filter=>$filter,blur=>$blur) if
-    $q->param('Algorithm') eq 'adaptive resize *';
-  $image->LiquidRescale(geometry=>$geometry) if
+  $status=$image->AdaptiveResize(geometry=>$geometry,filter=>$filter,
+    blur=>$blur) if $q->param('Algorithm') eq 'adaptive resize *';
+  $status=$image->LiquidRescale(geometry=>$geometry) if
     $q->param('Algorithm') eq 'liquid rescale *';
-  $image->Resize(geometry=>$geometry,filter=>$filter,blur=>$blur) if
+  $status=$image->Resize(geometry=>$geometry,filter=>$filter,blur=>$blur) if
     $q->param('Algorithm') eq 'resize *';
-  $image->Scale($geometry) if $q->param('Algorithm') eq 'scale *';
-  $image->Sample($geometry) if $q->param('Algorithm') eq 'sample *';
-  $image->Magnify() if $q->param('Algorithm') eq 'double size';
-  $image->Minify() if $q->param('Algorithm') eq 'half size';
-  $image->Extent(geometry=>$geometry,background=>$q->param('BackgroundColor'))
-    if $q->param('Algorithm') eq 'extent *';
-  $image->Resample(density=>$geometry,filter=>$filter,blur=>$blur) if
+  $status=$image->Scale($geometry) if $q->param('Algorithm') eq 'scale *';
+  $status=$image->Sample($geometry) if $q->param('Algorithm') eq 'sample *';
+  $status=$image->Magnify() if $q->param('Algorithm') eq 'double size';
+  $status=$image->Minify() if $q->param('Algorithm') eq 'half size';
+  $status=$image->Extent(geometry=>$geometry,background=>
+    $q->param('BackgroundColor')) if $q->param('Algorithm') eq 'extent *';
+  $status=$image->Resample(density=>$geometry,filter=>$filter,blur=>$blur) if
     $q->param('Algorithm') eq 'resample *';
-  $image->Thumbnail($geometry) if $q->param('Algorithm') eq 'thumbnail *';
+  $status=$image->Thumbnail($geometry) if $q->param('Algorithm') eq
+    'thumbnail *';
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -3426,36 +3453,37 @@ sub Transform
   $image->Set(fuzz=>$q->param('Fuzz')) if $q->param('Fuzz');
   $image->Set(background=>$q->param('BackgroundColor'));
   $image->Set(gravity=>$q->param('Gravity'));
-  $image->AffineTransform([split(/[ ,]+/,$parameter)]) if
+  $status=$image->AffineTransform([split(/[ ,]+/,$parameter)]) if
     $q->param('Option') eq 'affine *';
-  $image->AutoOrient() if $q->param('Option') eq 'auto-orient';
-  $image->Trim() if $q->param('Option') eq 'trim';
-  $image->Crop("$parameter") if $q->param('Option') eq 'crop *';
-  $image->Chop("$parameter") if $q->param('Option') eq 'chop *';
+  $status=$image->AutoOrient() if $q->param('Option') eq 'auto-orient';
+  $status=$image->Trim() if $q->param('Option') eq 'trim';
+  $status=$image->Crop("$parameter") if $q->param('Option') eq 'crop *';
+  $status=$image->Chop("$parameter") if $q->param('Option') eq 'chop *';
   $image=$image->Coalesce() if $q->param('Option') eq 'coalesce';
-  $image->Colorspace($q->param('Colorspace')) if
+  $status=$image->Colorspace($q->param('Colorspace')) if
     $q->param('Option') eq 'colorspace';
-  $image->Deconstruct() if $q->param('Option') eq 'deconstruct';
-  $image->Deskew($parameter) if $q->param('Option') eq 'deskew';
-  $image=$image->Flatten() if $q->param('Option') eq 'flatten';
-  $image->Flop() if $q->param('Option') eq 'flop';
-  $image->Flip() if $q->param('Option') eq 'flip';
+  $status=$image->Deconstruct() if $q->param('Option') eq 'deconstruct';
+  $status=$image->Deskew($parameter) if $q->param('Option') eq 'deskew';
+  $status=$image=$image->Flatten() if $q->param('Option') eq 'flatten';
+  $status=$image->Flop() if $q->param('Option') eq 'flop';
+  $status=$image->Flip() if $q->param('Option') eq 'flip';
   $image=$image->Layers(method=>$q->param('LayerMethod')) if
     $q->param('Option') eq 'layers';
-  $image->Rotate(90) if $q->param('Option') eq 'rotate right';
-  $image->Rotate(-90) if $q->param('Option') eq 'rotate left';
+  $status=$image->Rotate(90) if $q->param('Option') eq 'rotate right';
+  $status=$image->Rotate(-90) if $q->param('Option') eq 'rotate left';
   $color='none';
   $color=$q->param('BackgroundColor') if $q->param('BackgroundColor');
-  $image->Rotate(degrees=>$parameter,background=>$color) if
+  $status=$image->Rotate(degrees=>$parameter,background=>$color) if
     $q->param('Option') eq 'rotate *';
-  $image->Shave("$parameter") if $q->param('Option') eq 'shave *';
-  $image->Shear("$parameter") if $q->param('Option') eq 'shear *';
-  $image->Splice("$parameter") if $q->param('Option') eq 'splice *';
-  $image->Roll("$parameter") if $q->param('Option') eq 'roll *';
+  $status=$image->Shave("$parameter") if $q->param('Option') eq 'shave *';
+  $status=$image->Shear("$parameter") if $q->param('Option') eq 'shear *';
+  $status=$image->Splice("$parameter") if $q->param('Option') eq 'splice *';
+  $status=$image->Roll("$parameter") if $q->param('Option') eq 'roll *';
   $image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
-  $image->Transpose() if $q->param('Option') eq 'transpose';
-  $image->Transverse() if $q->param('Option') eq 'transverse';
-  $image->UniqueColors() if $q->param('Option') eq 'unique colors';
+  $status=$image->Transpose() if $q->param('Option') eq 'transpose';
+  $status=$image->Transverse() if $q->param('Option') eq 'transverse';
+  $status=$image->UniqueColors() if $q->param('Option') eq 'unique colors';
+  Error($status) if "$status";
   #
   # Write image.
   #
@@ -4033,8 +4061,9 @@ sub View
       $bordercolor='none';
       $bordercolor=$q->param('BorderColor') if $q->param('BorderColor');
       $method=$q->param('Method');
-      $image->Draw(primitive=>$primitive,points=>$points,fill=>$fill,
+      $status=$image->Draw(primitive=>$primitive,points=>$points,fill=>$fill,
         bordercolor=>$bordercolor,method=>$method);
+      Error($status) if "$status";
     }
   #
   # Write image.

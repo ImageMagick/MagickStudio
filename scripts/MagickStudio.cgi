@@ -3372,7 +3372,7 @@ XXX
     </div>
 XXX
   print <<XXX;
-    <p><small>&copy; 1999-2021 ImageMagick Studio LLC</small></p>
+    <p><small>&copy; 1999 ImageMagick Studio LLC</small></p>
   </div>
   </footer>
   <!-- Javascript assets -->

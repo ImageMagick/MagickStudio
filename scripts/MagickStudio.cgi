@@ -3127,7 +3127,7 @@ sub Resize
     blur=>$blur) if $q->param('Algorithm') eq 'adaptive resize *';
   $status=$image->LiquidRescale(geometry=>$geometry) if
     $q->param('Algorithm') eq 'liquid rescale *';
-  $status=$image->Resize(geometry=>$geometry,filter=>$filter,blur=>$blur) if
+  $status=$image->Resize(geometry=>$geometry,filter=>$filter) if
     $q->param('Algorithm') eq 'resize *';
   $status=$image->Scale($geometry) if $q->param('Algorithm') eq 'scale *';
   $status=$image->Sample($geometry) if $q->param('Algorithm') eq 'sample *';

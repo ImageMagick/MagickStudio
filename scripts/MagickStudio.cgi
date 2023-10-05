@@ -3135,7 +3135,7 @@ sub Resize
   $status=$image->Minify() if $q->param('Algorithm') eq 'half size';
   $status=$image->Extent(geometry=>$geometry,background=>
     $q->param('BackgroundColor')) if $q->param('Algorithm') eq 'extent *';
-  $status=$image->Resample(density=>$geometry,filter=>$filter,blur=>$blur) if
+  $status=$image->Resample(density=>$geometry,filter=>$filter) if
     $q->param('Algorithm') eq 'resample *';
   $status=$image->Thumbnail($geometry) if $q->param('Algorithm') eq
     'thumbnail *';

@@ -3119,10 +3119,10 @@ sub Resize
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $filter='Undefined';
   $filter=$q->param('FilterType') if $q->param('FilterType');
-  $support='0.0';
-  $support=$q->param('SupportFactor') if $q->param('SupportFactor');
-  $blur='1.0';
-  $blur=$q->param('BlurFactor') if $q->param('BlurFactor');
+  $image->Set('filter:support'=>$q->param('SupportFactor'))
+    if $q->param('SupportFactor');
+  $image->Set('filter:blur'=>$q->param('BlurFactor'))
+    if $q->param('BlurFactor');
   $status=$image->AdaptiveResize(geometry=>$geometry,filter=>$filter)
     if $q->param('Algorithm') eq 'adaptive resize *';
   $status=$image->LiquidRescale(geometry=>$geometry) if

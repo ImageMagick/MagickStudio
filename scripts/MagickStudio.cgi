@@ -3123,8 +3123,8 @@ sub Resize
   $support=$q->param('SupportFactor') if $q->param('SupportFactor');
   $blur='1.0';
   $blur=$q->param('BlurFactor') if $q->param('BlurFactor');
-  $status=$image->AdaptiveResize(geometry=>$geometry,filter=>$filter,
-    blur=>$blur) if $q->param('Algorithm') eq 'adaptive resize *';
+  $status=$image->AdaptiveResize(geometry=>$geometry,filter=>$filter)
+    if $q->param('Algorithm') eq 'adaptive resize *';
   $status=$image->LiquidRescale(geometry=>$geometry) if
     $q->param('Algorithm') eq 'liquid rescale *';
   $status=$image->Resize(geometry=>$geometry,filter=>$filter) if

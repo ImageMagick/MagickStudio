@@ -2898,6 +2898,7 @@ sub Header
   $|=1;
   print $q->header(-charset=>'UTF-8',expires=>$ExpireCache,@attributes), "\n";
   print $q->start_html(
+    -'data-bs-theme'=>'dark',
     -meta=>{
       'charset'=>'utf-8', 
       'viewport'=>'width=device-width, initial-scale=1'

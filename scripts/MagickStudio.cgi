@@ -205,7 +205,7 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dt>Text:</dt>\n";
   print '<dd>', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
-    -rows=>3), "</dd><br />\n";
+    -rows=>3), "</dd><br\n";
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
@@ -218,11 +218,11 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
     -values=>[@types],-default=>'SouthEast'), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'annotate'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Annotate Properties</legend>\n";
   print "<dl><dd>\n";
@@ -240,7 +240,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'Undercolor',
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>PointSize</th>\n";
@@ -255,7 +255,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
     -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Kerning</th>\n";
@@ -270,7 +270,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'InterwordSpacing',
     -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
@@ -280,16 +280,16 @@ XXX
   $image=new Image::Magick;
   @fonts=$image->QueryFont();
   print '<td>', $q->scrolling_list(-class=>'form-control',-name=>'Font',
-    -values=>[@fonts],-size=>10), "</td><br />\n";
+    -values=>[@fonts],-size=>10), "</td><br>\n";
   my @types=Image::Magick->QueryOption('direction');
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Direction',
     -values=>[@types]), "</td>\n";
   print "</tr>\n";
   print "<tr>\n";
   print '<td>', $q->textfield(-class=>'form-control',-name=>'FontURL',
-    -value=>'http://',-size=>25), "</td><br />\n";
+    -value=>'http://',-size=>25), "</td><br>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
@@ -304,7 +304,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
@@ -316,7 +316,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
@@ -325,7 +325,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
     -value=>'none', -size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd>', $q->checkbox(-name=>'Antialias',
     -label=>' antialias text.',-checked=>'true'), "</dd>\n";
@@ -377,7 +377,7 @@ sub CheckStudioStatus
   print <<XXX;
 <code>ImageMagick Studio</code> is busy serving other requests.  We have temporarily
 <i>suspended</i> the processing of your image.  The current studio status is:
-<br />
+<br>
 <center>
 <table class=\"table table-condensed table-striped\">
 <tr>
@@ -391,7 +391,7 @@ sub CheckStudioStatus
 </tr>
 </table>
 </center>
-<br />
+<br>
 When the studio load average becomes less than the threshold, processing
 <var>automagically</var> continues and your image is returned.  The studio status will
 be refreshed in $refresh_rate seconds.
@@ -565,14 +565,14 @@ XXX
     -value=>'quantize'), "\n";
   print "<dt>Parameter:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'256'), "</dd><br />\n";
+    -size=>25,-value=>'256'), "</dd><br>\n";
   print "<dt>Choose from these options:</dt>\n";
   print '<dd>', $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,
-    -columns=>3,-default=>'dither'), "</dd><br />\n";
+    -columns=>3,-default=>'dither'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'quantize'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
@@ -588,12 +588,12 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
     -values=>[@types],-default=>'sRGB'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br /> <br /> <br /> <br />
+<br> <br> <br> <br> <br> <br>
 XXX
   ;
   Trailer(1);
@@ -638,7 +638,7 @@ sub Comment
     -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
-<br />
+<br>
 <center>
 <a href="$SponsorURL" target="sponsor">
   <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" align=right border="0" vspace="45" /></a>
@@ -649,9 +649,9 @@ XXX
   ;
   print "<dl>\n";
   print "<dl>\n";
-  print "<dt>You said:<br />\n";
+  print "<dt>You said:<br>\n";
   print '<dd><ul><pre class=\"highlight\"><samp>', $q->param('Comment'),
-    "</samp></pre></ul><br />\n";
+    "</samp></pre></ul><br>\n";
   print "<dt>An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
   print "</dl>\n";
@@ -672,7 +672,7 @@ sub CommentForm
     -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
-<br />
+<br>
 <center>
 <a href="$SponsorURL" target="sponsor">
   <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" align=right border="0" vspace="45" /></a>
@@ -695,7 +695,7 @@ XXX
   print "<dl>\n";
   print "<dl>\n";
   print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
-    -columns=>50,-rows=>10,-wrap=>'horizontal'), "<br />\n";
+    -columns=>50,-rows=>10,-wrap=>'horizontal'), "<br>\n";
   print "</dl>\n";
   print "</dl>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
@@ -813,15 +813,15 @@ XXX
   print "<dt><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
     "Filename</a>:</dt>\n";
   print '<dd>', $q->filefield(-name=>'CompareFile',-size=>50,-maxlength=>1024),
-    "</dd><br />\n";
+    "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompareURL',
-    -size=>50), "</dd><br />\n";
+    -size=>50), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'compare'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Compare Properties</legend>\n";
   print "<dl><dd>\n";
@@ -841,7 +841,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ChannelType',
     -values=>[@channels],default=>'Default'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "</dd></dl>\n";
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Clipboard',
@@ -849,7 +849,7 @@ XXX
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 XXX
   ;
   Trailer(1);
@@ -979,11 +979,11 @@ XXX
   print "<dt><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
     "Filename</a>:</dt>\n";
   print '<dd>', $q->filefield(-name=>'CompositeFile',-size=>50,
-    -maxlength=>1024), "</dd><br />\n";
+    -maxlength=>1024), "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
-    -size=>50), "</dd><br />\n";
+    -size=>50), "</dd><br>\n";
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
@@ -996,11 +996,11 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
     -values=>[@types],-default=>'Center'), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'composite'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Composite Properties</legend>\n";
   print "<dl><dd>\n";
@@ -1016,7 +1016,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
     -values=>[@types],-default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Rotate</th>\n";
@@ -1029,7 +1029,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Tile',
     -label=>' tile across and down the image canvas.'), "</dd>\n";
@@ -1146,17 +1146,17 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dt>Decoration geometry:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>'15x15+3+3'), "</dd><br />\n";
+    -size=>25,-value=>'15x15+3+3'), "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Color</a>:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,
-    -value=>'gray'), "</dd><br />\n";
+    -value=>'gray'), "</dd><br>\n";
   print "<dt>Choose from these decorations:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>5,-default=>'frame *'), "</dd><br />\n";
+    -columns=>5,-default=>'frame *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'decorate'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Decorate Properties</legend>\n";
   print "<dl><dd>\n";
@@ -1169,12 +1169,12 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
     -values=>[@types],-default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+<br> <br> <br> <br> <br> <br> <br> <br>
 XXX
   ;
   Trailer(1);
@@ -1423,11 +1423,11 @@ XXX
   $hostname=$q->server_name();
   print <<XXX;
 </map>
-<br /> <br /> <br />
+<br> <br> <br>
 </center>
 XXX
   ;
-  print "* <i>this image was saved to the ImageMagick Studio clipboard.</i><br />"
+  print "* <i>this image was saved to the ImageMagick Studio clipboard.</i><br>"
     if $q->param('Option') eq 'clipboard';
   #
   # Image upload form.
@@ -1444,28 +1444,28 @@ XXX
     -value=>'upload'), "\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'upload'), ' your image to a remote site or ', $q->reset(
-    -name=>'reset',-class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -name=>'reset',-class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Upload Properties</legend>\n";
   print "<dl>\n";
   $hostname=GetHostname($q->remote_host());
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">FTP server name</a>:\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Hostname',
-    -size=>50,-value=>$hostname), "<br />\n";
+    -size=>50,-value=>$hostname), "<br>\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account name</a>:\n";
   $username='anonymous';
   $username=$q->remote_user() if $q->remote_user();
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Username',
-    -size=>25,-value=>$username), "<br />\n";
+    -size=>25,-value=>$username), "<br>\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account password</a>:\n";
-  print '<dd>', $q->password_field(-name=>'Password',-size=>25), "<br />\n";
+  print '<dd>', $q->password_field(-name=>'Password',-size=>25), "<br>\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Upload directory</a>:\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Directory',
-    -size=>50), "<br />\n";
+    -size=>50), "<br>\n";
   print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Filename</a>:\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Filename',
-    -size=>50, -value=>"$basename.$format"), "<br />\n";
+    -size=>50, -value=>"$basename.$format"), "<br>\n";
   print "</dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
@@ -1520,14 +1520,14 @@ XXX
   $format=$q->param('Magick');
   @formats=$image->QueryFormat();
   print '<dd>', $q->scrolling_list(-class=>'form-control',-name=>'Format',
-    -values=>[@formats],-size=>7,-default=>$format), "</dd><br />\n";
+    -values=>[@formats],-size=>7,-default=>$format), "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'multi-frame file'), "</dd><br />\n";
+    -columns=>3,-default=>'multi-frame file'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'output'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Download Properties</legend>\n";
   print "<dl><dd>\n";
@@ -1551,7 +1551,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Alpha',
     -values=>[@types],-default=>'Undefined'), "</td>\n";
   print "</tr>\n";
-  print "</table><br />\n";
+  print "</table><br>\n";
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Dispose</th>\n";
@@ -1569,7 +1569,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Preview',
     -values=>[@types]), "</td>\n";
   print "</tr>\n";
-  print "</table><br />\n";
+  print "</table><br>\n";
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Delay.html\" target=\"help\">Delay</a></th>\n";
@@ -1584,24 +1584,24 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'Quality',-size=>15,
     -value=>$image->Get('quality')), "</td>\n";
   print "</tr>\n";
-  print "</table><br />\n";
+  print "</table><br>\n";
   print "<dt>Image Depth</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,
-    -value=>$image->Get('depth')), "</dd><br />\n";
+    -value=>$image->Get('depth')), "</dd><br>\n";
   print "<dt>Smush Offset</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,
-    -value=>2), "</dd><br />\n";
+    -value=>2), "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
     "Page Geometry</a></dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Page',-size=>25),
-    "</dd><br />\n";
+    "</dd><br>\n";
   print "<dt><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">",
     "Passphrase</a></dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Passphrase',
-    -size=>25), "</dd><br />\n";
+    -size=>25), "</dd><br>\n";
   print "<dt>Comment:</dt>\n";
   print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
-    -columns=>50,-rows=>3,-value=>$image->Get('comment')), "</dd><br />\n";
+    -columns=>50,-rows=>3,-value=>$image->Get('comment')), "</dd><br>\n";
   print "<dt> Miscellaneous options:</dt>\n";
   print '<dd>', $q->checkbox(-name=>'Repage',
     -label=>' reset page geometry.'), "</dd>\n";
@@ -1723,15 +1723,15 @@ XXX
   print "<dt>Primitive:</dt>\n";
   my @types=Image::Magick->QueryOption('primitive');
   print '<dd>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
-    -values=>[@types],-default=>'Line'), "</dd><br />\n";
+    -values=>[@types],-default=>'Line'), "</dd><br>\n";
   print "<dt>Coordinates:</dt>\n";
   print '<dd>', $q->textarea(-class=>'form-control',-name=>'Coordinates',
     -columns=>50,-rows=>2,-value=>'+10+10  +60+60',-wrap=>'horizontal'),
-    "</dd><br />\n";
+    "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'draw'), ' on your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Draw Properties</legend>\n";
   print "<dl><dd>\n";
@@ -1749,7 +1749,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
     -size=>25,-value=>'1'), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
@@ -1764,7 +1764,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
@@ -1776,7 +1776,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "<dt>Miscellaneous options:</dt>\n";
   print '<dd> ', $q->checkbox(-name=>'Tile',
     -label=>' paint the drawing primitive with the clipboard image.'),
@@ -2209,14 +2209,14 @@ XXX
     "\n";
   print "<dt>Parameter:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'0.0x1.0'), "</dd><br />\n";
+    -size=>25,-value=>'0.0x1.0'), "</dd><br>\n";
   print "<dt>Choose from these effects:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'sharpen'), "</dd><br />\n";
+    -columns=>3,-default=>'sharpen'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Effects Properties</legend>\n";
   print "<dl><dd>\n";
@@ -2233,12 +2233,12 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
     -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br />
+<br> <br> <br>
 XXX
   ;
   Trailer(1);
@@ -2366,14 +2366,14 @@ XXX
     -value=>'enhance'), "\n";
   print "<dt>Parameter:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'1.6'), "</dd><br />\n";
+    -size=>25,-value=>'1.6'), "</dd><br>\n";
   print "<dt>Choose from these enhancements:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'gamma *'), "</dd><br />\n";
+    -columns=>3,-default=>'gamma *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'enhance'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Enhance Properties</legend>\n";
   print "<dl><dd>\n";
@@ -2390,12 +2390,12 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
     -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br />
+<br> <br> <br>
 XXX
   ;
   Trailer(1);
@@ -2414,21 +2414,21 @@ sub Error
 <center>
 <img src="$DocumentDirectory/images/stop.png" width="48" height="48" border="0" />
 </center>
-<br /> <br />
+<br> <br>
 <dl>
 <dt><font face="Arial,Helvetica" size=+2>$message:</font>
-<br />
+<br>
 <dd><font face="Arial,Helvetica" size=+1>$qualifier</font>
-<br />
+<br>
 <dd><font face="Arial,Helvetica" size=+0>$!</font>
 </dl>
-<br /> <br />
+<br> <br>
 <center>
 <img src="$DocumentDirectory/images/stop.png" width="48" height="48" border="0" />
 </center>
-<br />
-<br />
-<br />
+<br>
+<br>
+<br>
 Press <code>Back</code> to correct the error or press a tab above to continue.
 XXX
   ;
@@ -2704,14 +2704,14 @@ XXX
     "\n";
   print "<dt>Parameter:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'60'), "</dd><br />\n";
+    -size=>25,-value=>'60'), "</dd><br>\n";
   print "<dt>Choose from these special effects:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'swirl *'), "</dd><br />\n";
+    -columns=>3,-default=>'swirl *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>F/X Properties</legend>\n";
   print "<dl><dd>\n";
@@ -2732,7 +2732,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'FunctionType',
     -values=>[@functions],-default=>'Sin'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Morphology Method</th>\n";
@@ -2756,13 +2756,13 @@ XXX
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "</tr>\n";
-  print "<tr><br />\n";
+  print "<tr><br>\n";
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
     -value=>'black', -size=>25), "</td>\n";
   print '<td>', $q->textfield(-class=>'form-control',-name=>'FillColor',
     -value=>'white',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<dt> Miscellaneous options:</dt>\n";
   print '<dd>', $q->checkbox(-name=>'Repage',
     -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
@@ -2898,7 +2898,6 @@ sub Header
   $|=1;
   print $q->header(-charset=>'UTF-8',expires=>$ExpireCache,@attributes), "\n";
   print $q->start_html(
-    -'data-bs-theme'=>'dark',
     -meta=>{
       'charset'=>'utf-8', 
       'viewport'=>'width=device-width, initial-scale=1'
@@ -2930,67 +2929,29 @@ sub Header
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
-  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-    <symbol id="check2" viewBox="0 0 16 16">
-      <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-    </symbol>
-    <symbol id="circle-half" viewBox="0 0 16 16">
-      <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
-    </symbol>
-    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
-      <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
-      <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
-    </symbol>
-    <symbol id="sun-fill" viewBox="0 0 16 16">
-      <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-    </symbol>
-  </svg>
-  <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-    <button class="btn btn-bd-secondary py-2 dropdown-toggle d-flex align-items-center"
-            id="bd-theme"
-            type="button"
-            aria-expanded="false"
-            data-bs-toggle="dropdown"
-            aria-label="Toggle theme (auto)">
-      <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
-      <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#sun-fill"></use></svg>
-          Light
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
-          Dark
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em"><use href="#circle-half"></use></svg>
-          Auto
-          <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
-        </button>
-      </li>
-    </ul>
-  </div>
-    
-  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-    <symbol id="arrow-right-circle" viewBox="0 0 16 16">
-      <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-    </symbol>
-    <symbol id="color-mode" viewBox="0 0 118 94">
-      <title>Color Mode</title>
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
-    </symbol>
-  </svg>
-
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <script>
+    function setTheme(theme) {
+      localStorage.setItem('theme', theme);
+      updateThemeIcon(theme);
+      document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? getSystemTheme() : theme);
+    }
+    function getSystemTheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function updateThemeIcon(theme) {
+      const iconMap = {
+        light: '☀️',
+        dark: '🌙',
+        auto: '🌓'
+      };
+      document.getElementById('currentThemeIcon').textContent = iconMap[theme] || '🌓';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'auto';
+      setTheme(savedTheme);
+    });
+  </script>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
@@ -2998,17 +2959,8 @@ sub Header
     </button>
 
     <div class="collapse navbar-collapse" id="magick-navbars">
-      <form class="d-flex" action="$script">
-        <input type="hidden" name="CacheID" value="$cacheID" />
-        <input type="hidden" name="SessionID" value="$sessionID" />
-        <input type="hidden" name="Path" value="$path" />
-        <input type="hidden" name="Name" value="$name" />
-        <input type="hidden" name="Magick" value="$magick" />
-        <input type="hidden" name="ToolType" value="Upload" />
-        <button class="btn btn-outline-success" type="submit">Upload</button>
-      </form>
-      <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item dropdown">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item ms-3 dropdown">
           <a class="nav-link dropdown-toggle  $tools{'View'} $tools{'Identify'}" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
           <ul class="dropdown-menu" aria-labelledby="nav-items-view">
             <li><a class="dropdown-item" href="$url;ToolType=View">View</a></li>
@@ -3047,16 +2999,37 @@ sub Header
           </ul>
         </li>
       </ul>
-      <form class="d-flex" action="$script">
-        <input type="hidden" name="Action" value="mogrify" />
-        <input type="hidden" name="CacheID" value="$cacheID" />
-        <input type="hidden" name="SessionID" value="$sessionID" />
-        <input type="hidden" name="Path" value="$path" />
-        <input type="hidden" name="Name" value="$name" />
-        <input type="hidden" name="Magick" value="$magick" />
-        <input type="hidden" name="ToolType" value="Download" />
-        <button class="btn btn-outline-success" type="submit">Download</button>
-      </form>
+      <ul class="navbar-nav ms-auto">
+        <form class="d-flex" action="$script">
+          <input type="hidden" name="CacheID" value="$cacheID" />
+          <input type="hidden" name="SessionID" value="$sessionID" />
+          <input type="hidden" name="Path" value="$path" />
+          <input type="hidden" name="Name" value="$name" />
+          <input type="hidden" name="Magick" value="$magick" />
+          <input type="hidden" name="ToolType" value="Upload" />
+          <button class="btn btn-outline-success" type="submit">Upload</button>
+        </form>
+        <form class="d-flex ms-3" action="$script">
+          <input type="hidden" name="Action" value="mogrify" />
+          <input type="hidden" name="CacheID" value="$cacheID" />
+          <input type="hidden" name="SessionID" value="$sessionID" />
+          <input type="hidden" name="Path" value="$path" />
+          <input type="hidden" name="Name" value="$name" />
+          <input type="hidden" name="Magick" value="$magick" />
+          <input type="hidden" name="ToolType" value="Download" />
+          <button class="btn btn-outline-success" type="submit">Download</button>
+        </form>
+        <li class="nav-item dropdown ms-3">
+          <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="currentThemeIcon">🌓</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+            <li><a class="dropdown-item" href="#" onclick="setTheme('light')">☀️ Light</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">🌙 Dark</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">🌓 Auto</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   </nav>
@@ -3254,14 +3227,14 @@ XXX
     "\n";
   print "<dt>Image size:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>"$width" . 'x' . "$height"), "</dd><br />\n";
+    -size=>25,-value=>"$width" . 'x' . "$height"), "</dd><br>\n";
   print "<dt>Choose from these scaling methods:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Algorithm',-values=>@OptionTypes,
-    -columns=>3), "</dd><br />\n";
+    -columns=>3), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'resize'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Resize Properties</legend>\n";
   print "<dl><dd>\n";
@@ -3280,7 +3253,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BlurFactor',
     -size=>25,-value=>'1.0'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<dd><table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Gravity</th>\n";
@@ -3294,12 +3267,12 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
     -value=>'none', -size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table></dd><br />';
+  print '</table></dd><br>';
   print "</dd></dl>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br />
+<br> <br>
 XXX
   ;
   Trailer(1);
@@ -3443,41 +3416,41 @@ XXX
       #
       print "<center><h3>CGI State Information</h3></center>\n";
       print "Script:\n";
-      print '<dd>', $0, "<br />\n";
+      print '<dd>', $0, "<br>\n";
       print "Action:\n";
-      print '<dd>', $action, "<br />\n";
+      print '<dd>', $action, "<br>\n";
       print "Time:\n";
-      print '<dd>', time-$timer, "s<br />\n";
+      print '<dd>', time-$timer, "s<br>\n";
       print "Query state:\n";
-      print '<dd>', $q->query_string, "<br />\n";
+      print '<dd>', $q->query_string, "<br>\n";
       print $q->Dump;
-      print "<br />\n";
+      print "<br>\n";
       print "Environment state:\n";
       print "<ul>\n";
-      print "<li><code>SponsorURL</code>: ", $SponsorURL, "<br />\n";
-      print "<li><code>SponsorIcon</code>: ", $SponsorIcon, "<br />\n";
-      print "<li><code>accept</code>: ", $q->Accept(), "<br />\n";
-      print "<li><code>auth type</code>: ", $q->auth_type(), "<br />\n";
-      print "<li><code>raw cookie</code>: ", $q->raw_cookie(), "<br />\n";
-      print "<li><code>path info</code>: ", $q->path_info(), "<br />\n";
-      print "<li><code>path translated</code>: ", $q->path_translated(), "<br />\n";
-      print "<li><code>referer</code>: ", $q->referer(), "<br />\n";
-      print "<li><code>local addr</code>: ", GetAddress($q->virtual_host()), "<br />\n";
-      print "<li><code>remote addr</code>: ", $q->remote_addr(), "<br />\n";
-      print "<li><code>remote ident</code>: ", $q->remote_ident(), "<br />\n";
-      print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "<br />\n";
-      print "<li><code>remote user</code>: ", $q->remote_user(), "<br />\n";
-      print "<li><code>request method</code>: ", $q->request_method(), "<br />\n";
-      print "<li><code>script name</code>: ", $q->script_name(), "<br />\n";
-      print "<li><code>server name</code>: ", $q->server_name(), "<br />\n";
-      print "<li><code>server software</code>: ", $q->server_software(), "<br />\n";
-      print "<li><code>server port</code>: ", $q->server_port(), "<br />\n";
-      print "<li><code>temporary directory</code>: ", $ENV{TMPDIR}, "<br />\n";
-      print "<li><code>user agent</code>: ", $q->user_agent(), "<br />\n";
-      print "<li><code>user name</code>: ", $q->user_name(), "<br />\n";
-      print "<li><code>virtual host</code>: ", $q->virtual_host(), "<br />\n";
-      print "<li><code>environment</code>: ", $q->http(), "<br />\n";
-      print "<li><code>time stamp</code>: ", scalar(localtime), "<br />\n";
+      print "<li><code>SponsorURL</code>: ", $SponsorURL, "<br>\n";
+      print "<li><code>SponsorIcon</code>: ", $SponsorIcon, "<br>\n";
+      print "<li><code>accept</code>: ", $q->Accept(), "<br>\n";
+      print "<li><code>auth type</code>: ", $q->auth_type(), "<br>\n";
+      print "<li><code>raw cookie</code>: ", $q->raw_cookie(), "<br>\n";
+      print "<li><code>path info</code>: ", $q->path_info(), "<br>\n";
+      print "<li><code>path translated</code>: ", $q->path_translated(), "<br>\n";
+      print "<li><code>referer</code>: ", $q->referer(), "<br>\n";
+      print "<li><code>local addr</code>: ", GetAddress($q->virtual_host()), "<br>\n";
+      print "<li><code>remote addr</code>: ", $q->remote_addr(), "<br>\n";
+      print "<li><code>remote ident</code>: ", $q->remote_ident(), "<br>\n";
+      print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "<br>\n";
+      print "<li><code>remote user</code>: ", $q->remote_user(), "<br>\n";
+      print "<li><code>request method</code>: ", $q->request_method(), "<br>\n";
+      print "<li><code>script name</code>: ", $q->script_name(), "<br>\n";
+      print "<li><code>server name</code>: ", $q->server_name(), "<br>\n";
+      print "<li><code>server software</code>: ", $q->server_software(), "<br>\n";
+      print "<li><code>server port</code>: ", $q->server_port(), "<br>\n";
+      print "<li><code>temporary directory</code>: ", $ENV{TMPDIR}, "<br>\n";
+      print "<li><code>user agent</code>: ", $q->user_agent(), "<br>\n";
+      print "<li><code>user name</code>: ", $q->user_name(), "<br>\n";
+      print "<li><code>virtual host</code>: ", $q->virtual_host(), "<br>\n";
+      print "<li><code>environment</code>: ", $q->http(), "<br>\n";
+      print "<li><code>time stamp</code>: ", scalar(localtime), "<br>\n";
       print "</ul>\n";
     }
   print $q->end_html;
@@ -3600,14 +3573,14 @@ XXX
     "\n";
   print "<dt>Parameter:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25), "</dd><br />\n";
+    -size=>25), "</dd><br>\n";
   print "<dt>Choose from these transforms:</dt>\n";
   print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'trim'), "</dd><br />\n";
+    -columns=>3,-default=>'trim'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'transform'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br /><br />\n";
-  print "<br />\n";
+    -class=>'btn btn-warning'), " the form.<br><br>\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
@@ -3631,7 +3604,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
     -values=>[@types],-default=>'sRGB'), "</td>\n";
   print "<tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th>Layer Method</th>\n";
@@ -3644,7 +3617,7 @@ XXX
   print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<dt> Miscellaneous options:</dt>\n";
   print '<dd>', $q->checkbox(-name=>'Repage',
     -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
@@ -3947,8 +3920,8 @@ sub UploadForm
   $q->param(-name=>'ToolType',-value=>'Upload');
   Header("Magick Online Studio");
   print <<XXX;
-<br />
-<p class="lead">To convert, edit, or compose your image online, press <code>Choose File</code> to browse and select your image file or enter the <a href="$DocumentDirectory/URL.html" target="help">URL</a> of your image.  Next, set any of the optional parameters below.  Finally, press <code>view</code> to continue.</p>
+<br>
+<p class="lead">To get started, click <span class="fw-bold">Choose File</span> to browse and upload an image from your device, or enter the URL of an image hosted online. Next, customize your experience by adjusting any of the optional settings below to suit your needs. When you're ready, click <span class="fw-bold">View</span> to proceed and begin editing, converting, or composing your image.</p>
 XXX
   ;
   $version=Image::Magick->VERSION;
@@ -3978,24 +3951,26 @@ XXX
         -label=>' append to clipboard image.'), "</td>\n";
     }
   print "</tr>\n";
-  print "</table><br />\n";
+  print "</table><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'view'), ' your image or ', $q->reset(-name=>'reset',
     -class=>'btn btn-warning'), " the form.\n";
   print <<XXX;
-<br /> <br />
+<br> <br>
 An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>Magick Online Studio</code>, version $version.
-<br /> <br />
+<br> <br>
 <fieldset>
 <legend>Privacy Notice</legend>
-<p class="text-warning">Your privacy is protected as long as you use this service in a lawful manner.  All uploaded images are temporarily stored on our local disks for processing and they are <var>automagically</var> removed within a few hours.  Your images cannot be viewed or copied by anyone other than yourself.  We have security precautions in place to prevent others from accessing your images.</p>
+<p class="text-warning">Your privacy is safeguarded as long as you use this service in accordance with applicable laws. All uploaded images are stored temporarily on our secure local servers solely for processing purposes. These files are automatically deleted within a few hours—no manual action required.  Rest assured, your images are not accessible to anyone but you. We’ve implemented robust security measures to prevent unauthorized access, viewing, or copying of your content.</p>
 </fieldset>
-<br />
+<br>
 <fieldset>
 <legend>Liability Notice</legend>
-<p class="text-warning">By using this service, you agree not to hold ImageMagick Studio LLC liable for any data loss, subsequent damages, or privacy issues resulting from the use of this service.</p>
+<p class="text-warning">By using this service, you acknowledge and agree that ImageMagick Studio LLC shall not be held liable for any data loss, consequential damages, or privacy-related issues that may arise from your use of the platform.
+
+Use of this service is at your own risk, and it is your responsibility to ensure that any content you upload complies with applicable laws and does not contain sensitive or confidential information.</p>
 </fieldset>
-<br />
+<br>
 XXX
   ;
   print "<fieldset>\n";
@@ -4016,7 +3991,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Format',
     -values=>[@UploadTypes]), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Meta.html\" target=\"help\">Meta</a></th>\n";
@@ -4029,7 +4004,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
     -values=>[@types],-default=>'None'), "</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Scene.html\" target=\"help\">Scene</a></th>\n";
@@ -4203,7 +4178,7 @@ XXX
     "\n";
   print $q->image_button(-class=>'img-fluid mx-auto d-block',-name=>$basename,
     -src=>"$url/$basename.$format",-border=>1,-width=>$width,-height=>$height,
-    -style=>"cursor:crosshair",-cursor), "<br />\n";
+    -style=>"cursor:crosshair",-cursor), "<br>\n";
   if (defined($q->param("$basename.x")) || defined($q->param("$basename.y")))
     {
       my $width=$coalesce->Get('columns');
@@ -4260,7 +4235,7 @@ XXX
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
       print "</samp></pre></ul>\n";
     }
-  print "<br />\n";
+  print "<br>\n";
   print "<fieldset>\n";
   print "<legend>Paint Properties</legend>\n";
   print "<dl><dd>\n";
@@ -4279,7 +4254,7 @@ XXX
   print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
     -values=>[@PrimitiveTypes]),"</td>\n";
   print "</tr>\n";
-  print '</table><br />';
+  print '</table><br>';
   print "<table class=\"table table-condensed table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
@@ -4296,7 +4271,7 @@ XXX
   print "</fieldset>\n";
   print $q->end_form, "\n";
   print <<XXX;
-<br /> <br /> <br /> <br />
+<br> <br> <br> <br>
 XXX
   ;
   Trailer(undef);
@@ -4311,16 +4286,16 @@ sub Warning
 
   Header($message);
   print <<XXX;
-<br /> <br />
+<br> <br>
 <dl>
 <dt><font face="Arial,Helvetica" size=+3>$message:</font>
-<br />
+<br>
 <dd><font face="Arial,Helvetica" size=+2>$qualifier</font>
 </dl>
-<br /> <br />
-<br />
-<br />
-<br />
+<br> <br>
+<br>
+<br>
+<br>
 Press a tab above to continue.
 XXX
   ;

@@ -2929,6 +2929,28 @@ sub Header
   $url.=';Magick=' . $q->param('Magick') if  $q->param('Magick');
   $url.=';Action=mogrify';
   print <<XXX;
+  <script>
+    function setTheme(theme) {
+      localStorage.setItem('theme', theme);
+      updateThemeIcon(theme);
+      document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? getSystemTheme() : theme);
+    }
+    function getSystemTheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function updateThemeIcon(theme) {
+      const iconMap = {
+        light: '☀️',
+        dark: '🌙',
+        auto: '🌓'
+      };
+      document.getElementById('currentThemeIcon').textContent = iconMap[theme] || '🌓';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'auto';
+      setTheme(savedTheme);
+    });
+  </script>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
@@ -3383,28 +3405,6 @@ XXX
   </footer>
   <!-- Javascript assets -->
   <script src="$DocumentDirectory/assets/magick-js.php"></script>
-  <script>
-    function setTheme(theme) {
-      localStorage.setItem('theme', theme);
-      updateThemeIcon(theme);
-      document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? getSystemTheme() : theme);
-    }
-    function getSystemTheme() {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    function updateThemeIcon(theme) {
-      const iconMap = {
-        light: '☀️',
-        dark: '🌙',
-        auto: '🌓'
-      };
-      document.getElementById('currentThemeIcon').textContent = iconMap[theme] || '🌓';
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme') || 'auto';
-      setTheme(savedTheme);
-    });
-  </script>
 XXX
   ;
   if ($Debug)

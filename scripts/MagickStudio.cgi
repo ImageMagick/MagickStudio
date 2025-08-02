@@ -2903,9 +2903,6 @@ sub Header
       'viewport'=>'width=device-width, initial-scale=1'
     },
     -title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
-    -script=>{
-      -src=>"$DocumentDirectory/assets/color-modes.js"
-    },
     -style=>{
       -src=>"$DocumentDirectory/assets/magick-css.php"
     },

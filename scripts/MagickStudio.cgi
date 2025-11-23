@@ -104,7 +104,7 @@ sub Annotate
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -119,7 +119,7 @@ sub Annotate
   $direction=$q->param('Direction');
   $fill='none';
   $fill=$q->param('Fill') if $q->param('Fill');
-  getstore(Untaint($q->param('FontURL')),'MagickStudio.ttf')
+  getstore(Untaint(scalar $q->param('FontURL')),'MagickStudio.ttf')
     unless $q->param('FontURL') eq 'http://';
   $font="\@MagickStudio.ttf" if -e 'MagickStudio.ttf';
   $font=($image->QueryFont($q->param('Font')))[10] unless -e 'MagickStudio.ttf';
@@ -450,7 +450,7 @@ sub Colormap
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -726,7 +726,7 @@ sub Compare
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -735,10 +735,10 @@ sub Compare
   # Read compare image.
   #
   if ($q->param('CompareURL')) {
-    $filename=Untaint($q->param('CompareURL'));
+    $filename=Untaint(scalar $q->param('CompareURL'));
     getstore($filename,'MagickStudio.dat');
   } else {
-    $filename=Untaint($q->param('CompareFile')) if $q->param('CompareFile');
+    $filename=Untaint(scalar $q->param('CompareFile')) if $q->param('CompareFile');
     $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
       $q->param('SessionID') if $q->param('Clipboard') eq 'on';
     copy($q->upload('CompareFile'),'MagickStudio.dat') ||
@@ -871,7 +871,7 @@ sub Composite
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -880,10 +880,10 @@ sub Composite
   # Read composite image.
   #
   if ($q->param('CompositeURL')) {
-    $filename=Untaint($q->param('CompositeURL'));
+    $filename=Untaint(scalar $q->param('CompositeURL'));
     getstore($filename,'MagickStudio.dat');
   } else {
-    $filename=Untaint($q->param('CompositeFile')) if $q->param('CompositeFile');
+    $filename=Untaint(scalar $q->param('CompositeFile')) if $q->param('CompositeFile');
     $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
       $q->param('SessionID') if $q->param('Clipboard') eq 'on';
     copy($q->upload('CompositeFile'),'MagickStudio.dat') ||
@@ -1083,7 +1083,7 @@ sub Decorate
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -1193,7 +1193,7 @@ sub Download
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -1494,7 +1494,7 @@ sub DownloadForm
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -1636,7 +1636,7 @@ sub Draw
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -1803,7 +1803,7 @@ sub Effects
 
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -2256,7 +2256,7 @@ sub Enhance
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -2602,7 +2602,7 @@ sub FileTransfer
   # Read image.
   #
   SaveQueryState($q->param('SessionID'),'FileTransfer');
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -2850,7 +2850,7 @@ sub GetTitle
     {
       my($format, $path, $size);
 
-      $path=Untaint($q->param('Path'));
+      $path=Untaint(scalar $q->param('Path'));
       $image=Image::Magick->new;
       ($width,$height,$size,$format)=$image->Ping("$path/MagickStudio.mpc");
     }
@@ -3054,7 +3054,7 @@ sub Identify
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $images=Image::Magick->new(precision=>6);
   $status=$images->Read("$path/MagickStudio.mpc");
@@ -3125,7 +3125,7 @@ sub Resize
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -3200,7 +3200,7 @@ sub ResizeForm
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   ($width,$height)=$image->Ping("$path/MagickStudio.mpc");
@@ -3368,7 +3368,7 @@ XXX
       #
       $image=Image::Magick->new;
       $path="";
-      $path=Untaint($q->param('Path')) if $q->param('Path');
+      $path=Untaint(scalar $q->param('Path')) if $q->param('Path');
       $filename="$path/MagickStudio.gif";
       if (-e $filename)
         {
@@ -3466,7 +3466,7 @@ sub Transform
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
@@ -3689,7 +3689,7 @@ sub Upload
       #
       # Copy data file to workarea.
       #
-      $filename=Untaint($q->param('File'));
+      $filename=Untaint(scalar $q->param('File'));
       copy($q->upload('File'),'MagickStudio.dat') ||
         copy(\*$filename,'MagickStudio.dat') ||
           getstore($filename,'MagickStudio.dat');
@@ -3714,7 +3714,7 @@ sub Upload
     {
       if ($q->param('URL'))
         {
-          $filename=Untaint($q->param('URL'));
+          $filename=Untaint(scalar $q->param('URL'));
           if (!($filename =~ /\/$/))
             {
               #
@@ -3764,7 +3764,7 @@ sub Upload
         {
           if ($q->param('Meta') && ($q->param('Format') ne 'Implicit'))
             {
-              $filename=Untaint($q->param('Meta'));
+              $filename=Untaint(scalar $q->param('Meta'));
               $q->param('SizeGeometry') =~ /(\d+)\D*(\d*)/;
               Error('Image area exceeds maximum allowable') if $1 && $2 &&
                 (($1*$2) > (1024*$MaxImageArea));
@@ -4047,7 +4047,7 @@ sub View
   #
   # Read image.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   $image=Image::Magick->new;
   @extents=$image->Ping("$path/MagickStudio.mpc");
@@ -4124,7 +4124,7 @@ sub ViewForm
   #
   # Ensure image resources are within bounds.
   #
-  $path=Untaint($q->param('Path'));
+  $path=Untaint(scalar $q->param('Path'));
   chdir($path) || Error('Your image has expired',$path);
   if (!$image)
     {

@@ -90,6 +90,10 @@
   <policy domain="path" rights="none" pattern="@*"/>
   <!-- Deny all image modules and specifically exempt reading or writing
        web-safe image formats. -->
+  <policy domain="coder" rights="none" pattern="*" />
+  <policy domain="coder" rights="read | write" pattern="{BMP,GIF,JPEG,PNG,TIFF,WEBP}"/>
+  <policy domain="coder" rights="read | write" pattern="{MPC}" stealth="true"/>
+  <policy domain="coder" rights="write" pattern="{AAI,ART,ASHLAR,AVS,BAYER,BGR,BRAILLE,CALS,CIN,CIP,CLIPBOARD,CLIP,CMYK,DEBUG,DIB,DPX,EPT,EXR,FARBFELD,FAX,FITS,FL32,FLIF,FPX,FTXT,GIF,GRAY,HDR,HEIC,HISTOGRAM,HRZ,HTML,ICON,INLINE,IPL,JBIG,JP2,JSON,JXL,KERNEL,MAGICK,MAP,MASK,MAT,MATTE,META,MIFF,MONO,MPC,MPR,MSL,MTV,MVG,NULL,OTB,PALM,PCD,PCL,PCX,PDB,PDF,PGX,PICT,PNM,PS2,PS3,PS,PSD,QOI,RAW,RGB,RGF,SGI,SIXEL,STRIMG,SUN,SVG,TGA,THUMBNAIL,TXT,UIL,UYVY,VICAR,VID,VIDEO,VIFF,VIPS,WBMP,WEBP,WPG,XBM,XPM,XWD,YAML,YCBCR,YUV}"/>
   <policy domain="module" rights="none" pattern="*" />
   <policy domain="module" rights="read | write" pattern="{BMP,GIF,JPEG,PNG,TIFF,WEBP}"/>
   <policy domain="module" rights="read | write" pattern="{MPC}" stealth="true"/>

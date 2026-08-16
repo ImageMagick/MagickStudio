@@ -206,7 +206,7 @@ XXX
   print "<dt>Text:</dt>\n";
   print '<dd>', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
     -rows=>3), "</dd><br\n";
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
   print "<th>Gravity</th>\n";
@@ -226,7 +226,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Annotate Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
@@ -241,7 +241,7 @@ XXX
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>PointSize</th>\n";
   print "<th>Density</th>\n";
@@ -256,7 +256,7 @@ XXX
     -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Kerning</th>\n";
   print "<th>Interline Spacing</th>\n";
@@ -271,7 +271,7 @@ XXX
     -value=>'0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
   print "<th>Direction</th>\n";
@@ -290,7 +290,7 @@ XXX
     -value=>'http://',-size=>25), "</td><br>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
   print "<th>Scale</th>\n";
@@ -305,7 +305,7 @@ XXX
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
   print "<th>Skew Y</th>\n";
@@ -317,7 +317,7 @@ XXX
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "</tr>\n";
@@ -379,7 +379,7 @@ sub CheckStudioStatus
 <i>suspended</i> the processing of your image.  The current studio status is:
 <br>
 <center>
-<table class=\"table table-condensed table-striped\">
+<table class=\"table table-sm table-hover table-striped\">
 <tr>
   <th>Load Average</th>
   <th>Threshold</th>
@@ -576,7 +576,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Transparent Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\">Colorspace</a></th>\n";
@@ -650,7 +650,7 @@ XXX
   print "<dl>\n";
   print "<dl>\n";
   print "<dt>You said:<br>\n";
-  print '<dd><ul><pre class=\"highlight\"><samp>', $q->param('Comment'),
+  print '<dd><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;\"><samp>', $q->param('Comment'),
     "</samp></pre></ul><br>\n";
   print "<dt>An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
@@ -825,7 +825,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Compare Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Metric.html\" target=\"help\">Metric</a></th>\n";
@@ -984,7 +984,7 @@ XXX
     "URL</a>:</dt>\n";
   print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
     -size=>50), "</dd><br>\n";
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Offset</th>\n";
   print "<th>Gravity</th>\n";
@@ -1004,7 +1004,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Composite Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Blend</th>\n";
   print "<th>Compose</th>\n";
@@ -1017,7 +1017,7 @@ XXX
     -values=>[@types],-default=>'SrcOver'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Rotate</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
@@ -1160,7 +1160,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Decorate Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Compose</th>\n";
   print "</tr>\n";
@@ -1531,7 +1531,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Download Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Image Type</th>\n";
   print "<th>Compress</th>\n";
@@ -1552,7 +1552,7 @@ XXX
     -values=>[@types],-default=>'Undefined'), "</td>\n";
   print "</tr>\n";
   print "</table><br>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Dispose</th>\n";
   print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
@@ -1570,7 +1570,7 @@ XXX
     -values=>[@types]), "</td>\n";
   print "</tr>\n";
   print "</table><br>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Delay.html\" target=\"help\">Delay</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Loop.html\" target=\"help\">Loop</a></th>\n";
@@ -1735,7 +1735,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Draw Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
@@ -1750,7 +1750,7 @@ XXX
     -size=>25,-value=>'1'), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Translate</th>\n";
   print "<th>Scale</th>\n";
@@ -1765,7 +1765,7 @@ XXX
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Skew X</th>\n";
   print "<th>Skew Y</th>\n";
@@ -2220,7 +2220,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Effects Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Virtual Pixel Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
@@ -2377,7 +2377,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Enhance Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Virtual Pixel Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
@@ -2715,7 +2715,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>F/X Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Distort Type</th>\n";
   print "<th>Evaluate Type</th>\n";
@@ -2733,7 +2733,7 @@ XXX
     -values=>[@functions],-default=>'Sin'), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Morphology Method</th>\n";
   print "<th>Virtual Pixel Method</th>\n";
@@ -2751,7 +2751,7 @@ XXX
     -values=>[@channels],-default=>'Default'), "</td>\n";
   print "</tr>\n";
   print "</tr>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
@@ -2900,7 +2900,7 @@ sub Header
   print $q->start_html(
     -meta=>{
       'charset'=>'utf-8', 
-      'viewport'=>'width=device-width, initial-scale=1'
+      'viewport'=>'width=device-width, initial-scale=1, viewport-fit=cover'
     },
     -title=>$title,-author=>$ContactInfo,-encoding=>'UTF-8',
     -style=>{
@@ -2909,6 +2909,8 @@ sub Header
     -head=>[
       "<link rel=\"icon\" href=\"$DocumentDirectory/images/wand.png\"/>",
       "<link rel=\"shortcut icon\" href=\"$DocumentDirectory/images/wand.ico\" type=\"image/x-icon\"/>",
+      "<link rel=\"preload\" href=\"https://cdn.jsdelivr.net/npm/bootstrap\@5.3.8/dist/css/bootstrap.min.css\" as=\"style\" crossorigin=\"anonymous\">",
+      "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap\@5.3.8/dist/css/bootstrap.min.css\" crossorigin=\"anonymous\">",
       "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745\" crossorigin=\"anonymous\"></script>"
     ],
   ), "\n";
@@ -2948,9 +2950,9 @@ sub Header
       setTheme(savedTheme);
     });
   </script>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 fixed-top">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
+    <a class="navbar-brand fw-bold" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -3031,8 +3033,8 @@ sub Header
   </div>
   </nav>
 
-<div class="col-lg-8 mx-auto p-4 py-md-5 text-body-secondary">
-<main class="container">
+<div class="col-lg-8 mx-auto text-body-secondary pt-5 pt-lg-5">
+<main role="main" class="container">
 	<div>
 XXX
   ;
@@ -3070,7 +3072,7 @@ sub Identify
 <p class="lead">Here is a detailed description of your image, <code>$filename</code>:</p>
 XXX
   ;
-  print "<ul><pre class=\"pre-scrollable\"><samp>";
+  print "<ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>";
   $images->Identify();
   print "</samp></pre></ul>\n";
   Trailer(1);
@@ -3235,7 +3237,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Resize Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Filter</th>\n";
   print "<th>Support</th>\n";
@@ -3251,7 +3253,7 @@ XXX
     -size=>25,-value=>'1.0'), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<dd><table class=\"table table-condensed table-striped\">\n";
+  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Gravity</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
@@ -3339,6 +3341,20 @@ sub Trailer
   my($home, $load_average, $url);
 
   print <<XXX;
+   <div class="container text-center">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745"
+        crossorigin="anonymous"></script>
+      <!-- Banner Ad -->
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-3129977114552745"
+        data-ad-slot="1083537442"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </div>
 </main>
 </div>
@@ -3355,7 +3371,7 @@ XXX
   $home="$DocumentDirectory/images/home-stop.png"
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
-  <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+  <footer class="py-5 text-center text-body-secondary bg-body-tertiary" style="max-height:75svh;">
   <div class="container-fluid">
 XXX
   ;
@@ -3401,7 +3417,7 @@ XXX
   </div>
   </footer>
   <!-- Javascript assets -->
-  <script src="$DocumentDirectory/assets/magick-js.php"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap\@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 XXX
   ;
   if ($Debug)
@@ -3581,7 +3597,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Transform Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th>Gravity</th>\n";
@@ -3602,7 +3618,7 @@ XXX
     -values=>[@types],-default=>'sRGB'), "</td>\n";
   print "<tr>\n";
   print '</table><br>';
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th>Layer Method</th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
@@ -3909,8 +3925,9 @@ sub UploadForm
   $load_average=GetLoadAverage();
   if ($load_average > $LoadAverageThreshold)
     {
-      print $q->redirect($RedirectURL);
-      exit;
+      sleep 2;
+#      print $q->redirect($RedirectURL);
+#      exit;
     }
   $url=$q->script_name();
   $q->delete('ToolType');
@@ -3931,7 +3948,7 @@ XXX
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
   print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
   print $q->hidden(-name=>'SessionID'), "\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<td><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">Filename</a>:</td>\n";
   print '<td>', $q->filefield(-name=>'File',-size=>50,-maxlength=>1024), "</td>\n";
@@ -3977,7 +3994,7 @@ XXX
 <dl><dd>
 XXX
   ;
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Size.html\" target=\"help\">Size</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a></th>\n";
@@ -3989,7 +4006,7 @@ XXX
     -values=>[@UploadTypes]), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Meta.html\" target=\"help\">Meta</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
@@ -4002,7 +4019,7 @@ XXX
     -values=>[@types],-default=>'None'), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Scene.html\" target=\"help\">Scene</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
@@ -4182,7 +4199,7 @@ XXX
       my $height=$coalesce->Get('rows');
       my $x=$q->param("$basename.x");
       my $y=$q->param("$basename.y");
-      print "<ul><pre class=\"highlight\"><samp>$x,$y: ";
+      print "<ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>$x,$y: ";
       my $page=$coalesce->Get('page');
       if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
@@ -4228,7 +4245,7 @@ XXX
     {
       my $error=$image->Get('error');
       $error*=(Image::Magick->QuantumRange);
-      print '<ul><pre class="highlight"><samp>';
+      print '<ul><pre class="overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;"><samp>';
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
       print "</samp></pre></ul>\n";
     }
@@ -4236,7 +4253,7 @@ XXX
   print "<fieldset>\n";
   print "<legend>Paint Properties</legend>\n";
   print "<dl><dd>\n";
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Paint.html\" target=\"help\">Method</a></th>\n";
@@ -4252,7 +4269,7 @@ XXX
     -values=>[@PrimitiveTypes]),"</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<table class=\"table table-condensed table-striped\">\n";
+  print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
   print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Border Color</a></th>\n";

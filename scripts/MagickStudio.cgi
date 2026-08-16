@@ -196,15 +196,15 @@ sub AnnotateForm
 <p class="lead">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <code>annotate</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt>Text:</dt>\n";
-  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
+  print "<dt class=\"fw-bold mb-2\">Text:</dt>\n";
+  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
     -rows=>3), "</dd><br\n";
   print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
@@ -326,10 +326,10 @@ XXX
     -value=>'none', -size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dt>Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Antialias',
+  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Antialias',
     -label=>' antialias text.',-checked=>'true'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Polaroid',
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Polaroid',
     -label=>' simulate a Polaroid picture.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
@@ -554,7 +554,7 @@ sub ColormapForm
 <p class="lead">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <code>quantize</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -563,11 +563,11 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
     -value=>'quantize'), "\n";
-  print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
     -size=>25,-value=>'256'), "</dd><br>\n";
-  print "<dt>Choose from these options:</dt>\n";
-  print '<dd>', $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these options:</dt>\n";
+  print '<dd class="mb-3">', $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,
     -columns=>3,-default=>'dither'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'quantize'), ' your image or ', $q->reset(-name=>'reset',
@@ -649,10 +649,10 @@ XXX
   ;
   print "<dl>\n";
   print "<dl>\n";
-  print "<dt>You said:<br>\n";
-  print '<dd><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;\"><samp>', $q->param('Comment'),
+  print "<dt class=\"fw-bold mb-2\">You said:<br>\n";
+  print '<dd class="mb-3"><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;\"><samp>', $q->param('Comment'),
     "</samp></pre></ul><br>\n";
-  print "<dt>An administrator will review your comment soon.  Thanks.\n";
+  print "<dt class=\"fw-bold mb-2\">An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
   print "</dl>\n";
   Trailer(1);
@@ -685,7 +685,7 @@ address if you require a response.
 XXX
   ;
   $q->delete('Comment');
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -694,7 +694,7 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print "<dl>\n";
   print "<dl>\n";
-  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
+  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Comment',
     -columns=>50,-rows=>10,-wrap=>'horizontal'), "<br>\n";
   print "</dl>\n";
   print "</dl>\n";
@@ -804,19 +804,19 @@ XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
     ";Action=compare";
-  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
+  print $q->start_multipart_form(-action=>$action,-method=>'POST');
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
     "Filename</a>:</dt>\n";
-  print '<dd>', $q->filefield(-name=>'CompareFile',-size=>50,-maxlength=>1024),
+  print '<dd class="mb-3">', $q->filefield(-name=>'CompareFile',-size=>50,-maxlength=>1024),
     "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompareURL',
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'CompareURL',
     -size=>50), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'compare'), ' your image or ', $q->reset(-name=>'reset',
@@ -843,8 +843,8 @@ XXX
   print "</tr>\n";
   print '</table><br>';
   print "</dd></dl>\n";
-  print "<dt>Miscellaneous options:</dt>\n";
-  print '<dd> ', $q->checkbox(-name=>'Clipboard',
+  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for compare.'), "</dd>\n";
   print "</fieldset>\n";
   print $q->end_form, "\n";
@@ -970,19 +970,19 @@ XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
     ";Action=composite";
-  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
+  print $q->start_multipart_form(-action=>$action,-method=>'POST');
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
     "Filename</a>:</dt>\n";
-  print '<dd>', $q->filefield(-name=>'CompositeFile',-size=>50,
+  print '<dd class="mb-3">', $q->filefield(-name=>'CompositeFile',-size=>50,
     -maxlength=>1024), "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
     "URL</a>:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
     -size=>50), "</dd><br>\n";
   print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
@@ -1030,12 +1030,12 @@ XXX
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dt>Miscellaneous options:</dt>\n";
-  print '<dd> ', $q->checkbox(-name=>'Tile',
+  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Tile',
     -label=>' tile across and down the image canvas.'), "</dd>\n";
-  print '<dd> ', $q->checkbox(-name=>'Resize',
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Resize',
     -label=>' resize to fit.'),"</dd>\n";
-  print '<dd> ', $q->checkbox(-name=>'Clipboard',
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for composite.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
@@ -1137,21 +1137,21 @@ sub DecorateForm
 <p class="lead">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <code>decorate</code>.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt>Decoration geometry:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
+  print "<dt class=\"fw-bold mb-2\">Decoration geometry:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Geometry',
     -size=>25,-value=>'15x15+3+3'), "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Color</a>:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Color</a>:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,
     -value=>'gray'), "</dd><br>\n";
-  print "<dt>Choose from these decorations:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these decorations:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>5,-default=>'frame *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'decorate'), ' your image or ', $q->reset(-name=>'reset',
@@ -1433,7 +1433,7 @@ XXX
   # Image upload form.
   #
   RestoreQueryState($q->param('SessionID'),$q->param('Path'),'FileTransfer');
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1450,21 +1450,21 @@ XXX
   print "<legend>Upload Properties</legend>\n";
   print "<dl>\n";
   $hostname=GetHostname($q->remote_host());
-  print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">FTP server name</a>:\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Hostname',
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">FTP server name</a>:\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Hostname',
     -size=>50,-value=>$hostname), "<br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account name</a>:\n";
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account name</a>:\n";
   $username='anonymous';
   $username=$q->remote_user() if $q->remote_user();
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Username',
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Username',
     -size=>25,-value=>$username), "<br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account password</a>:\n";
-  print '<dd>', $q->password_field(-name=>'Password',-size=>25), "<br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Upload directory</a>:\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Directory',
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account password</a>:\n";
+  print '<dd class="mb-3">', $q->password_field(-name=>'Password',-size=>25), "<br>\n";
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Upload directory</a>:\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Directory',
     -size=>50), "<br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Filename</a>:\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Filename',
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Filename</a>:\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Filename',
     -size=>50, -value=>"$basename.$format"), "<br>\n";
   print "</dl>\n";
   print "</fieldset>\n";
@@ -1507,7 +1507,7 @@ sub DownloadForm
 <p class="lead">Choose an <a href="$DocumentDirectory/Download.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <code>output</code> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -1516,13 +1516,13 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'output'),
     "\n";
-  print "<dt><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
   $format=$q->param('Magick');
   @formats=$image->QueryFormat();
-  print '<dd>', $q->scrolling_list(-class=>'form-control',-name=>'Format',
+  print '<dd class="mb-3">', $q->scrolling_list(-class=>'form-control',-name=>'Format',
     -values=>[@formats],-size=>7,-default=>$format), "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'multi-frame file'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'output'), ' your image or ', $q->reset(-name=>'reset',
@@ -1585,33 +1585,33 @@ XXX
     -value=>$image->Get('quality')), "</td>\n";
   print "</tr>\n";
   print "</table><br>\n";
-  print "<dt>Image Depth</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,
+  print "<dt class=\"fw-bold mb-2\">Image Depth</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,
     -value=>$image->Get('depth')), "</dd><br>\n";
-  print "<dt>Smush Offset</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,
+  print "<dt class=\"fw-bold mb-2\">Smush Offset</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,
     -value=>2), "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
     "Page Geometry</a></dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Page',-size=>25),
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Page',-size=>25),
     "</dd><br>\n";
-  print "<dt><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">",
+  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">",
     "Passphrase</a></dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Passphrase',
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Passphrase',
     -size=>25), "</dd><br>\n";
-  print "<dt>Comment:</dt>\n";
-  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Comment',
+  print "<dt class=\"fw-bold mb-2\">Comment:</dt>\n";
+  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Comment',
     -columns=>50,-rows=>3,-value=>$image->Get('comment')), "</dd><br>\n";
-  print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',
+  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
     -label=>' reset page geometry.'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Coalesce',
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Coalesce',
     -checked=>'true',-label=>' coalesce multi-frame images.'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Strip',
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Strip',
     -label=>' strip image of any comments or profiles.'), "</dd>\n";
-  print '<dd> ', $q->checkbox(-name=>'CMYK',
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'CMYK',
     -label=>' save image as CMYK pixels (JPEG, TIFF, PS, PDF, PSD)'), "</dd>\n";
-  print '<dd> ', $q->checkbox(-name=>'Stack',
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Stack',
     -label=>' stack images left-to-right (when storage type is append)'),
     "</dd>\n";
   print "</dd></dl>\n";
@@ -1713,19 +1713,19 @@ sub DrawForm
 <p class="lead">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <code>draw</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt>Primitive:</dt>\n";
+  print "<dt class=\"fw-bold mb-2\">Primitive:</dt>\n";
   my @types=Image::Magick->QueryOption('primitive');
-  print '<dd>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
+  print '<dd class="mb-3">', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
     -values=>[@types],-default=>'Line'), "</dd><br>\n";
-  print "<dt>Coordinates:</dt>\n";
-  print '<dd>', $q->textarea(-class=>'form-control',-name=>'Coordinates',
+  print "<dt class=\"fw-bold mb-2\">Coordinates:</dt>\n";
+  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Coordinates',
     -columns=>50,-rows=>2,-value=>'+10+10  +60+60',-wrap=>'horizontal'),
     "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
@@ -1777,11 +1777,11 @@ XXX
     -value=>'0.0',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table></dd><br>';
-  print "<dt>Miscellaneous options:</dt>\n";
-  print '<dd> ', $q->checkbox(-name=>'Tile',
+  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Tile',
     -label=>' paint the drawing primitive with the clipboard image.'),
     "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Antialias',
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Antialias',
     -label=>' antialias text.',-checked=>'true'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
@@ -2198,7 +2198,7 @@ sub EffectsForm
 <p class="lead">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -2207,11 +2207,11 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
     "\n";
-  print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
     -size=>25,-value=>'0.0x1.0'), "</dd><br>\n";
-  print "<dt>Choose from these effects:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these effects:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'sharpen'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
@@ -2355,7 +2355,7 @@ sub EnhanceForm
 <p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>enhance</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -2364,11 +2364,11 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
     -value=>'enhance'), "\n";
-  print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
     -size=>25,-value=>'1.6'), "</dd><br>\n";
-  print "<dt>Choose from these enhancements:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these enhancements:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'gamma *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'enhance'), ' your image or ', $q->reset(-name=>'reset',
@@ -2693,7 +2693,7 @@ sub FXForm
 <p class="lead">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -2702,11 +2702,11 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
     "\n";
-  print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
     -size=>25,-value=>'60'), "</dd><br>\n";
-  print "<dt>Choose from these special effects:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these special effects:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'swirl *'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
@@ -2763,10 +2763,10 @@ XXX
     -value=>'white',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',
+  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
     -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
-  print '<dd>', $q->checkbox(-name=>'Clipboard',
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Clipboard',
     -label=>' use clipboard image as source for F(x).'),"</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
@@ -3035,7 +3035,7 @@ sub Header
 
 <div class="col-lg-8 mx-auto text-body-secondary pt-5 pt-lg-5">
 <main role="main" class="container">
-	<div>
+  <div>
     <h6>&nbsp;</h6>
 XXX
   ;
@@ -3216,7 +3216,7 @@ sub ResizeForm
 <p class="lead">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>resize</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3225,12 +3225,13 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
     "\n";
-  print "<dt>Image size:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>"$width" . 'x' . "$height"), "</dd><br>\n";
-  print "<dt>Choose from these scaling methods:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Algorithm',-values=>@OptionTypes,
-    -columns=>3), "</dd><br>\n";
+  print "<dt class=\"fw-bold mb-2\">Image size:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',
+    -name=>'Geometry',-size=>25,-value=>"$width" . 'x' . "$height"),
+    "</dd><br>\n";
+  print "<dt class=\"fw-bold mb-2\">Choose from these scaling methods:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Algorithm',
+    -values=>@OptionTypes,-columns=>3), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'resize'), ' your image or ', $q->reset(-name=>'reset',
     -class=>'btn btn-warning'), " the form.<br><br>\n";
@@ -3430,13 +3431,13 @@ XXX
       #
       print "<center><h3>CGI State Information</h3></center>\n";
       print "Script:\n";
-      print '<dd>', $0, "<br>\n";
+      print '<dd class="mb-3">', $0, "<br>\n";
       print "Action:\n";
-      print '<dd>', $action, "<br>\n";
+      print '<dd class="mb-3">', $action, "<br>\n";
       print "Time:\n";
-      print '<dd>', time-$timer, "s<br>\n";
+      print '<dd class="mb-3">', time-$timer, "s<br>\n";
       print "Query state:\n";
-      print '<dd>', $q->query_string, "<br>\n";
+      print '<dd class="mb-3">', $q->query_string, "<br>\n";
       print $q->Dump;
       print "<br>\n";
       print "Environment state:\n";
@@ -3576,7 +3577,7 @@ sub TransformForm
 <p class="lead">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>transform</code> to continue.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
@@ -3585,11 +3586,11 @@ XXX
   print $q->hidden(-name=>'Magick'), "\n";
   print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
     "\n";
-  print "<dt>Parameter:</dt>\n";
-  print '<dd>', $q->textfield(-class=>'form-control',-name=>'Parameter',
+  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
+  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
     -size=>25), "</dd><br>\n";
-  print "<dt>Choose from these transforms:</dt>\n";
-  print '<dd>', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
+  print "<dt class=\"fw-bold mb-2\">Choose from these transforms:</dt>\n";
+  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
     -columns=>3,-default=>'trim'), "</dd><br>\n";
   print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
     -value=>'transform'), ' your image or ', $q->reset(-name=>'reset',
@@ -3632,8 +3633,8 @@ XXX
     -value=>'none',-size=>25), "</td>\n";
   print "</tr>\n";
   print '</table><br>';
-  print "<dt> Miscellaneous options:</dt>\n";
-  print '<dd>', $q->checkbox(-name=>'Repage',
+  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
+  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
     -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
   print "</dd></dl>\n";
   print "</fieldset>\n";
@@ -3947,7 +3948,7 @@ XXX
   $version=Image::Magick::Q32->VERSION if !defined($version);
   $version=Image::Magick::Q32HDRI->VERSION if !defined($version);
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
-  print $q->start_multipart_form(-action=>$action,-class=>'form-horizontal');
+  print $q->start_multipart_form(-action=>$action,-method=>'POST');
   print $q->hidden(-name=>'SessionID'), "\n";
   print "<table class=\"table table-sm table-hover table-striped\">\n";
   print "<tr>\n";
@@ -4182,7 +4183,7 @@ sub ViewForm
 <p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 XXX
   ;
-  print $q->start_form(-class=>'form-horizontal');
+  print $q->start_form(-method=>'POST');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";

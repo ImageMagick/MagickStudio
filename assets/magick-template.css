@@ -39,11 +39,16 @@ a.dropdown-item:hover {
 }
 
 .table {
-  table-layout: fixed;   /* force equal distribution of width */
-  width: 100%;           /* table spans full container */
+  table-layout: fixed;     /* force equal distribution of width */
+  width: 100%;             /* table spans full container */
 }
 
 .table td, .table th {
   white-space: normal;     /* allow wrapping */
   word-break: break-word;  /* break long words/strings */
+}
+
+input[type="radio"] {
+  margin-right: 0.5rem;    /* adjust spacing as needed */
+  vertical-align: middle;  /* keeps circle aligned with text baseline */
 }

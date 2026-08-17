@@ -2952,7 +2952,7 @@ sub Header
   </script>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.ico"/></a>
+    <a class="navbar-brand fw-bold" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.png"/></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

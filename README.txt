@@ -22,6 +22,20 @@ RUNNING WITH DOCKER
       docker build --build-arg DEBIAN_MIRROR=ftp.nl.debian.org -t magickstudio .
 
 
+BROWSER VERSION
+
+  The site folder contains a version of ImageMagick Studio that runs
+  completely in the browser with magick-wasm and is published to GitHub
+  Pages.  To work on it, type
+
+      cd site
+      npm install
+      npm run dev
+
+  The help pages, stylesheets and images are shared with the app folder.
+  See site/TODO.md for the features that still need to be ported.
+
+
 INSTALL INSTRUCTIONS
 
   The website is located in the app folder.  ImageMagick Studio requires

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="ImageMagick Studio LLC">
+  <title>Magick Online Studio</title>
+  <link rel="icon" href="images/wand.png">
+  <link rel="shortcut icon" href="images/wand.ico" type="image/x-icon">
+  <script>
+    (() => {
+      const theme = localStorage.getItem('theme') || 'auto';
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? system : theme);
+    })();
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745" crossorigin="anonymous"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#/upload"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="images/wand.png"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="magick-navbars">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item ms-3 dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-tools="view identify" data-bs-toggle="dropdown" aria-expanded="false">View</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#/view">View</a></li>
+              <li><a class="dropdown-item" href="#/identify">Identify</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-tools="transform resize" data-bs-toggle="dropdown" aria-expanded="false">Transform</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#/transform">Transform</a></li>
+              <li><a class="dropdown-item" href="#/resize">Resize</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-tools="effects fx enhance colormap" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#/effects">Effects</a></li>
+              <li><a class="dropdown-item" href="#/fx">F/X</a></li>
+              <li><a class="dropdown-item" href="#/enhance">Enhance</a></li>
+              <li><a class="dropdown-item" href="#/colormap">Colormap</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-tools="decorate annotate draw" data-bs-toggle="dropdown" aria-expanded="false">Decorate</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#/decorate">Decorate</a></li>
+              <li><a class="dropdown-item" href="#/annotate">Annotate</a></li>
+              <li><a class="dropdown-item" href="#/draw">Draw</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-tools="composite compare" data-bs-toggle="dropdown" aria-expanded="false">Composite</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#/composite">Composite</a></li>
+              <li><a class="dropdown-item" href="#/compare">Compare</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#/docker" data-tools="docker">Run Locally</a>
+          </li>
+          <li class="d-flex">
+            <a class="btn btn-outline-success" href="#/upload">Upload</a>
+          </li>
+          <li class="d-flex ms-3">
+            <button class="btn btn-outline-success" type="button" id="download">Download</button>
+          </li>
+          <li class="nav-item dropdown ms-3">
+            <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span id="currentThemeIcon">🌓</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+              <li><a class="dropdown-item" href="#" data-theme="light">☀️ Light</a></li>
+              <li><a class="dropdown-item" href="#" data-theme="dark">🌙 Dark</a></li>
+              <li><a class="dropdown-item" href="#" data-theme="auto">🌓 Auto</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="col-lg-8 mx-auto text-body-secondary pt-5 pt-lg-5">
+    <main role="main" class="container">
+      <div>
+        <h6>&nbsp;</h6>
+        <div id="status" class="alert d-none" role="alert"></div>
+        <div id="page"></div>
+        <div class="container text-center">
+          <!-- Banner Ad -->
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-3129977114552745"
+            data-ad-slot="1083537442"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+    <div class="container-fluid">
+      <div class="nav-link">
+        <p><a href="#" id="backToTop">Back to top</a> •
+           <a href="https://github.com/ImageMagick/ImageMagick/discussions">Community</a> •
+           <a href="https://github.com/sponsors/ImageMagick?o=esb">Donate</a></p>
+      </div>
+      <p><small>&copy; 1999 ImageMagick Studio LLC</small></p>
+    </div>
+  </footer>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

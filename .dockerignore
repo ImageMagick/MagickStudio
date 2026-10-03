@@ -3,6 +3,7 @@
 .gitattributes
 .gitignore
 .vscode
+site
 *.md
 Dockerfile
 .dockerignore

@@ -52,3 +52,9 @@ input[type="radio"] {
   margin-right: 0.5rem;    /* adjust spacing as needed */
   vertical-align: middle;  /* keeps circle aligned with text baseline */
 }
+
+/* Browsers paint an opaque white background behind an iframe whose color scheme
+   differs from the page, so match the always-light ad iframe to the dark theme. */
+ins.adsbygoogle iframe {
+  color-scheme: light;
+}

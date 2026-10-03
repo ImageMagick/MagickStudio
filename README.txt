@@ -1,7 +1,31 @@
 
+RUNNING WITH DOCKER
+
+  The easiest way to run ImageMagick Studio is with Docker.  From the root
+  of this repository, type
+
+      docker build -t magickstudio .
+      docker run --rm -p 7377:7377 magickstudio
+
+  and point your browser to
+
+      http://localhost:7377/
+
+  The image builds ImageMagick and PerlMagick from source.  Use the
+  IMAGEMAGICK_VERSION build argument to select another ImageMagick release:
+
+      docker build --build-arg IMAGEMAGICK_VERSION=7.1.2-32 -t magickstudio .
+
+  If downloading the Debian packages fails, select a different Debian
+  mirror with the DEBIAN_MIRROR build argument:
+
+      docker build --build-arg DEBIAN_MIRROR=ftp.nl.debian.org -t magickstudio .
+
+
 INSTALL INSTRUCTIONS
 
-  ImageMagick Studio requires both ImageMagick and PerlMagick.  See
+  The website is located in the app folder.  ImageMagick Studio requires
+  both ImageMagick and PerlMagick.  See
 
       https://imagemagick.org/
 
@@ -13,7 +37,8 @@ INSTALL INSTRUCTIONS
   color reduce, or add special effects to an image and save your
   completed work in the same or differing image format.
 
-  To get the ImageMagick Studio image engine working on your system, edit
+  To get the ImageMagick Studio image engine working on your system, copy
+  the contents of the app folder to your web server, edit
   scripts/MagickStudio.pm and set
   
       $DocumentRoot='/var/www/html';

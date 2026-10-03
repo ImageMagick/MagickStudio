@@ -27,7 +27,7 @@ export async function renderView(container: HTMLElement) {
 
     const { paintMethods } = await studio.initialize()
     container.innerHTML = `
-<p class="lead">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  For more information, see <a href="https://imagemagick.org/">ImageMagick</a>.</p>
+<p class="lead">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  For more information, see <a href="https://imagemagick.org/" target="_blank" rel="noopener">ImageMagick</a>.</p>
 <p>You can optionally ${help('Paint', 'paint')} on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
 <img class="img-fluid mx-auto d-block border" id="image" alt="${escapeHtml(image.title)}" style="cursor:crosshair"><br>
 <ul id="pixel" class="d-none"><pre class="overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;"><samp></samp></pre></ul>

@@ -44,5 +44,5 @@ export async function busy<T>(message: string, action: () => Promise<T>): Promis
 }
 
 export function help(page: string, label: string): string {
-    return `<a href="${page}.html" target="help">${escapeHtml(label)}</a>`
+    return `<a href="${page}.html" target="_blank" rel="noopener">${escapeHtml(label)}</a>`
 }

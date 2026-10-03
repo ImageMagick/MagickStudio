@@ -1,7 +1,7 @@
 export function renderDocker(container: HTMLElement) {
     container.innerHTML = `
 <br>
-<p class="lead">Run the complete <code>Magick Online Studio</code>, including every tool, on your own computer with <a href="https://www.docker.com/">Docker</a>.</p>
+<p class="lead">Run the complete <code>Magick Online Studio</code>, including every tool, on your own computer with <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>.</p>
 <fieldset>
 <legend>Build and run</legend>
 <p>Clone the repository and build the image from its root folder:</p>
@@ -9,7 +9,7 @@ export function renderDocker(container: HTMLElement) {
 cd MagickStudio
 docker build -t magickstudio .
 docker run --rm -p 7377:7377 magickstudio</samp></pre>
-<p>Then point your browser to <a href="http://localhost:7377/">http://localhost:7377/</a>.</p>
+<p>Then point your browser to <a href="http://localhost:7377/" target="_blank" rel="noopener">http://localhost:7377/</a>.</p>
 </fieldset>
 <br>
 <fieldset>

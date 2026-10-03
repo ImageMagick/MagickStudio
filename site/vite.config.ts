@@ -54,7 +54,7 @@ function shareAppFiles(): Plugin {
 }
 
 export default defineConfig({
-    base: '/MagickStudio/',
+    base: '/',
     plugins: [
         shareAppFiles(),
     ],

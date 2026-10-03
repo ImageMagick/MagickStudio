@@ -48,6 +48,7 @@ async function initialize(): Promise<InitializeResult> {
     await initializeImageMagickx64(new URL(wasmUrl, self.location.href))
     return {
         version: Magick.imageMagickVersion,
+        delegates: Magick.delegates,
         paintMethods,
     }
 }

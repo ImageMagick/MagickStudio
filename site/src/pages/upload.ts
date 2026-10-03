@@ -27,7 +27,7 @@ export function renderUpload(container: HTMLElement) {
   Press to <input class="btn btn-primary" type="submit" value="view"> your image or <input class="btn btn-warning" type="reset" value="reset"> the form.
 </form>
 <br> <br>
-An example <a href="#/upload" id="example">image</a> is available to help you get familiar with <code>Magick Online Studio</code>, version <span id="version">…</span>.
+An example <a href="#/upload" id="example">image</a> is available to help you get familiar with <code>Magick Online Studio</code>.
 <br> <br>
 <fieldset>
 <legend>Browser Version</legend>
@@ -67,12 +67,4 @@ Use of this service is at your own risk, and it is your responsibility to ensure
         event.preventDefault()
         void open(() => studio.loadFromUrl(exampleImage))
     })
-
-    studio.initialize()
-        .then(result => {
-            const version = container.querySelector('#version')
-            if (version !== null)
-                version.textContent = /ImageMagick (\S+)/.exec(result.version)?.[1] ?? result.version
-        })
-        .catch(() => undefined)
 }

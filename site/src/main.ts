@@ -102,6 +102,17 @@ document.getElementById('download')?.addEventListener('click', () => {
 window.addEventListener('hashchange', () => void render())
 void render()
 
-studio.initialize().catch(error => {
-    showStatus(`Unable to start ImageMagick in your browser: ${errorMessage(error)}. This website requires a browser with support for 64-bit WebAssembly (memory64), such as a recent version of Chrome, Edge or Firefox.`)
-})
+studio.initialize()
+    .then(result => {
+        const set = (id: string, text: string) => {
+            const element = document.getElementById(id)
+            if (element !== null)
+                element.textContent = text
+        }
+        set('version', result.version)
+        set('delegates', `Delegates (built-in): ${result.delegates}`)
+        document.getElementById('magickInfo')?.classList.remove('d-none')
+    })
+    .catch(error => {
+        showStatus(`Unable to start ImageMagick in your browser: ${errorMessage(error)}. This website requires a browser with support for 64-bit WebAssembly (memory64), such as a recent version of Chrome, Edge or Firefox.`)
+    })

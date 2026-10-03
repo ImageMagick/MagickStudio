@@ -27,6 +27,7 @@ export interface ImageView {
 
 export interface InitializeResult {
     version: string
+    delegates: string
     paintMethods: string[]
 }
 

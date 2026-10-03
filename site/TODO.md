@@ -17,9 +17,6 @@ Remove an item when it is done.
 
 ## View
 
-- [ ] Paint at position 0,0 when the value of any Paint Properties field changes,
-      including the Method and Paint Type dropdowns (new behaviour, not in the CGI).
-      Pressing Enter in a text field already does this, see `paintAt` in `src/pages/view.ts`.
 - [ ] Add an undo (Back) history so the last change can be reverted.
 - [ ] Show the distortion (`error`) value after a Compare, as `ViewForm` does.
 - [ ] Show the small image thumbnail in the footer, like `Trailer(1)` does.

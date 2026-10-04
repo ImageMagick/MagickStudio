@@ -81,7 +81,7 @@ our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot,
 #$ENV{'ftp_proxy'}='http://webproxy.imagemagick.org/';
 #$ENV{'http_proxy'}='http://webproxy.imagemagick.org/';
 $ENV{DISPLAY}="$ENV{REMOTE_HOST}:0" if $ENV{REMOTE_HOST};
-$ENV{LD_LIBRARY_PATH}='/usr/lib:/usr/lib64:/usr/local/lib';
+$ENV{LD_LIBRARY_PATH}='/usr/local/lib:/usr/lib64:/usr/lib';
 $ENV{MAGICK_FONT_PATH}=$DocumentRoot . $DocumentDirectory . "/fonts";
 $ENV{PATH}='/bin:/usr/bin:/usr/openwin/bin:/usr/local/bin';
 $ENV{TMPDIR}=$DocumentRoot . $DocumentDirectory . "/tmp";

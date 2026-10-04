@@ -57,7 +57,7 @@ BEGIN {
   push @INC, '.';
 }
 
-use CGI;
+use CGI::Fast;
 use CGI::Carp qw/fatalsToBrowser/;
 use Sys::Hostname;
 use MagickStudio;
@@ -707,7 +707,7 @@ XXX
   ;
   print "<p><hr /></p>\n";
   print $q->end_html;
-  exit;
+  die "FCGI_DONE\n";
 }
 
 #
@@ -3469,7 +3469,7 @@ XXX
       print "</ul>\n";
     }
   print $q->end_html;
-  exit;
+  die "FCGI_DONE\n";
 }
 
 #
@@ -3927,9 +3927,9 @@ sub UploadForm
   $load_average=GetLoadAverage();
   if ($load_average > $LoadAverageThreshold)
     {
-      sleep 2;
-#      print $q->redirect($RedirectURL);
-#      exit;
+      sleep $load_average/2;
+      print $q->redirect($RedirectURL);
+      die "FCGI_DONE\n";
     }
   $url=$q->script_name();
   $q->delete('ToolType');
@@ -4320,55 +4320,67 @@ XXX
 }
 
 #
-# Initialize the CGI context.
+# FastCGI request loop.  Each pass through this loop services exactly one
+# HTTP request; the Perl process itself stays resident between requests.
 #
-setpriority(0,0,getpriority(0,0)+4);  # be nice
+# setpriority(0,0,getpriority(0,0)+4);  # be nice ?
 $CGI::POST_MAX=1024*$MaxFilesize;
-$timer=time;
-$q=new CGI;
-$q->autoEscape(undef);
-if (GetAddress($q->virtual_host) == '198.72.81.86')
+while ($q = CGI::Fast->new)
+{
+  eval
   {
-    print $q->redirect('https://warrior.imagemagick.org/MagickStudio');
-    exit;
-  }
-$q->delete('CacheID');
-$q->param(-name=>'CacheID',-value=>rand($timer+$$));
-#
-# Choose function as determined by the query and environment.
-#
-$header=undef;
-$action=$q->param('Action');
-$q->delete('Action');
-Upload() if defined($q->param('File'));
-Upload() if defined($q->param('URL'));
-UploadForm() unless defined($action);
-my $session = $q->param('SessionID');
-my $filename = Untaint($DocumentRoot . $DocumentDirectory .
-  "/session_info/$session.Upload");
-UploadForm() unless -e $filename;
-Error('You must specify a filename or URL') unless $q->param('Path');
-%Functions=
-(
-  'annotate'=>\&ChooseTool,
-  'compare'=>\&ChooseTool,
-  'composite'=>\&ChooseTool,
-  'decorate'=>\&ChooseTool,
-  'draw'=>\&ChooseTool,
-  'effect'=>\&ChooseTool,
-  'enhance'=>\&ChooseTool,
-  'generate'=>\&ChooseTool,
-  'identify'=>\&ChooseTool,
-  'mogrify'=>\&Mogrify,
-  'Mogrify'=>\&Mogrify,
-  'output'=>\&ChooseTool,
-  'quantize'=>\&ChooseTool,
-  'resize'=>\&ChooseTool,
-  'send'=>\&ChooseTool,
-  'transform'=>\&ChooseTool,
-  'upload'=>\&FileTransfer,
-  'view'=>\&ChooseTool,
-);
-my $function = $Functions{$action};
-&$function() if defined($function);
-Error('Request failed due to malformed query');
+    $timer=time;
+    %seen=();
+    $header=undef;
+    $action=undef;
+    $q->autoEscape(undef);
+    $q->delete('CacheID');
+    $q->param(-name=>'CacheID',-value=>rand($timer+$$));
+    #
+    # Choose function as determined by the query and environment.
+    #
+    $action=$q->param('Action');
+    $q->delete('Action');
+    Upload() if defined($q->param('File'));
+    Upload() if defined($q->param('URL'));
+    UploadForm() unless defined($action);
+    my $session = $q->param('SessionID');
+    my $filename = Untaint($DocumentRoot . $DocumentDirectory .
+      "/session_info/$session.Upload");
+    UploadForm() unless -e $filename;
+    Error('You must specify a filename or URL') unless $q->param('Path');
+    %Functions=
+    (
+      'annotate'=>\&ChooseTool,
+      'compare'=>\&ChooseTool,
+      'composite'=>\&ChooseTool,
+      'decorate'=>\&ChooseTool,
+      'draw'=>\&ChooseTool,
+      'effect'=>\&ChooseTool,
+      'enhance'=>\&ChooseTool,
+      'generate'=>\&ChooseTool,
+      'identify'=>\&ChooseTool,
+      'mogrify'=>\&Mogrify,
+      'Mogrify'=>\&Mogrify,
+      'output'=>\&ChooseTool,
+      'quantize'=>\&ChooseTool,
+      'resize'=>\&ChooseTool,
+      'send'=>\&ChooseTool,
+      'transform'=>\&ChooseTool,
+      'upload'=>\&FileTransfer,
+      'view'=>\&ChooseTool,
+    );
+    my $function = $Functions{$action};
+    &$function() if defined($function);
+    Error('Request failed due to malformed query');
+  };
+  if ($@ && $@ !~ /^FCGI_DONE/)
+    {
+      #
+      # An unexpected error escaped our own Error()/Warning() handling.
+      # Log it and move on to the next request instead of letting it
+      # kill the persistent worker.
+      #
+      warn "MagickStudio request error: $@";
+    }
+}

@@ -430,7 +430,7 @@ sub ChooseTool
   View() unless defined($tooltype);
   Error('Unable to mogrify image','path is not defined')
     unless $q->param('Path');
-  SaveQueryState($q->param('SessionID'),$tooltype);
+  SaveQueryState(scalar $q->param('SessionID'),$tooltype);
   $function=$Tools{$tooltype};
   &$function() if defined($function);
   Error('Request failed due to malformed query');
@@ -649,7 +649,7 @@ XXX
   print "<dl>\n";
   print "<dl>\n";
   print "<dt class=\"fw-bold mb-2\">You said:<br>\n";
-  print '<dd class="mb-3"><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;\"><samp>', $q->param('Comment'),
+  print '<dd class="mb-3"><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>', $q->param('Comment'),
     "</samp></pre></ul><br>\n";
   print "<dt class=\"fw-bold mb-2\">An administrator will review your comment soon.  Thanks.\n";
   print "</dl>\n";
@@ -3105,10 +3105,10 @@ sub Mogrify
     'Comment'=>\&CommentForm
   );
 
-  $tooltype=$q->param('ToolType');
+  $tooltype=scalar $q->param('ToolType');
   View() unless defined($tooltype);
   Error('Unable to view image','no path is defined') unless $q->param('Path');
-  RestoreQueryState($q->param('SessionID'),$q->param('Path'),$tooltype);
+  RestoreQueryState(scalar $q->param('SessionID'),scalar $q->param('Path'),$tooltype);
   $function=$Tools{$tooltype};
   &$function() if defined($function);
   Error('Request failed due to malformed query');
@@ -3135,7 +3135,7 @@ sub Resize
   #
   # Resize image.
   #
-  $image->Set(gravity=>$q->param('Gravity'));
+  $image->Set(gravity=>scalar $q->param('Gravity'));
   $q->param('Geometry') =~ /(\d+)\D*(\d*)/;
   Error('Image area exceeds maximum allowable') if $1 && $2 &&
     (($1*$2) > (1024*$MaxImageArea));
@@ -3145,9 +3145,9 @@ sub Resize
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $filter='Undefined';
   $filter=$q->param('FilterType') if $q->param('FilterType');
-  $image->Set('filter:support'=>$q->param('SupportFactor'))
+  $image->Set('filter:support'=>scalar $q->param('SupportFactor'))
     if $q->param('SupportFactor');
-  $image->Set('filter:blur'=>$q->param('BlurFactor'))
+  $image->Set('filter:blur'=>scalar $q->param('BlurFactor'))
     if $q->param('BlurFactor');
   $status=$image->AdaptiveResize(geometry=>$geometry,filter=>$filter)
     if $q->param('Algorithm') eq 'adaptive resize *';
@@ -3318,7 +3318,8 @@ sub SaveQueryState
   $q->save(DATA);
   print DATA "pid: $$\n";
   print DATA "image locator: ", $q->param('File'), "\n" if $q->param('File');
-  print DATA "image locator: ", $q->param('URL'), "\n" if $q->param('URL');
+  print DATA "image locator: ", scalar $q->param('URL'), "\n"
+    if $q->param('URL');
   $remote_host='localhost';
   $remote_host=$q->remote_host() if $q->remote_host();
   print DATA "server name: ", $q->server_name(), "\n" if $q->server_name();
@@ -3492,9 +3493,9 @@ sub Transform
   # Transform image.
   #
   $parameter=$q->param('Parameter');
-  $image->Set(fuzz=>$q->param('Fuzz')) if $q->param('Fuzz');
-  $image->Set(background=>$q->param('BackgroundColor'));
-  $image->Set(gravity=>$q->param('Gravity'));
+  $image->Set(fuzz=>scalar $q->param('Fuzz')) if $q->param('Fuzz');
+  $image->Set(background=>scalar $q->param('BackgroundColor'));
+  $image->Set(gravity=>scalar $q->param('Gravity'));
   $status=$image->AffineTransform([split(/[ ,]+/,$parameter)]) if
     $q->param('Option') eq 'affine *';
   $status=$image->AutoOrient() if $q->param('Option') eq 'auto-orient';
@@ -3694,13 +3695,14 @@ sub Upload
   $path=$q->param('Path');
   $format='';
   $format=$q->param('Format') . ':'
-    if ($q->param('Format') && ($q->param('Format') ne 'Implicit'));
+    if ($q->param('Format') && (scalar $q->param('Format') ne 'Implicit'));
   $scene='';
-  $scene='[' . $q->param('Scene') . ']' if $q->param('Scene');
+  $scene='[' . scalar $q->param('Scene') . ']' if $q->param('Scene');
   $image=Image::Magick->new;
   $image->Set(font=>$DefaultFont);
-  $image->Set(density=>$q->param('Density')) if $q->param('Density');
-  $image->Set(size=>$q->param('SizeGeometry')) if $q->param('SizeGeometry');
+  $image->Set(density=>scalar $q->param('Density')) if $q->param('Density');
+  $image->Set(size=>scalar $q->param('SizeGeometry')) if
+    $q->param('SizeGeometry');
   if ($q->param('File'))
     {
       #
@@ -3837,7 +3839,7 @@ sub Upload
       $channel=$q->param('Channel');
       $image->Separate($channel) unless $channel eq 'All';
     }
-  $basename=$filename;
+  $basename=scalar $filename;
   $filename=~/^((?:.*[:\\\/])?)(.*)(\..*)/s;
   $basename=$2 if $2;
   $basename=~s/ //g;
@@ -3846,7 +3848,7 @@ sub Upload
   $magick=~tr/A-Z/a-z/;
   $q->param(-name=>'Magick',-value=>$magick);
   $digest=Digest::SHA3->new(512);
-  $digest->add($HashDigestSalt,$image->Get('signature'),$filename,
+  $digest->add($HashDigestSalt,$image->Get('signature'),scalar $filename,
     $q->remote_addr(),time(),{},rand(),$$);
   $session=$digest->hexdigest;
   if (defined($q->param('SessionID')))
@@ -4322,8 +4324,9 @@ XXX
 # FastCGI request loop.  Each pass through this loop services exactly one
 # HTTP request; the Perl process itself stays resident between requests.
 #
-# setpriority(0,0,getpriority(0,0)+4);  # be nice ?
+#setpriority(0,0,getpriority(0,0)+4);  # be nice
 $CGI::POST_MAX=1024*$MaxFilesize;
+our ($image, $compare, $composite);
 while ($q = CGI::Fast->new)
 {
   eval
@@ -4373,6 +4376,10 @@ while ($q = CGI::Fast->new)
     &$function() if defined($function);
     Error('Request failed due to malformed query');
   };
+  undef $image;
+  undef $compare;
+  undef $composite;
+  $q=undef;
   if ($@ && $@ !~ /^FCGI_DONE/)
     {
       #

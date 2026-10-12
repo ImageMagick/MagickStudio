@@ -26,6 +26,7 @@ RUN set -eux; \
         ghostscript \
         libapache2-mod-php \
         libcgi-pm-perl \
+        libcgi-fast-perl \
         libdigest-sha3-perl \
         libwww-perl \
         perl; \

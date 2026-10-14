@@ -121,7 +121,7 @@ sub Annotate
   getstore(Untaint(scalar $q->param('FontURL')),'MagickStudio.ttf')
     unless $q->param('FontURL') eq 'http://';
   $font="\@MagickStudio.ttf" if -e 'MagickStudio.ttf';
-  $font=($image->QueryFont($q->param('Font')))[10] unless -e 'MagickStudio.ttf';
+  $font=($image->QueryFont(scalar $q->param('Font')))[10] unless -e 'MagickStudio.ttf';
   $geometry='+0+0';
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $gravity=$q->param('Gravity');
@@ -1812,7 +1812,7 @@ sub Effects
   #
   $parameter=$q->param('Parameter');
   $channel=$q->param('Channel');
-  $image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
+  $image->Set('virtual-pixel'=>scalar $q->param('VirtualPixelMethod')) if
     $q->param('VirtualPixelMethod');
   $image->Set(label=>$q->param('Label')) if $q->param('Label');
   $status=$image->AdaptiveBlur(geometry=>"$parameter",channel=>$channel) if
@@ -3812,7 +3812,7 @@ sub Upload
   #
   $image=Image::Magick->new;
   $image->Set(font=>$DefaultFont);
-  $image->Set(density=>$q->param('Density')) if $q->param('Density');
+  $image->Set(density=>scalar $q->param('Density')) if $q->param('Density');
   $image->Set(size=>$q->param('SizeGeometry')) if $q->param('SizeGeometry');
   @extents=$image->Ping("$format$path/MagickStudio.dat$scene");
   $extent=0;

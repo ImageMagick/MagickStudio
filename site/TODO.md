@@ -23,7 +23,6 @@ Remove an item when it is done.
 
 ## Tools (currently show the "not available" page)
 
-- [ ] Identify
 - [ ] Transform
 - [ ] Resize
 - [ ] Effects

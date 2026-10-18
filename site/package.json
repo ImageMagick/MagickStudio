@@ -10,7 +10,7 @@
         "lint": "eslint --max-warnings=0 ."
     },
     "dependencies": {
-        "@imagemagick/magick-wasm": "0.0.44",
+        "@imagemagick/magick-wasm": "0.0.45",
         "bootstrap": "5.3.8"
     },
     "devDependencies": {

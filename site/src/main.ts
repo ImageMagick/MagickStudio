@@ -3,6 +3,7 @@ import '../../app/assets/magick-template.css'
 import 'bootstrap'
 
 import { renderDocker } from './pages/docker'
+import { renderIdentify } from './pages/identify'
 import { renderUnavailable } from './pages/unavailable'
 import { renderUpload } from './pages/upload'
 import { renderView } from './pages/view'
@@ -10,7 +11,6 @@ import { studio } from './studio'
 import { busy, clearStatus, errorMessage, showStatus } from './ui'
 
 const unavailableTools: Record<string, string> = {
-    identify: 'Identify',
     transform: 'Transform',
     resize: 'Resize',
     effects: 'Effects',
@@ -65,6 +65,8 @@ async function render() {
     try {
         if (route === 'view')
             await renderView(container)
+        else if (route === 'identify')
+            await renderIdentify(container)
         else if (route === 'docker')
             renderDocker(container)
         else if (route in unavailableTools)

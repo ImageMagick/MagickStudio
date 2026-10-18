@@ -15,6 +15,7 @@ export type WorkerRequest =
     | { id: number, type: 'load', data: Uint8Array, name: string }
     | { id: number, type: 'pixel', x: number, y: number }
     | { id: number, type: 'paint', options: PaintOptions }
+    | { id: number, type: 'identify' }
     | { id: number, type: 'download' }
 
 export interface ImageView {
@@ -29,6 +30,11 @@ export interface InitializeResult {
     version: string
     delegates: string
     paintMethods: string[]
+}
+
+export interface IdentifyResult {
+    fileName: string
+    text: string
 }
 
 export interface DownloadResult {

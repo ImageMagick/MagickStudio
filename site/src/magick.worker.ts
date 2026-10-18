@@ -16,7 +16,7 @@ import {
     type IMagickImageCollection,
 } from '@imagemagick/magick-wasm'
 
-import type { DownloadResult, ImageView, InitializeResult, PaintOptions, WorkerRequest, WorkerResponse } from './messages'
+import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, WorkerRequest, WorkerResponse } from './messages'
 
 interface StudioImage {
     images: IMagickImageCollection
@@ -154,6 +154,17 @@ function paint(options: PaintOptions): ImageView {
     return view()
 }
 
+function identify(): IdentifyResult {
+    const { images, name, format } = requireImage()
+    const fileName = `${name}.${format.toLowerCase()}`
+    const text = images.clone(verboseImages => {
+        for (const image of verboseImages)
+            image.settings.verbose = true
+        return verboseImages.write(MagickFormat.Info, data => new TextDecoder().decode(data))
+    })
+    return { fileName, text }
+}
+
 function download(): DownloadResult {
     const { images, name, format } = requireImage()
     const info = formatInfo(format)
@@ -179,6 +190,8 @@ async function handle(request: WorkerRequest): Promise<unknown> {
             return pixel(request.x, request.y)
         case 'paint':
             return paint(request.options)
+        case 'identify':
+            return identify()
         case 'download':
             return download()
     }

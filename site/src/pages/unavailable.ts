@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 import { escapeHtml } from '../ui'
 
 export function renderUnavailable(container: HTMLElement, tool: string) {

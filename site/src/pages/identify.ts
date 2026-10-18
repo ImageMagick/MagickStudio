@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 import { studio } from '../studio'
 import { escapeHtml } from '../ui'
 

@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 export type PaintType = 'None' | 'Color' | 'Matte'
 
 export interface PaintOptions {

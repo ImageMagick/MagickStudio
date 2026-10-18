@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 import MagickWorker from './magick.worker?worker'
 
 import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, WorkerRequest, WorkerResponse } from './messages'

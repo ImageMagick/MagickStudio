@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 import wasmUrl from '@imagemagick/magick-wasm/x64/magick.wasm?url'
 import {
     CompositeOperator,

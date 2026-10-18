@@ -1,3 +1,6 @@
+// Copyright @ 1999 ImageMagick Studio LLC, a non-profit organization
+// dedicated to making software imaging solutions freely available.
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../app/assets/magick-template.css'
 import 'bootstrap'

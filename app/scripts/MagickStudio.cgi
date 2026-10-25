@@ -192,150 +192,196 @@ sub AnnotateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Annotate.html" target="help">annotate</a> your image with text, enter your text and location below and press <code>annotate</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="card-title fw-bold mb-3">Annotate Image</h5>
+    <p class="card-text text-secondary mb-0">To <a href="$DocumentDirectory/Annotate.html" target="help" class="text-decoration-none">annotate</a> your image with text, enter your text and location below and press <code>annotate</code>. Configure optional styling parameters as needed.</p>
+  </div>
+</div>
 XXX
   ;
-  print $q->start_form(-method=>'POST');
+  print $q->start_form(-method=>'POST', -class=>'needs-validation');
   print $q->hidden(-name=>'CacheID'), "\n";
   print $q->hidden(-name=>'SessionID'), "\n";
   print $q->hidden(-name=>'Path'), "\n";
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt class=\"fw-bold mb-2\">Text:</dt>\n";
-  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,
-    -rows=>3), "</dd><br\n";
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Offset</th>\n";
-  print "<th>Gravity</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>'+0+0'), "</td>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textarea(-class=>'form-control',-name=>'Text',-columns=>50,-rows=>3,-placeholder=>'Text',-style=>'height: 100px;'), "\n";
+  print "<label for=\"Text\">Text to Annotate</label>\n";
+  print "</div>\n";
+  
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Geometry',-size=>25,-value=>'+0+0',-placeholder=>'Offset'), "\n";
+  print "<label for=\"Geometry\">Offset</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
-    -values=>[@types],-default=>'SouthEast'), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'annotate'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Annotate Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Undercolor</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fill',
-    -value=>'white',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Stroke',
-    -value=>'none',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Undercolor',
-    -value=>'none',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>PointSize</th>\n";
-  print "<th>Density</th>\n";
-  print "<th>Stroke Width</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Pointsize',
-    -value=>'24',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Density',
-    -value=>'90',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
-    -value=>'0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Kerning</th>\n";
-  print "<th>Interline Spacing</th>\n";
-  print "<th>Interword Spacing</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Kerning',
-    -value=>'0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'InterlineSpacing',
-    -value=>'0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'InterwordSpacing',
-    -value=>'0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/fonts/\">Font</a></th>\n";
-  print "<th>Direction</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Gravity',-values=>[@types],-default=>'SouthEast'), "\n";
+  print "<label for=\"Gravity\">Gravity</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'annotate'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Annotate Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Fill',-value=>'white',-size=>25,-placeholder=>'Fill Color'), "\n";
+  print "<label for=\"Fill\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Fill Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Stroke',-value=>'none',-size=>25,-placeholder=>'Stroke Color'), "\n";
+  print "<label for=\"Stroke\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Stroke Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Undercolor',-value=>'none',-size=>25,-placeholder=>'Undercolor'), "\n";
+  print "<label for=\"Undercolor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Undercolor</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Pointsize',-value=>'24',-size=>25,-placeholder=>'PointSize'), "\n";
+  print "<label for=\"Pointsize\">PointSize</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Density',-value=>'90',-size=>25,-placeholder=>'Density'), "\n";
+  print "<label for=\"Density\">Density</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'StrokeWidth',-value=>'0',-size=>25,-placeholder=>'Stroke Width'), "\n";
+  print "<label for=\"StrokeWidth\">Stroke Width</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Kerning',-value=>'0',-size=>25,-placeholder=>'Kerning'), "\n";
+  print "<label for=\"Kerning\">Kerning</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'InterlineSpacing',-value=>'0',-size=>25,-placeholder=>'Interline Spacing'), "\n";
+  print "<label for=\"InterlineSpacing\">Interline Spacing</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'InterwordSpacing',-value=>'0',-size=>25,-placeholder=>'Interword Spacing'), "\n";
+  print "<label for=\"InterwordSpacing\">Interword Spacing</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   $image=new Image::Magick;
   @fonts=$image->QueryFont();
-  print '<td>', $q->scrolling_list(-class=>'form-control',-name=>'Font',
-    -values=>[@fonts],-size=>10), "</td><br>\n";
-  my @types=Image::Magick->QueryOption('direction');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Direction',
-    -values=>[@types]), "</td>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'FontURL',
-    -value=>'http://',-size=>25), "</td><br>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Translate</th>\n";
-  print "<th>Scale</th>\n";
-  print "<th>Rotate</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Translate',
-    -value=>'0.0, 0.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scale',
-    -value=>'1.0, 1.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Skew X</th>\n";
-  print "<th>Skew Y</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewX',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
-    -value=>'none', -size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Antialias',
-    -label=>' antialias text.',-checked=>'true'), "</dd>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Polaroid',
-    -label=>' simulate a Polaroid picture.'), "</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  my @directions=Image::Magick->QueryOption('direction');
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->scrolling_list(-class=>'form-select',-name=>'Font',-values=>[@fonts],-size=>5), "\n";
+  print "<label for=\"Font\"><a href=\"$DocumentDirectory/fonts/\" class=\"text-decoration-none\">Font</a></label>\n";
+  print "</div>\n";
+  print "<div class=\"form-floating mt-2\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'FontURL',-value=>'http://',-size=>25,-placeholder=>'Font URL'), "\n";
+  print "<label for=\"FontURL\">Custom Font URL</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Direction',-values=>[@directions]), "\n";
+  print "<label for=\"Direction\">Direction</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Translate',-value=>'0.0, 0.0',-size=>25,-placeholder=>'Translate'), "\n";
+  print "<label for=\"Translate\">Translate</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Scale',-value=>'1.0, 1.0',-size=>25,-placeholder=>'Scale'), "\n";
+  print "<label for=\"Scale\">Scale</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Rotate',-value=>'0.0',-size=>25,-placeholder=>'Rotate'), "\n";
+  print "<label for=\"Rotate\">Rotate</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SkewX',-value=>'0.0',-size=>25,-placeholder=>'Skew X'), "\n";
+  print "<label for=\"SkewX\">Skew X</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SkewY',-value=>'0.0',-size=>25,-placeholder=>'Skew Y'), "\n";
+  print "<label for=\"SkewY\">Skew Y</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BackgroundColor',-value=>'none',-size=>25,-placeholder=>'Background Color'), "\n";
+  print "<label for=\"BackgroundColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Background Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-4\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Antialias',-label=>' Antialias text.',-checked=>'true'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Polaroid',-label=>' Simulate a Polaroid picture.'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -351,10 +397,10 @@ sub CheckStudioHours
   $url=$q->self_url . "&Action=" . $action;
   Header("Please Stand By...",-refresh=>"600; URL=$url");
   print <<XXX;
-<code>ImageMagick Studio</code> has restricted access from 6PM until 11PM EST.
-We have temporarily <i>suspended</i> the processing of your image.
-Shortly after 11PM, processing <var>automagically</var> continues and your image is
-returned.
+<div class="alert alert-warning shadow-sm border-0 p-4" role="alert">
+  <h4 class="alert-heading fw-bold mb-2">Restricted Operating Hours</h4>
+  <p class="mb-0"><code>ImageMagick Studio</code> has restricted access from 6PM until 11PM EST. We have temporarily <i>suspended</i> processing. Shortly after 11PM, processing <var>automagically</var> continues and your image will be returned.</p>
+</div>
 XXX
   ;
   Trailer(undef);
@@ -374,26 +420,29 @@ sub CheckStudioStatus
   Header("Please Stand By...",-refresh=>"$refresh_rate; URL=$url",
     -status=>'502 Service Temporarily Overloaded');
   print <<XXX;
-<code>ImageMagick Studio</code> is busy serving other requests.  We have temporarily
-<i>suspended</i> the processing of your image.  The current studio status is:
-<br>
-<center>
-<table class=\"table table-sm table-hover table-striped\">
-<tr>
-  <th>Load Average</th>
-  <th>Threshold</th>
-</tr>
-
-<tr>
-  <td align=center>$load_average</td>
-  <td align=center>$LoadAverageThreshold</td>
-</tr>
-</table>
-</center>
-<br>
-When the studio load average becomes less than the threshold, processing
-<var>automagically</var> continues and your image is returned.  The studio status will
-be refreshed in $refresh_rate seconds.
+<div class="alert alert-danger shadow-sm border-0 p-4 mb-4" role="alert">
+  <h4 class="alert-heading fw-bold mb-2">Server Busy</h4>
+  <p class="mb-0"><code>ImageMagick Studio</code> is busy serving other requests. Processing has been temporarily suspended.</p>
+</div>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0 text-center">
+      <thead class="table-light">
+        <tr>
+          <th>Load Average</th>
+          <th>Threshold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-semibold">$load_average</td>
+          <td class="fw-semibold">$LoadAverageThreshold</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<p class="text-secondary">When the load average drops below the threshold, processing will automatically continue. Retrying in $refresh_rate seconds.</p>
 XXX
   ;
   Trailer(undef);
@@ -550,7 +599,12 @@ sub ColormapForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">You have a number of options for creating or changing the image <a href="$DocumentDirectory/Colormap.html" target="help">colormap</a>.  You can reduce the number of colors in your image, dither, or convert to gray colors.  To create or modify your image's colormap, check one or more options below.  Next, press <code>quantize</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="card-title fw-bold mb-3">Colormap Settings</h5>
+    <p class="card-text text-secondary mb-0">Select options for creating or altering the image <a href="$DocumentDirectory/Colormap.html" target="help" class="text-decoration-none">colormap</a>. Options include color reduction, dithering, or grayscale conversion. Press <code>quantize</code> when ready.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -560,41 +614,51 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'quantize'), "\n";
-  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'256'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these options:</dt>\n";
-  print '<dd class="mb-3">', $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,
-    -columns=>3,-default=>'dither'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'quantize'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Transform Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Transparent Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\">Colorspace</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'TransparentColor',
-    -value=>'none',-size=>25), "</td>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'quantize'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Parameter',-size=>25,-value=>'256',-placeholder=>'Parameter'), "\n";
+  print "<label for=\"Parameter\">Parameter</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Options</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->checkbox_group(-name=>'Options',-values=>@OptionTypes,-columns=>3,-default=>'dither',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'quantize'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Transform Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'TransparentColor',-value=>'none',-size=>25,-placeholder=>'Transparent Color'), "\n";
+  print "<label for=\"TransparentColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Transparent Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  
   my @types=Image::Magick->QueryOption('colorspace');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
-    -values=>[@types],-default=>'sRGB'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Colorspace',-values=>[@types],-default=>'sRGB'), "\n";
+  print "<label for=\"Colorspace\"><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\" class=\"text-decoration-none\">Colorspace</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br> <br> <br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -637,23 +701,24 @@ sub Comment
     -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
-<br>
-<center>
-<a href="$SponsorURL" target="sponsor">
-  <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" align=right border="0" vspace="45" /></a>
-<img alt="ImageMagick Studio" src="$DocumentDirectory/images/magick.png" align=bottom width="114" height="118" border="0" />
-</center>
-<p><hr /></p>
+<div class="text-center my-4">
+  <a href="$SponsorURL" target="sponsor">
+    <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" class="float-end img-fluid ms-3" />
+  </a>
+  <img alt="ImageMagick Studio" src="$DocumentDirectory/images/magick.png" class="img-fluid" width="114" height="118" />
+</div>
+<hr class="my-4" />
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-3">Comment Received</h5>
+    <div class="p-3 bg-body-tertiary rounded mb-3 border">
+      <pre class="mb-0 overflow-auto" style="max-height: 50vh;"><code>@{[ $q->param('Comment') ]}</code></pre>
+    </div>
+    <div class="alert alert-info border-0 mb-0">An administrator will review your comment soon. Thank you!</div>
+  </div>
+</div>
 XXX
   ;
-  print "<dl>\n";
-  print "<dl>\n";
-  print "<dt class=\"fw-bold mb-2\">You said:<br>\n";
-  print '<dd class="mb-3"><ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>', $q->param('Comment'),
-    "</samp></pre></ul><br>\n";
-  print "<dt class=\"fw-bold mb-2\">An administrator will review your comment soon.  Thanks.\n";
-  print "</dl>\n";
-  print "</dl>\n";
   Trailer(1);
 }
 
@@ -671,16 +736,19 @@ sub CommentForm
     -style=>{-src=>"$DocumentDirectory/assets/magick-css.php"},
     -author=>$ContactInfo,-bgcolor=>'#FFFFFF',-encoding=>'UTF-8'), "\n";
   print <<XXX;
-<br>
-<center>
-<a href="$SponsorURL" target="sponsor">
-  <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" align=right border="0" vspace="45" /></a>
-<img alt="ImageMagick Studio" src="$DocumentDirectory/images/magick.png" align=bottom width="114" height="118" border="0" />
-</center>
-<p><hr /></p>
-If you have a comment or problem with <code>ImageMagick Studio</code>, enter
-any details below and press <code>send</code>.  Be sure to include a valid e-mail
-address if you require a response.
+<div class="text-center my-4">
+  <a href="$SponsorURL" target="sponsor">
+    <img src="$DocumentDirectory/images/$SponsorIcon" alt="[sponsor]" class="float-end img-fluid ms-3" />
+  </a>
+  <img alt="ImageMagick Studio" src="$DocumentDirectory/images/magick.png" class="img-fluid" width="114" height="118" />
+</div>
+<hr class="my-4" />
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Send Feedback</h5>
+    <p class="text-secondary mb-0">If you have comments or problems with <code>ImageMagick Studio</code>, submit your details below. Include a valid email address if you require a response.</p>
+  </div>
+</div>
 XXX
   ;
   $q->delete('Comment');
@@ -691,20 +759,21 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dl>\n";
-  print "<dl>\n";
-  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Comment',
-    -columns=>50,-rows=>10,-wrap=>'horizontal'), "<br>\n";
-  print "</dl>\n";
-  print "</dl>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'send'), ' your comment or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textarea(-class=>'form-control',-name=>'Comment',-columns=>50,-rows=>10,-placeholder=>'Comment',-style=>'height: 180px;'), "\n";
+  print "<label for=\"Comment\">Your Comment</label>\n";
+  print "</div>\n";
+  
+  print "<div class=\"d-flex gap-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'send'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
-  print "<p><hr /></p>\n";
   print $q->end_html;
   die "FCGI_DONE\n";
 }
@@ -798,7 +867,12 @@ sub CompareForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Compare.html" target="help">compare</a> your image, press <code>Choose File</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the compare image and the type of compare operation.  Finally, press <code>compare</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Compare Images</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Compare.html" target="help" class="text-decoration-none">compare</a> images, select a local file or enter a remote URL. Choose parameters and click <code>compare</code>.</p>
+  </div>
+</div>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
@@ -809,48 +883,60 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
-    "Filename</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->filefield(-name=>'CompareFile',-size=>50,-maxlength=>1024),
-    "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
-    "URL</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'CompareURL',
-    -size=>50), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'compare'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Compare Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Metric.html\" target=\"help\">Metric</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel Type</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
-    -value=>'0%'), "</td>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"mb-3\">\n";
+  print "<label class=\"form-label fw-bold\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\" class=\"text-decoration-none\">Filename</a></label>\n";
+  print $q->filefield(-class=>'form-control',-name=>'CompareFile',-size=>50,-maxlength=>1024), "\n";
+  print "</div>\n";
+
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'CompareURL',-size=>50,-placeholder=>'URL'), "\n";
+  print "<label for=\"CompareURL\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\" class=\"text-decoration-none\">URL</a></label>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'compare'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Compare Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,-value=>'0%',-placeholder=>'Fuzz'), "\n";
+  print "<label for=\"Fuzz\"><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\" class=\"text-decoration-none\">Fuzz</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @types=Image::Magick->QueryOption('metric');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'MetricType',
-    -values=>[@types],-default=>'NCC'), "</td>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'MetricType',-values=>[@types],-default=>'NCC'), "\n";
+  print "<label for=\"MetricType\"><a href=\"$DocumentDirectory/Metric.html\" target=\"help\" class=\"text-decoration-none\">Metric</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ChannelType',
-    -values=>[@channels],default=>'Default'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "</dd></dl>\n";
-  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Clipboard',
-    -label=>' use clipboard image as source for compare.'), "</dd>\n";
-  print "</fieldset>\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'ChannelType',-values=>[@channels],-default=>'Default'), "\n";
+  print "<label for=\"ChannelType\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel Type</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"form-check mt-3\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Clipboard',-label=>' Use clipboard image as source for compare.'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -964,7 +1050,12 @@ sub CompositeForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Composite.html" target="help">composite</a> your image, press <code>Browse</code> and select your image file or enter the Uniform Resource Locator of your image.  Next, choose the location of the composite image and the type of composite operation.  Finally, press <code>composite</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Composite Image</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Composite.html" target="help" class="text-decoration-none">composite</a> images, upload a file or specify a remote URL. Select placement and composition parameters, then press <code>composite</code>.</p>
+  </div>
+</div>
 XXX
   ;
   $action=$q->script_name() . "?CacheID=" . $q->param('CacheID') .
@@ -975,73 +1066,95 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">",
-    "Filename</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->filefield(-name=>'CompositeFile',-size=>50,
-    -maxlength=>1024), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\">",
-    "URL</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'CompositeURL',
-    -size=>50), "</dd><br>\n";
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Offset</th>\n";
-  print "<th>Gravity</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>'+0+0'), "</td>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"mb-3\">\n";
+  print "<label class=\"form-label fw-bold\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\" class=\"text-decoration-none\">Filename</a></label>\n";
+  print $q->filefield(-class=>'form-control',-name=>'CompositeFile',-size=>50,-maxlength=>1024), "\n";
+  print "</div>\n";
+
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'CompositeURL',-size=>50,-placeholder=>'URL'), "\n";
+  print "<label for=\"CompositeURL\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\" class=\"text-decoration-none\">URL</a></label>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Geometry',-size=>25,-value=>'+0+0',-placeholder=>'Offset'), "\n";
+  print "<label for=\"Geometry\">Offset</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
-    -values=>[@types],-default=>'Center'), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'composite'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Composite Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Blend</th>\n";
-  print "<th>Compose</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Blend',-size=>25,
-    -value=>'0%'), "</td>\n";
-  my @types=Image::Magick->QueryOption('compose');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
-    -values=>[@types],-default=>'SrcOver'), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Rotate</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
-    "Background Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',-size=>25,
-    -value=>'0.0'), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
-    -value=>'none',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Tile',
-    -label=>' tile across and down the image canvas.'), "</dd>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Resize',
-    -label=>' resize to fit.'),"</dd>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Clipboard',
-    -label=>' use clipboard image as source for composite.'), "</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Gravity',-values=>[@types],-default=>'Center'), "\n";
+  print "<label for=\"Gravity\">Gravity</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'composite'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Composite Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Blend',-size=>25,-value=>'0%',-placeholder=>'Blend'), "\n";
+  print "<label for=\"Blend\">Blend</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @compose_types=Image::Magick->QueryOption('compose');
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'ComposeType',-values=>[@compose_types],-default=>'SrcOver'), "\n";
+  print "<label for=\"ComposeType\">Compose</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Rotate',-size=>25,-value=>'0.0',-placeholder=>'Rotate'), "\n";
+  print "<label for=\"Rotate\">Rotate</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BackgroundColor',-value=>'none',-size=>25,-placeholder=>'Background Color'), "\n";
+  print "<label for=\"BackgroundColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Background Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-3\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Tile',-label=>' Tile across and down the image canvas.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Resize',-label=>' Resize to fit.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Clipboard',-label=>' Use clipboard image as source for composite.'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -1133,7 +1246,12 @@ sub DecorateForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Decorate.html" target="help">decorate</a> your image with a border or frame, set your options below and press <code>decorate</code>.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Decorate Image</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Decorate.html" target="help" class="text-decoration-none">decorate</a> your image with a border or frame, configure parameters below and press <code>decorate</code>.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -1143,39 +1261,50 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt class=\"fw-bold mb-2\">Decoration geometry:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Geometry',
-    -size=>25,-value=>'15x15+3+3'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Color</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,
-    -value=>'gray'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these decorations:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>5,-default=>'frame *'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'decorate'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Decorate Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Compose</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Geometry',-size=>25,-value=>'15x15+3+3',-placeholder=>'Decoration Geometry'), "\n";
+  print "<label for=\"Geometry\">Decoration Geometry</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Color',-size=>25,-value=>'gray',-placeholder=>'Color'), "\n";
+  print "<label for=\"Color\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Choose Decoration</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>4,-default=>'frame *',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'decorate'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Decorate Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
   my @types=Image::Magick->QueryOption('compose');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'ComposeType',
-    -values=>[@types],-default=>'SrcOver'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'ComposeType',-values=>[@types],-default=>'SrcOver'), "\n";
+  print "<label for=\"ComposeType\">Compose</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br> <br> <br> <br> <br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -1313,7 +1442,7 @@ sub Download
   $format=$q->param('Format') if $q->param('Format');
   $format='jpg' if $format =~ /jpeg/;
   $image->Set(magick=>$format);
-  for ($i=0; $image->[$i]; $i++)
+  for ($i=0; $i < scalar(@$image); $i++)
   { $image->[$i]->Set(scene=>$i); }
   if ($q->param('Option') eq 'clipboard')
     {
@@ -1363,7 +1492,7 @@ sub Download
   #
   # Label image.
   #
-  for ($i=0; $image->[$i]; $i++)
+  for ($i=0; $i < scalar(@$image); $i++)
   {
     $image->[$i]->Label($image->[$i]->Get('filename'));
     next if $i == 0;
@@ -1382,8 +1511,10 @@ sub Download
   #
   $url=substr($q->param('Path'),length($DocumentRoot));
   print <<XXX;
-<p>Here is your converted image (or images).  Click on any image to view or precede your click by the shift key to download it to your local area or press <code>upload</code> to transfer the image to a remote site.</p>
-<center>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4 text-center">
+    <h5 class="fw-bold mb-3">Converted Image</h5>
+    <p class="text-secondary mb-3">Click on any image to view or Shift-click to download to your local drive. Click <code>upload</code> to transfer to a remote server.</p>
 XXX
   ;
   if ($#$image > 0)
@@ -1393,14 +1524,18 @@ XXX
       #
       ($width,$height)=$image->Get('width','height');
       print <<XXX;
-<p><a href="$url/$basename.$format"> <img alt="$basename.$format" src="$url/Animate.gif" width=$width height=$height border="0" /></a></p>
+    <div class="mb-3">
+      <a href="$url/$basename.$format"> <img alt="$basename.$format" src="$url/Animate.gif" width=$width height=$height class="img-fluid rounded border shadow-sm" /></a>
+    </div>
 XXX
   ;
     }
   ($width,$height)=$montage->Get('width','height');
   print <<XXX;
-<p><img ismap usemap=#Montage src="$url/MagickStudio.gif" width=$width height=$height border="0" /></p>
-<map name=Montage>
+    <div class="mb-3">
+      <img ismap usemap="#Montage" src="$url/MagickStudio.gif" width=$width height=$height class="img-fluid rounded border shadow-sm" />
+    </div>
+    <map name="Montage">
 XXX
   ;
   $montage->Get('montage')=~/(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/;
@@ -1421,13 +1556,13 @@ XXX
   }
   $hostname=$q->server_name();
   print <<XXX;
-</map>
-<br> <br> <br>
-</center>
+    </map>
 XXX
   ;
-  print "* <i>this image was saved to the ImageMagick Studio clipboard.</i><br>"
-    if $q->param('Option') eq 'clipboard';
+  if ($q->param('Option') eq 'clipboard') {
+    print '<p class="text-muted small fst-italic mt-2 mb-0">* This image was saved to the ImageMagick Studio clipboard.</p>';
+  }
+  print "</div></div>\n";
   #
   # Image upload form.
   #
@@ -1439,34 +1574,61 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'upload'), "\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'upload'), ' your image to a remote site or ', $q->reset(
-    -name=>'reset',-class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Upload Properties</legend>\n";
-  print "<dl>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'upload'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Upload Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
   $hostname=GetHostname($q->remote_host());
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">FTP server name</a>:\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Hostname',
-    -size=>50,-value=>$hostname), "<br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account name</a>:\n";
   $username='anonymous';
   $username=$q->remote_user() if $q->remote_user();
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Username',
-    -size=>25,-value=>$username), "<br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Account password</a>:\n";
-  print '<dd class="mb-3">', $q->password_field(-name=>'Password',-size=>25), "<br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Upload directory</a>:\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Directory',
-    -size=>50), "<br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\">Filename</a>:\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Filename',
-    -size=>50, -value=>"$basename.$format"), "<br>\n";
-  print "</dl>\n";
-  print "</fieldset>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Hostname',-size=>50,-value=>$hostname,-placeholder=>'FTP Hostname'), "\n";
+  print "<label for=\"Hostname\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\" class=\"text-decoration-none\">FTP Server Name</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Username',-size=>25,-value=>$username,-placeholder=>'Account Name'), "\n";
+  print "<label for=\"Username\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\" class=\"text-decoration-none\">Account Name</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->password_field(-class=>'form-control',-name=>'Password',-size=>25,-placeholder=>'Password'), "\n";
+  print "<label for=\"Password\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\" class=\"text-decoration-none\">Password</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Directory',-size=>50,-placeholder=>'Directory'), "\n";
+  print "<label for=\"Directory\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\" class=\"text-decoration-none\">Upload Directory</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Filename',-size=>50,-value=>"$basename.$format",-placeholder=>'Filename'), "\n";
+  print "<label for=\"Filename\"><a href=\"$DocumentDirectory/Upload.html\" target=\"help\" class=\"text-decoration-none\">Filename</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'upload'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
   Trailer(undef);
 }
@@ -1503,7 +1665,12 @@ sub DownloadForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p class="lead">Choose an <a href="$DocumentDirectory/Download.html" target="help">output</a> image format and set any optional image attributes below.  Some attributes are only relevant to specific output formats.  Next, press <code>output</code> to convert your image to the selected format.  The image is converted and you are given an opportunity to download it to your local area.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Download Image</h5>
+    <p class="text-secondary mb-0">Select an <a href="$DocumentDirectory/Download.html" target="help" class="text-decoration-none">output</a> format and configure attributes. Press <code>output</code> to convert and download the file.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -1513,112 +1680,177 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'output'),
-    "\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a>:</dt>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'output'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
   $format=$q->param('Magick');
   @formats=$image->QueryFormat();
-  print '<dd class="mb-3">', $q->scrolling_list(-class=>'form-control',-name=>'Format',
-    -values=>[@formats],-size=>7,-default=>$format), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Storage.html\" target=\"help\">Storage type</a>:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'multi-frame file'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'output'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Download Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Image Type</th>\n";
-  print "<th>Compress</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
-  print "<th>Alpha</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('type');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Type',
-    -values=>[@types]), "</td>\n";
-  my @types=Image::Magick->QueryOption('compress');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Compress',-values=>[@types]), "</td>\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->scrolling_list(-class=>'form-select',-name=>'Format',-values=>[@formats],-size=>5,-default=>$format), "\n";
+  print "<label for=\"Format\"><a href=\"$DocumentDirectory/Format.html\" target=\"help\" class=\"text-decoration-none\">Format</a></label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Storage.html\" target=\"help\" class=\"text-decoration-none\">Storage Type</a></label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>3,-default=>'multi-frame file',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'output'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Download Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  
+  my @type_opts=Image::Magick->QueryOption('type');
+  my @compress_opts=Image::Magick->QueryOption('compress');
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
-    -values=>[@channels],-default=>'All'), "</td>\n";
-  my @types=Image::Magick->QueryOption('Alpha');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Alpha',
-    -values=>[@types],-default=>'Undefined'), "</td>\n";
-  print "</tr>\n";
-  print "</table><br>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Dispose</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
-  print "<th>Preview</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('dispose');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Dispose',
-    -values=>[@types],-default=>'Undefined'), "</td>\n";
-  my @types=Image::Magick->QueryOption('interlace');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
-    -values=>[@types],-default=>'None'), "</td>\n";
-  my @types=Image::Magick->QueryOption('preview');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Preview',
-    -values=>[@types]), "</td>\n";
-  print "</tr>\n";
-  print "</table><br>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Delay.html\" target=\"help\">Delay</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Loop.html\" target=\"help\">Loop</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Quality.html\" target=\"help\">Quality</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Delay',-size=>15,
-    -value=>$image->Get('delay')), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Loop',-size=>15,
-    -value=>$image->Get('loop')), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Quality',-size=>15,
-    -value=>$image->Get('quality')), "</td>\n";
-  print "</tr>\n";
-  print "</table><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Image Depth</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,
-    -value=>$image->Get('depth')), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Smush Offset</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,
-    -value=>2), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Page.html\" target=\"help\">",
-    "Page Geometry</a></dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Page',-size=>25),
-    "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">",
-    "Passphrase</a></dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Passphrase',
-    -size=>25), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Comment:</dt>\n";
-  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Comment',
-    -columns=>50,-rows=>3,-value=>$image->Get('comment')), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
-    -label=>' reset page geometry.'), "</dd>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Coalesce',
-    -checked=>'true',-label=>' coalesce multi-frame images.'), "</dd>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Strip',
-    -label=>' strip image of any comments or profiles.'), "</dd>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'CMYK',
-    -label=>' save image as CMYK pixels (JPEG, TIFF, PS, PDF, PSD)'), "</dd>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Stack',
-    -label=>' stack images left-to-right (when storage type is append)'),
-    "</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  my @alpha_opts=Image::Magick->QueryOption('Alpha');
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Type',-values=>[@type_opts]), "\n";
+  print "<label for=\"Type\">Image Type</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Compress',-values=>[@compress_opts]), "\n";
+  print "<label for=\"Compress\">Compress</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Channel',-values=>[@channels],-default=>'All'), "\n";
+  print "<label for=\"Channel\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Alpha',-values=>[@alpha_opts],-default=>'Undefined'), "\n";
+  print "<label for=\"Alpha\">Alpha</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @dispose_opts=Image::Magick->QueryOption('dispose');
+  my @interlace_opts=Image::Magick->QueryOption('interlace');
+  my @preview_opts=Image::Magick->QueryOption('preview');
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Dispose',-values=>[@dispose_opts],-default=>'Undefined'), "\n";
+  print "<label for=\"Dispose\">Dispose</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Interlace',-values=>[@interlace_opts],-default=>'None'), "\n";
+  print "<label for=\"Interlace\"><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\" class=\"text-decoration-none\">Interlace</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Preview',-values=>[@preview_opts]), "\n";
+  print "<label for=\"Preview\">Preview</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Delay',-size=>15,-value=>$image->Get('delay'),-placeholder=>'Delay'), "\n";
+  print "<label for=\"Delay\"><a href=\"$DocumentDirectory/Delay.html\" target=\"help\" class=\"text-decoration-none\">Delay</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Loop',-size=>15,-value=>$image->Get('loop'),-placeholder=>'Loop'), "\n";
+  print "<label for=\"Loop\"><a href=\"$DocumentDirectory/Loop.html\" target=\"help\" class=\"text-decoration-none\">Loop</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Quality',-size=>15,-value=>$image->Get('quality'),-placeholder=>'Quality'), "\n";
+  print "<label for=\"Quality\"><a href=\"$DocumentDirectory/Quality.html\" target=\"help\" class=\"text-decoration-none\">Quality</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Depth',-size=>25,-value=>$image->Get('depth'),-placeholder=>'Image Depth'), "\n";
+  print "<label for=\"Depth\">Image Depth</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Offset',-size=>25,-value=>2,-placeholder=>'Smush Offset'), "\n";
+  print "<label for=\"Offset\">Smush Offset</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Page',-size=>25,-placeholder=>'Page Geometry'), "\n";
+  print "<label for=\"Page\"><a href=\"$DocumentDirectory/Page.html\" target=\"help\" class=\"text-decoration-none\">Page Geometry</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-3\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Passphrase',-size=>25,-placeholder=>'Passphrase'), "\n";
+  print "<label for=\"Passphrase\"><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\" class=\"text-decoration-none\">Passphrase</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textarea(-class=>'form-control',-name=>'Comment',-columns=>50,-rows=>3,-value=>$image->Get('comment'),-placeholder=>'Comment',-style=>'height: 80px;'), "\n";
+  print "<label for=\"Comment\">Comment</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-3\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Repage',-label=>' Reset page geometry.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Coalesce',-checked=>'true',-label=>' Coalesce multi-frame images.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Strip',-label=>' Strip image of comments or profiles.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'CMYK',-label=>' Save image as CMYK pixels (JPEG, TIFF, PS, PDF, PSD).'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Stack',-label=>' Stack images left-to-right (when storage type is append).'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(undef);
 }
 
@@ -1709,7 +1941,12 @@ sub DrawForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Draw.html" target="help">draw</a> on your image, choose a drawing primitive, define it with coordinates, and press <code>draw</code>.  There are additional optional attributes below.  Set them as appropriate.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Draw Vector Graphics</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Draw.html" target="help" class="text-decoration-none">draw</a> on your image, select a primitive, specify coordinates, and press <code>draw</code>.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -1719,75 +1956,105 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print "<dt class=\"fw-bold mb-2\">Primitive:</dt>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
   my @types=Image::Magick->QueryOption('primitive');
-  print '<dd class="mb-3">', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
-    -values=>[@types],-default=>'Line'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Coordinates:</dt>\n";
-  print '<dd class="mb-3">', $q->textarea(-class=>'form-control',-name=>'Coordinates',
-    -columns=>50,-rows=>2,-value=>'+10+10  +60+60',-wrap=>'horizontal'),
-    "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'draw'), ' on your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Draw Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Stroke Color</a></th>\n";
-  print "<th>Stroke Width</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fill',
-    -value=>'white',-size=>25),"</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Stroke',
-    -value=>'none',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'StrokeWidth',
-    -size=>25,-value=>'1'), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Translate</th>\n";
-  print "<th>Scale</th>\n";
-  print "<th>Rotate</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Translate',
-    -value=>'0.0, 0.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scale',
-    -value=>'1.0, 1.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Rotate',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Skew X</th>\n";
-  print "<th>Skew Y</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewX',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SkewY',
-    -value=>'0.0',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "<dt class=\"fw-bold mb-2\">Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3"> ', $q->checkbox(-name=>'Tile',
-    -label=>' paint the drawing primitive with the clipboard image.'),
-    "</dd>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Antialias',
-    -label=>' antialias text.',-checked=>'true'), "</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Primitive',-values=>[@types],-default=>'Line'), "\n";
+  print "<label for=\"Primitive\">Primitive</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textarea(-class=>'form-control',-name=>'Coordinates',-columns=>50,-rows=>2,-value=>'+10+10  +60+60',-placeholder=>'Coordinates',-style=>'height: 80px;'), "\n";
+  print "<label for=\"Coordinates\">Coordinates</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'draw'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Draw Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Fill',-value=>'white',-size=>25,-placeholder=>'Fill Color'), "\n";
+  print "<label for=\"Fill\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Fill Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Stroke',-value=>'none',-size=>25,-placeholder=>'Stroke Color'), "\n";
+  print "<label for=\"Stroke\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Stroke Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'StrokeWidth',-value=>'1',-size=>25,-placeholder=>'Stroke Width'), "\n";
+  print "<label for=\"StrokeWidth\">Stroke Width</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Translate',-value=>'0.0, 0.0',-size=>25,-placeholder=>'Translate'), "\n";
+  print "<label for=\"Translate\">Translate</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Scale',-value=>'1.0, 1.0',-size=>25,-placeholder=>'Scale'), "\n";
+  print "<label for=\"Scale\">Scale</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Rotate',-value=>'0.0',-size=>25,-placeholder=>'Rotate'), "\n";
+  print "<label for=\"Rotate\">Rotate</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SkewX',-value=>'0.0',-size=>25,-placeholder=>'Skew X'), "\n";
+  print "<label for=\"SkewX\">Skew X</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SkewY',-value=>'0.0',-size=>25,-placeholder=>'Skew Y'), "\n";
+  print "<label for=\"SkewY\">Skew Y</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-3\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Tile',-label=>' Paint the drawing primitive with the clipboard image.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Antialias',-label=>' Antialias text.',-checked=>'true'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -2194,7 +2461,12 @@ sub EffectsForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Effects.html" target="help">effect</a> your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Apply Effects</h5>
+    <p class="text-secondary mb-0">To apply an <a href="$DocumentDirectory/Effects.html" target="help" class="text-decoration-none">effect</a> to your image, select the method and set the parameter value if required (*). Press <code>effect</code> to process.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -2204,42 +2476,54 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
-    "\n";
-  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'0.0x1.0'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these effects:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'sharpen'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Effects Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Virtual Pixel Method</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Parameter',-size=>25,-value=>'0.0x1.0',-placeholder=>'Parameter'), "\n";
+  print "<label for=\"Parameter\">Parameter</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Choose Effect</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>3,-default=>'sharpen',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'effect'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Effects Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3\">\n";
+  
   my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-class=>'form-control',
-    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'VirtualPixelMethod',-values=>[@methods]), "\n";
+  print "<label for=\"VirtualPixelMethod\">Virtual Pixel Method</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
-    -values=>[@channels],-default=>'Default'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Channel',-values=>[@channels],-default=>'Default'), "\n";
+  print "<label for=\"Channel\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -2351,7 +2635,12 @@ sub EnhanceForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p>To <a href="$DocumentDirectory/Enhance.html" target="help">enhance</a> your image, enter your enhancement parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>enhance</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Enhance Image</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Enhance.html" target="help" class="text-decoration-none">enhance</a> your image, select the method and supply a parameter if required (*). Press <code>enhance</code> to continue.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -2361,42 +2650,54 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'enhance'), "\n";
-  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'1.6'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these enhancements:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'gamma *'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'enhance'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Enhance Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Virtual Pixel Method</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'enhance'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Parameter',-size=>25,-value=>'1.6',-placeholder=>'Parameter'), "\n";
+  print "<label for=\"Parameter\">Parameter</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Choose Enhancement</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>3,-default=>'gamma *',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'enhance'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Enhance Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3\">\n";
+  
   my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-class=>'form-control',
-    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'VirtualPixelMethod',-values=>[@methods]), "\n";
+  print "<label for=\"VirtualPixelMethod\">Virtual Pixel Method</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
-    -values=>[@channels],-default=>'Default'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Channel',-values=>[@channels],-default=>'Default'), "\n";
+  print "<label for=\"Channel\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -2410,25 +2711,19 @@ sub Error
   Header($message) unless $header;
   $qualifier="" unless $qualifier;
   print <<XXX;
-<center>
-<img src="$DocumentDirectory/images/stop.png" width="48" height="48" border="0" />
-</center>
-<br> <br>
-<dl>
-<dt><font face="Arial,Helvetica" size=+2>$message:</font>
-<br>
-<dd><font face="Arial,Helvetica" size=+1>$qualifier</font>
-<br>
-<dd><font face="Arial,Helvetica" size=+0>$!</font>
-</dl>
-<br> <br>
-<center>
-<img src="$DocumentDirectory/images/stop.png" width="48" height="48" border="0" />
-</center>
-<br>
-<br>
-<br>
-Press <code>Back</code> to correct the error or press a tab above to continue.
+<div class="card border-danger shadow-sm mb-4">
+  <div class="card-body p-4 text-center">
+    <div class="text-danger mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-exclamation-octagon-fill" viewBox="0 0 16 16">
+        <path d="M11.46 1e-3M11.46.1L15.9 4.54c.09.09.14.21.14.34v6.24c0 .13-.05.25-.14.34L11.46 15.9c-.09.09-.21.14-.34.14H4.88c-.13 0-.25-.05-.34-.14L.1 11.46a.5.5 0 0 1-.14-.34V4.88c0-.13.05-.25.14-.34L4.54.1c.09-.09.21-.14.34-.14h6.24c.13 0 .25.05.34.14zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+      </svg>
+    </div>
+    <h4 class="card-title text-danger fw-bold mb-2">$message</h4>
+    <p class="card-text text-secondary mb-1">$qualifier</p>
+    <p class="card-text text-muted small mb-3"><code>$!</code></p>
+    <p class="text-secondary mb-0">Press <code>Back</code> to correct the error or choose a navigation item above.</p>
+  </div>
+</div>
 XXX
   ;
   Trailer(0);
@@ -2689,7 +2984,12 @@ sub FXForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To add special <a href="$DocumentDirectory/FX.html" target="help">effects</a> to your image, enter your effects parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>effect</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Special Effects (F/X)</h5>
+    <p class="text-secondary mb-0">To apply special <a href="$DocumentDirectory/FX.html" target="help" class="text-decoration-none">effects</a>, choose an option and supply parameter values if required (*). Press <code>effect</code> to execute.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -2699,80 +2999,116 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'),
-    "\n";
-  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25,-value=>'60'), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these special effects:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'swirl *'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'effect'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>F/X Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Distort Type</th>\n";
-  print "<th>Evaluate Type</th>\n";
-  print "<th>Function Type</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'effect'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Parameter',-size=>25,-value=>'60',-placeholder=>'Parameter'), "\n";
+  print "<label for=\"Parameter\">Parameter</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Choose Special Effect</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>3,-default=>'swirl *',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'effect'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">F/X Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  
   my @distorts=Image::Magick->QueryOption('distort');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'DistortType',
-    -values=>[@distorts],-default=>'Arc'), "</td>\n";
   my @operators=Image::Magick->QueryOption('evaluate');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'EvaluateType',
-    -values=>[@operators], -default=>'Sin'), "</td>\n";
   my @functions=Image::Magick->QueryOption('function');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'FunctionType',
-    -values=>[@functions],-default=>'Sin'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Morphology Method</th>\n";
-  print "<th>Virtual Pixel Method</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @methods=Image::Magick->QueryOption('morphology');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'MorphologyMethod',
-    -values=>[@methods]), "</td>\n";
-  my @methods=Image::Magick->QueryOption('virtual-pixel');
-  print '<td>', $q->popup_menu(-class=>'form-control',
-    -name=>'VirtualPixelMethod',-values=>[@methods]), "</td>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'DistortType',-values=>[@distorts],-default=>'Arc'), "\n";
+  print "<label for=\"DistortType\">Distort Type</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'EvaluateType',-values=>[@operators],-default=>'Sin'), "\n";
+  print "<label for=\"EvaluateType\">Evaluate Type</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'FunctionType',-values=>[@functions],-default=>'Sin'), "\n";
+  print "<label for=\"FunctionType\">Function Type</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @morph_methods=Image::Magick->QueryOption('morphology');
+  my @virt_methods=Image::Magick->QueryOption('virtual-pixel');
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
-    -values=>[@channels],-default=>'Default'), "</td>\n";
-  print "</tr>\n";
-  print "</tr>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr><br>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
-    -value=>'black', -size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'FillColor',
-    -value=>'white',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
-    -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Clipboard',
-    -label=>' use clipboard image as source for F(x).'),"</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'MorphologyMethod',-values=>[@morph_methods]), "\n";
+  print "<label for=\"MorphologyMethod\">Morphology Method</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'VirtualPixelMethod',-values=>[@virt_methods]), "\n";
+  print "<label for=\"VirtualPixelMethod\">Virtual Pixel Method</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Channel',-values=>[@channels],-default=>'Default'), "\n";
+  print "<label for=\"Channel\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BackgroundColor',-value=>'black',-size=>25,-placeholder=>'Background Color'), "\n";
+  print "<label for=\"BackgroundColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Background Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'FillColor',-value=>'white',-size=>25,-placeholder=>'Fill Color'), "\n";
+  print "<label for=\"FillColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Fill Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-3\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check mb-2\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Repage',-checked=>'true',-label=>' Reset page geometry.'), "\n";
+  print "</div>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Clipboard',-label=>' Use clipboard image as source for F(x).'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -2949,32 +3285,35 @@ sub Header
       setTheme(savedTheme);
     });
   </script>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="$DocumentDirectory/"><img class="d-block" id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.png"/></a>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4 fixed-top shadow-sm">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="$DocumentDirectory/">
+      <img id="icon" alt="ImageMagick Online Studio" width="32" height="32" src="$DocumentDirectory/images/wand.png"/>
+      <span>Magick Studio</span>
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#magick-navbars" aria-controls="magick-navbars" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="magick-navbars">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item ms-3 dropdown">
-          <a class="nav-link dropdown-toggle  $tools{'View'} $tools{'Identify'}" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
-          <ul class="dropdown-menu" aria-labelledby="nav-items-view">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item ms-md-2 dropdown">
+          <a class="nav-link dropdown-toggle $tools{'View'} $tools{'Identify'}" href="#" id="view" data-bs-toggle="dropdown" aria-expanded="false">View</a>
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="view">
             <li><a class="dropdown-item" href="$url;ToolType=View">View</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Identify">Identify</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle $tools{'Transform'} $tools{'Resize'}" href="#" id="transform" data-bs-toggle="dropdown" aria-expanded="false">Transform</a>
-          <ul class="dropdown-menu" aria-labelledby="nav-items-transform">
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="transform">
             <li><a class="dropdown-item" href="$url;ToolType=Transform">Transform</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Resize">Resize</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle $tools{'Effects'} $tools{'F/X'} $tools{'Enhance'} $tools{'Colormap'}" href="#" id="effects" data-bs-toggle="dropdown" aria-expanded="false">Effects</a>
-          <ul class="dropdown-menu" aria-labelledby="nav-items-effects">
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="effects">
             <li><a class="dropdown-item" href="$url;ToolType=Effects">Effects</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=FX">F/X</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Enhance">Enhance</a></li>
@@ -2983,7 +3322,7 @@ sub Header
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle $tools{'Decorate'} $tools{'Annotate'} $tools{'Draw'}" href="#" id="decorate" data-bs-toggle="dropdown" aria-expanded="false">Decorate</a>
-          <ul class="dropdown-menu" aria-labelledby="nav-items-decorate">
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="decorate">
             <li><a class="dropdown-item" href="$url;ToolType=Decorate">Decorate</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Annotate">Annotate</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Draw">Draw</a></li>
@@ -2991,23 +3330,23 @@ sub Header
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle $tools{'Composite'} $tools{'Compare'}" href="#" id="composite" data-bs-toggle="dropdown" aria-expanded="false">Composite</a>
-          <ul class="dropdown-menu" aria-labelledby="nav-items-composite">
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="composite">
             <li><a class="dropdown-item" href="$url;ToolType=Composite">Composite</a></li>
             <li><a class="dropdown-item" href="$url;ToolType=Compare">Compare</a></li>
           </ul>
         </li>
       </ul>
-      <ul class="navbar-nav ms-auto">
-        <form class="d-flex" action="$script">
+      <div class="d-flex align-items-center gap-2">
+        <form class="d-flex m-0" action="$script">
           <input type="hidden" name="CacheID" value="$cacheID" />
           <input type="hidden" name="SessionID" value="$sessionID" />
           <input type="hidden" name="Path" value="$path" />
           <input type="hidden" name="Name" value="$name" />
           <input type="hidden" name="Magick" value="$magick" />
           <input type="hidden" name="ToolType" value="Upload" />
-          <button class="btn btn-outline-success" type="submit">Upload</button>
+          <button class="btn btn-outline-light btn-sm fw-semibold px-3" type="submit">Upload</button>
         </form>
-        <form class="d-flex ms-3" action="$script">
+        <form class="d-flex m-0" action="$script">
           <input type="hidden" name="Action" value="mogrify" />
           <input type="hidden" name="CacheID" value="$cacheID" />
           <input type="hidden" name="SessionID" value="$sessionID" />
@@ -3015,30 +3354,25 @@ sub Header
           <input type="hidden" name="Name" value="$name" />
           <input type="hidden" name="Magick" value="$magick" />
           <input type="hidden" name="ToolType" value="Download" />
-          <button class="btn btn-outline-success" type="submit">Download</button>
+          <button class="btn btn-success btn-sm fw-semibold px-3" type="submit">Download</button>
         </form>
-        <li class="nav-item dropdown ms-3">
-          <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle px-2" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <span id="currentThemeIcon">🌓</span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="themeDropdown">
             <li><a class="dropdown-item" href="#" onclick="setTheme('light')">☀️ Light</a></li>
             <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">🌙 Dark</a></li>
             <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">🌓 Auto</a></li>
           </ul>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
   </nav>
 
-<div class="col-lg-8 mx-auto text-body-secondary pt-5 pt-lg-5">
-<main role="main" class="container">
-  <div>
-    <h6>&nbsp;</h6>
-XXX
-  ;
-  print <<XXX;
+<div class="col-lg-10 col-xl-8 mx-auto pt-5 mt-4">
+<main role="main" class="container-fluid px-3">
 XXX
   ;
 }
@@ -3069,12 +3403,21 @@ sub Identify
   #
   Header(GetTitle($images));
   print <<XXX;
-<p class="lead">Here is a detailed description of your image, <code>$filename</code>:</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-3">Image Information: <code>$filename</code></h5>
+    <div class="bg-body-tertiary rounded border p-3">
+      <pre class="mb-0 overflow-auto text-body-secondary" style="max-height: 65vh;"><code>
 XXX
   ;
-  print "<ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>";
   $images->Identify();
-  print "</samp></pre></ul>\n";
+  print <<XXX;
+</code></pre>
+    </div>
+  </div>
+</div>
+XXX
+  ;
   Trailer(1);
 }
 
@@ -3212,7 +3555,12 @@ sub ResizeForm
   #
   Header(GetTitle($image));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Resize.html" target="help">resize</a> your image, specify the desired size and scaling method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>resize</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Resize Image</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Resize.html" target="help" class="text-decoration-none">resize</a> your image, specify dimensions and method (* requires parameter). Press <code>resize</code> to process.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -3222,59 +3570,77 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
-    "\n";
-  print "<dt class=\"fw-bold mb-2\">Image size:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',
-    -name=>'Geometry',-size=>25,-value=>"$width" . 'x' . "$height"),
-    "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these scaling methods:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Algorithm',
-    -values=>@OptionTypes,-columns=>3), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'resize'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Resize Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Filter</th>\n";
-  print "<th>Support</th>\n";
-  print "<th>Blur</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('filter');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
-    -values=>[@types]), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SupportFactor',
-    -size=>25,-value=>'0.0'), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BlurFactor',
-    -size=>25,-value=>'1.0'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<dd><table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Gravity</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">",
-    "Background Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
-    -values=>[@types]), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
-    -value=>'none', -size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table></dd><br>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Geometry',-size=>25,-value=>"$width" . 'x' . "$height",-placeholder=>'Image Size'), "\n";
+  print "<label for=\"Geometry\">Image Size</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Scaling Method</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Algorithm',-values=>@OptionTypes,-columns=>3,-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'resize'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Resize Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  
+  my @filter_types=Image::Magick->QueryOption('filter');
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Primitive',-values=>[@filter_types]), "\n";
+  print "<label for=\"Primitive\">Filter</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SupportFactor',-size=>25,-value=>'0.0',-placeholder=>'Support'), "\n";
+  print "<label for=\"SupportFactor\">Support</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BlurFactor',-size=>25,-value=>'1.0',-placeholder=>'Blur'), "\n";
+  print "<label for=\"BlurFactor\">Blur</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3\">\n";
+  my @gravity_types=Image::Magick->QueryOption('gravity');
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Gravity',-values=>[@gravity_types]), "\n";
+  print "<label for=\"Gravity\">Gravity</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BackgroundColor',-value=>'none',-size=>25,-placeholder=>'Background Color'), "\n";
+  print "<label for=\"BackgroundColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Background Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br>
-XXX
-  ;
   Trailer(1);
 }
 
@@ -3343,20 +3709,16 @@ sub Trailer
   my($home, $load_average, $url);
 
   print <<XXX;
-   <div class="container text-center">
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745"
-        crossorigin="anonymous"></script>
-      <!-- Banner Ad -->
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-3129977114552745"
-        data-ad-slot="1083537442"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
+  <div class="my-4 text-center">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-3129977114552745"
+      data-ad-slot="1083537442"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 </main>
 </div>
@@ -3373,8 +3735,8 @@ XXX
   $home="$DocumentDirectory/images/home-stop.png"
     if $load_average >= (2*$LoadAverageThreshold/3);
   print <<XXX;
-  <footer class="py-5 text-center text-body-secondary bg-body-tertiary" style="max-height:75svh;">
-  <div class="container-fluid">
+  <footer class="mt-5 py-4 border-top bg-body-tertiary">
+  <div class="container text-center">
 XXX
   ;
   if ($display)
@@ -3392,30 +3754,30 @@ XXX
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
           $url=substr($path,length($DocumentRoot));
+          print "<div class=\"d-inline-block me-2 mb-3\">\n";
           print "<img alt=\"image icon\" src=\"$url/MagickStudio.gif\" ",
             "border=\"0\" width=\"$width\" height=\"$height\" ",
-            "class=\"img-thumbnail img-fluid float-start\"/>\n";
+            "class=\"img-thumbnail shadow-sm\"/>\n</div>\n";
         }
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.gif';
       if (-e $filename)
         {
           ($width,$height)=$image->Ping("$filename" . '[0]');
+          print "<div class=\"d-inline-block mb-3\">\n";
           print "<img alt=\"clipboard icon\" src=\"$DocumentDirectory/",
             "clipboard/", $q->param('SessionID'), ".gif\" border=\"0\" ",
             "width=\"$width\" height=\"$height\" ",
-            "class=\"img-thumbnail img-fluid float-start\"/>\n";
+            "class=\"img-thumbnail shadow-sm\"/>\n</div>\n";
         }
     }
   print <<XXX;
-    <div class="nav-link">
-      <p><a href="#">Back to top</a> •
-         <a href="https://github.com/ImageMagick/ImageMagick/discussions">Community</a> •
-         <a href="https://github.com/sponsors/ImageMagick?o=esb">Donate</a></p>
+    <div class="mb-2">
+      <a href="#" class="text-decoration-none me-2">Back to top</a> •
+      <a href="https://github.com/ImageMagick/ImageMagick/discussions" class="text-decoration-none mx-2">Community</a> •
+      <a href="https://github.com/sponsors/ImageMagick?o=esb" class="text-decoration-none ms-2">Donate</a>
     </div>
-XXX
-  print <<XXX;
-    <p><small>&copy; 1999 ImageMagick Studio LLC</small></p>
+    <p class="text-secondary small mb-0">&copy; 1999 ImageMagick Studio LLC</p>
   </div>
   </footer>
   <!-- Javascript assets -->
@@ -3429,44 +3791,43 @@ XXX
       #
       # Display debugging information for an administrator.
       #
-      print "<center><h3>CGI State Information</h3></center>\n";
-      print "Script:\n";
-      print '<dd class="mb-3">', $0, "<br>\n";
-      print "Action:\n";
-      print '<dd class="mb-3">', $action, "<br>\n";
-      print "Time:\n";
-      print '<dd class="mb-3">', time-$timer, "s<br>\n";
-      print "Query state:\n";
-      print '<dd class="mb-3">', $q->query_string, "<br>\n";
-      print $q->Dump;
-      print "<br>\n";
-      print "Environment state:\n";
-      print "<ul>\n";
-      print "<li><code>SponsorURL</code>: ", $SponsorURL, "<br>\n";
-      print "<li><code>SponsorIcon</code>: ", $SponsorIcon, "<br>\n";
-      print "<li><code>accept</code>: ", $q->Accept(), "<br>\n";
-      print "<li><code>auth type</code>: ", $q->auth_type(), "<br>\n";
-      print "<li><code>raw cookie</code>: ", $q->raw_cookie(), "<br>\n";
-      print "<li><code>path info</code>: ", $q->path_info(), "<br>\n";
-      print "<li><code>path translated</code>: ", $q->path_translated(), "<br>\n";
-      print "<li><code>referer</code>: ", $q->referer(), "<br>\n";
-      print "<li><code>local addr</code>: ", GetAddress($q->virtual_host()), "<br>\n";
-      print "<li><code>remote addr</code>: ", $q->remote_addr(), "<br>\n";
-      print "<li><code>remote ident</code>: ", $q->remote_ident(), "<br>\n";
-      print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "<br>\n";
-      print "<li><code>remote user</code>: ", $q->remote_user(), "<br>\n";
-      print "<li><code>request method</code>: ", $q->request_method(), "<br>\n";
-      print "<li><code>script name</code>: ", $q->script_name(), "<br>\n";
-      print "<li><code>server name</code>: ", $q->server_name(), "<br>\n";
-      print "<li><code>server software</code>: ", $q->server_software(), "<br>\n";
-      print "<li><code>server port</code>: ", $q->server_port(), "<br>\n";
-      print "<li><code>temporary directory</code>: ", $ENV{TMPDIR}, "<br>\n";
-      print "<li><code>user agent</code>: ", $q->user_agent(), "<br>\n";
-      print "<li><code>user name</code>: ", $q->user_name(), "<br>\n";
-      print "<li><code>virtual host</code>: ", $q->virtual_host(), "<br>\n";
-      print "<li><code>environment</code>: ", $q->http(), "<br>\n";
-      print "<li><code>time stamp</code>: ", scalar(localtime), "<br>\n";
+      print "<div class=\"card shadow-sm border-0 my-4 text-start\"><div class=\"card-body p-4\">\n";
+      print "<h5 class=\"fw-bold mb-3\">CGI State Information</h5>\n";
+      print "<ul class=\"list-group list-group-flush small\">\n";
+      print "<li class=\"list-group-item\"><strong>Script:</strong> ", $0, "</li>\n";
+      print "<li class=\"list-group-item\"><strong>Action:</strong> ", $action, "</li>\n";
+      print "<li class=\"list-group-item\"><strong>Time:</strong> ", time-$timer, "s</li>\n";
+      print "<li class=\"list-group-item\"><strong>Query state:</strong> <code>", $q->query_string, "</code></li>\n";
       print "</ul>\n";
+      print "<div class=\"mt-3\">", $q->Dump, "</div>\n";
+      print "<h6 class=\"fw-bold mt-4 mb-2\">Environment state</h6>\n";
+      print "<ul class=\"list-unstyled small text-muted\">\n";
+      print "<li><code>SponsorURL</code>: ", $SponsorURL, "</li>\n";
+      print "<li><code>SponsorIcon</code>: ", $SponsorIcon, "</li>\n";
+      print "<li><code>accept</code>: ", $q->Accept(), "</li>\n";
+      print "<li><code>auth type</code>: ", $q->auth_type(), "</li>\n";
+      print "<li><code>raw cookie</code>: ", $q->raw_cookie(), "</li>\n";
+      print "<li><code>path info</code>: ", $q->path_info(), "</li>\n";
+      print "<li><code>path translated</code>: ", $q->path_translated(), "</li>\n";
+      print "<li><code>referer</code>: ", $q->referer(), "</li>\n";
+      print "<li><code>local addr</code>: ", GetAddress($q->virtual_host()), "</li>\n";
+      print "<li><code>remote addr</code>: ", $q->remote_addr(), "</li>\n";
+      print "<li><code>remote ident</code>: ", $q->remote_ident(), "</li>\n";
+      print "<li><code>remote host</code>: ", GetHostname($q->remote_host()), "</li>\n";
+      print "<li><code>remote user</code>: ", $q->remote_user(), "</li>\n";
+      print "<li><code>request method</code>: ", $q->request_method(), "</li>\n";
+      print "<li><code>script name</code>: ", $q->script_name(), "</li>\n";
+      print "<li><code>server name</code>: ", $q->server_name(), "</li>\n";
+      print "<li><code>server software</code>: ", $q->server_software(), "</li>\n";
+      print "<li><code>server port</code>: ", $q->server_port(), "</li>\n";
+      print "<li><code>temporary directory</code>: ", $ENV{TMPDIR}, "</li>\n";
+      print "<li><code>user agent</code>: ", $q->user_agent(), "</li>\n";
+      print "<li><code>user name</code>: ", $q->user_name(), "</li>\n";
+      print "<li><code>virtual host</code>: ", $q->virtual_host(), "</li>\n";
+      print "<li><code>environment</code>: ", $q->http(), "</li>\n";
+      print "<li><code>time stamp</code>: ", scalar(localtime), "</li>\n";
+      print "</ul>\n";
+      print "</div></div>\n";
     }
   print $q->end_html;
   die "FCGI_DONE\n";
@@ -3574,7 +3935,12 @@ sub TransformForm
   #
   Header(GetTitle(undef));
   print <<XXX;
-<p class="lead">To <a href="$DocumentDirectory/Transform.html" target="help">transform</a> your image, enter your transform parameter and method.  Note, only methods denoted with an asterisk require a parameter value.  Next, press <code>transform</code> to continue.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Transform Image</h5>
+    <p class="text-secondary mb-0">To <a href="$DocumentDirectory/Transform.html" target="help" class="text-decoration-none">transform</a> your image, specify the method and supply parameters if required (*). Press <code>transform</code> to continue.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -3584,64 +3950,85 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'),
-    "\n";
-  print "<dt class=\"fw-bold mb-2\">Parameter:</dt>\n";
-  print '<dd class="mb-3">', $q->textfield(-class=>'form-control',-name=>'Parameter',
-    -size=>25), "</dd><br>\n";
-  print "<dt class=\"fw-bold mb-2\">Choose from these transforms:</dt>\n";
-  print '<dd class="mb-3">', $q->radio_group(-name=>'Option',-values=>@OptionTypes,
-    -columns=>3,-default=>'trim'), "</dd><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'transform'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.<br><br>\n";
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Transform Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
-  print "<th>Gravity</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
-    -value=>'0%'), "</td>\n";
-  my @types=Image::Magick->QueryOption('gravity');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Gravity',
-    -values=>[@types]), "</td>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\">Colorspace</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('colorspace');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Colorspace',
-    -values=>[@types],-default=>'sRGB'), "</td>\n";
-  print "<tr>\n";
-  print '</table><br>';
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th>Layer Method</th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Background Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  my @types=Image::Magick->QueryOption('layers');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'LayerMethod',
-    -values=>[@types],-default=>'Optimize'), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BackgroundColor',
-    -value=>'none',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<dt class=\"fw-bold mb-2\"> Miscellaneous options:</dt>\n";
-  print '<dd class="mb-3">', $q->checkbox(-name=>'Repage',
-    -checked=>'true',-label=>' reset page geometry.'), "</dd>\n";
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'resize'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Parameter',-size=>25,-placeholder=>'Parameter'), "\n";
+  print "<label for=\"Parameter\">Parameter</label>\n";
+  print "</div>\n";
+
+  print "<div class=\"mb-4\">\n";
+  print "<label class=\"fw-bold mb-2\">Choose Transform</label>\n";
+  print "<div class=\"row g-2\">\n";
+  print $q->radio_group(-name=>'Option',-values=>@OptionTypes,-columns=>3,-default=>'trim',-class=>'form-check-input'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'transform'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Transform Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,-value=>'0%',-placeholder=>'Fuzz'), "\n";
+  print "<label for=\"Fuzz\"><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\" class=\"text-decoration-none\">Fuzz</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @gravity_types=Image::Magick->QueryOption('gravity');
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Gravity',-values=>[@gravity_types]), "\n";
+  print "<label for=\"Gravity\">Gravity</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @colorspace_types=Image::Magick->QueryOption('colorspace');
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Colorspace',-values=>[@colorspace_types],-default=>'sRGB'), "\n";
+  print "<label for=\"Colorspace\"><a href=\"$DocumentDirectory/Colorspace.html\" target=\"help\" class=\"text-decoration-none\">Colorspace</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3 mb-3\">\n";
+  my @layer_types=Image::Magick->QueryOption('layers');
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'LayerMethod',-values=>[@layer_types],-default=>'Optimize'), "\n";
+  print "<label for=\"LayerMethod\">Layer Method</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BackgroundColor',-value=>'none',-size=>25,-placeholder=>'Background Color'), "\n";
+  print "<label for=\"BackgroundColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Background Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"mt-3\">\n";
+  print "<h6 class=\"fw-bold mb-3\">Miscellaneous options</h6>\n";
+  print "<div class=\"form-check\">\n";
+  print $q->checkbox(-class=>'form-check-input',-name=>'Repage',-checked=>'true',-label=>' Reset page geometry.'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -3937,8 +4324,12 @@ sub UploadForm
   $q->param(-name=>'ToolType',-value=>'Upload');
   Header("Magick Online Studio");
   print <<XXX;
-<br>
-<p class="lead">To get started, click <span class="fw-bold">Choose File</span> to browse and upload an image from your device, or enter the URL of an image hosted online. Next, customize your experience by adjusting any of the optional settings below to suit your needs. When you're ready, click <span class="fw-bold">View</span> to proceed and begin editing, converting, or composing your image.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h4 class="card-title fw-bold mb-3">Welcome to Magick Online Studio</h4>
+    <p class="card-text text-secondary lead">Select an image from your device or supply a URL. Adjust processing attributes below and click <span class="fw-bold">View</span> to start editing or converting.</p>
+  </div>
+</div>
 XXX
   ;
   $version=Image::Magick->VERSION;
@@ -3951,106 +4342,134 @@ XXX
   $action=$url . "?CacheID=" . $q->param('CacheID') .  ";Action=view";
   print $q->start_multipart_form(-action=>$action,-method=>'POST');
   print $q->hidden(-name=>'SessionID'), "\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<td><a href=\"$DocumentDirectory/Filename.html\" target=\"help\">Filename</a>:</td>\n";
-  print '<td>', $q->filefield(-name=>'File',-size=>50,-maxlength=>1024), "</td>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print "<td><a href=\"$DocumentDirectory/URL.html\" target=\"help\">URL</a>:</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'URL',-size=>50),
-    "</td>\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"mb-3\">\n";
+  print "<label class=\"form-label fw-bold\"><a href=\"$DocumentDirectory/Filename.html\" target=\"help\" class=\"text-decoration-none\">Filename</a></label>\n";
+  print $q->filefield(-class=>'form-control',-name=>'File',-size=>50,-maxlength=>1024), "\n";
+  print "</div>\n";
+
+  print "<div class=\"form-floating mb-3\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'URL',-size=>50,-placeholder=>'URL'), "\n";
+  print "<label for=\"URL\"><a href=\"$DocumentDirectory/URL.html\" target=\"help\" class=\"text-decoration-none\">URL</a></label>\n";
+  print "</div>\n";
+
   $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
     $q->param('SessionID')  . '.mpc';
   if ((-e $filename) && defined($q->param('SessionID')))
     {
-      print '<td>', $q->checkbox(-name=>'Append',
-        -label=>' append to clipboard image.'), "</td>\n";
+      print "<div class=\"form-check mb-3\">\n";
+      print $q->checkbox(-class=>'form-check-input',-name=>'Append',-label=>' Append to clipboard image.'), "\n";
+      print "</div>\n";
     }
-  print "</tr>\n";
-  print "</table><br>\n";
-  print 'Press to ', $q->submit(-name=>'Action',-class=>'btn btn-primary',
-    -value=>'view'), ' your image or ', $q->reset(-name=>'reset',
-    -class=>'btn btn-warning'), " the form.\n";
-  print <<XXX;
-<br> <br>
-An example <a href="$url?URL=$ExampleImage;Action=view"> image</a> is available to help you get familiar with <code>Magick Online Studio</code>, version $version.
-<br> <br>
-<fieldset>
-<legend>Privacy Notice</legend>
-<p class="text-warning">Your privacy is safeguarded as long as you use this service in accordance with applicable laws. All uploaded images are stored temporarily on our secure local servers solely for processing purposes. These files are automatically deleted within a few hours—no manual action required.  Rest assured, your images are not accessible to anyone but you. We’ve implemented robust security measures to prevent unauthorized access, viewing, or copying of your content.</p>
-</fieldset>
-<br>
-<fieldset>
-<legend>Liability Notice</legend>
-<p class="text-warning">By using this service, you acknowledge and agree that ImageMagick Studio LLC shall not be held liable for any data loss, consequential damages, or privacy-related issues that may arise from your use of the platform.
 
-Use of this service is at your own risk, and it is your responsibility to ensure that any content you upload complies with applicable laws and does not contain sensitive or confidential information.</p>
-</fieldset>
-<br>
-XXX
-  ;
-  print "<fieldset>\n";
-  print "<legend>Upload Properties</legend>\n";
+  print "<div class=\"d-flex gap-2 pt-2\">\n";
+  print $q->submit(-name=>'Action',-class=>'btn btn-primary px-4 py-2 fw-semibold shadow-sm',-value=>'view'), "\n";
+  print $q->reset(-name=>'reset',-class=>'btn btn-outline-secondary px-4 py-2',-value=>'Reset Form'), "\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   print <<XXX;
-<p>You rarely need to set these parameters.  The scene specification is useful when you want to view only a few frames from a multi-frame image.  The remaining options are only necessary for raw image formats such as RGB or GRAY.</p>
-<dl><dd>
+<div class="alert alert-secondary shadow-sm border-0 mb-4">
+  An example <a href="$url?URL=$ExampleImage;Action=view" class="alert-link">image</a> is available to explore features of <code>Magick Online Studio</code>, version $version.
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-body-tertiary fw-bold border-0 py-3 px-4">Privacy Notice</div>
+      <div class="card-body p-4 text-secondary">
+        <p class="card-text mb-0">Your privacy is safeguarded. Uploaded images are stored temporarily on secure local servers for processing and deleted automatically within a few hours. Images are accessible only to you.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-body-tertiary fw-bold border-0 py-3 px-4">Liability Notice</div>
+      <div class="card-body p-4 text-secondary">
+        <p class="card-text mb-0">By using this service, you agree that ImageMagick Studio LLC is not liable for data loss or privacy issues. Use of this service is at your own risk. Ensure uploaded content complies with applicable laws.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-header bg-body-tertiary fw-bold border-0 py-3 px-4">Upload Properties</div>
+  <div class="card-body p-4">
+    <p class="text-secondary mb-4">Optional parameters for frame selection or raw formats (RGB, GRAY).</p>
 XXX
   ;
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Size.html\" target=\"help\">Size</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Format.html\" target=\"help\">Format</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'SizeGeometry',
-    -size=>25,-value=>'320x240'), "</td>\n";
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Format',
-    -values=>[@UploadTypes]), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Meta.html\" target=\"help\">Meta</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\">Interlace</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Meta',-size=>25,
-    -value=>'white'), "</td>\n";
-  my @types=Image::Magick->QueryOption('interlace');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Interlace',
-    -values=>[@types],-default=>'None'), "</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Scene.html\" target=\"help\">Scene</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Channel.html\" target=\"help\">Channel</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Scene',
-    -size=>25), "</td>\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'SizeGeometry',-size=>25,-value=>'320x240',-placeholder=>'Size'), "\n";
+  print "<label for=\"SizeGeometry\"><a href=\"$DocumentDirectory/Size.html\" target=\"help\" class=\"text-decoration-none\">Size</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Format',-values=>[@UploadTypes]), "\n";
+  print "<label for=\"Format\"><a href=\"$DocumentDirectory/Format.html\" target=\"help\" class=\"text-decoration-none\">Format</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @interlace_types=Image::Magick->QueryOption('interlace');
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Meta',-size=>25,-value=>'white',-placeholder=>'Meta'), "\n";
+  print "<label for=\"Meta\"><a href=\"$DocumentDirectory/Meta.html\" target=\"help\" class=\"text-decoration-none\">Meta</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Interlace',-values=>[@interlace_types],-default=>'None'), "\n";
+  print "<label for=\"Interlace\"><a href=\"$DocumentDirectory/Interlace.html\" target=\"help\" class=\"text-decoration-none\">Interlace</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
   my @channels=Image::Magick->QueryOption('channel');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Channel',
-    -values=>[@channels],-default=>'All'), "</td>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\">Passphrase</a></th>\n";
-  print "<th>Density</th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Passphrase',
-    -size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Density',
-    -size=>8,-value=>90), "</td>\n";
-  print "</tr>\n";
-  print '</table>';
-  print '</dd></dl>';
-  print "</fieldset>\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Scene',-size=>25,-placeholder=>'Scene'), "\n";
+  print "<label for=\"Scene\"><a href=\"$DocumentDirectory/Scene.html\" target=\"help\" class=\"text-decoration-none\">Scene</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Channel',-values=>[@channels],-default=>'All'), "\n";
+  print "<label for=\"Channel\"><a href=\"$DocumentDirectory/Channel.html\" target=\"help\" class=\"text-decoration-none\">Channel</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Passphrase',-size=>25,-placeholder=>'Passphrase'), "\n";
+  print "<label for=\"Passphrase\"><a href=\"$DocumentDirectory/Passphrase.html\" target=\"help\" class=\"text-decoration-none\">Passphrase</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Density',-size=>8,-value=>90,-placeholder=>'Density'), "\n";
+  print "<label for=\"Density\">Density</label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-XXX
-  ;
   Trailer(1);
 }
 
@@ -4180,8 +4599,12 @@ sub ViewForm
   ($width,$height)=$coalesce->Get('width','height');
   $url=substr($path,length($DocumentRoot));
   print <<XXX;
-<p class="lead">Here is your image.  Click on a tab above to interactively resize, rotate, sharpen, color reduce, or add special effects to your image and save the completed work in the same or differing image format.  Press <code>Back</code> to undo your last image transformation.  For more information, see <a href="https://imagemagick.org/">ImageMagick</a>.</p>
-<p>You can optionally <a href="$DocumentDirectory/Paint.html" target="help">paint</a> on your image.  Set any optional attributes below and click on the appropriate location within your image.</p>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-2">Image Canvas</h5>
+    <p class="text-secondary mb-0">Select navigation tabs above to edit, transform, or save your image. Click directly on the canvas to paint using the parameters below. See <a href="https://imagemagick.org/" class="text-decoration-none">ImageMagick</a> for documentation.</p>
+  </div>
+</div>
 XXX
   ;
   print $q->start_form(-method=>'POST');
@@ -4191,18 +4614,21 @@ XXX
   print $q->hidden(-name=>'ToolType'), "\n";
   print $q->hidden(-name=>'Name'), "\n";
   print $q->hidden(-name=>'Magick'), "\n";
-  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'view'),
-    "\n";
-  print $q->image_button(-class=>'img-fluid mx-auto d-block',-name=>$basename,
-    -src=>"$url/$basename.$format",-border=>1,-width=>$width,-height=>$height,
-    -style=>"cursor:crosshair",-cursor), "<br>\n";
+  print $q->hidden(-name=>'Action',-class=>'btn btn-primary',-value=>'view'), "\n";
+  
+  print "<div class=\"card shadow-sm border-0 mb-4 text-center\">\n";
+  print "<div class=\"card-body p-3\">\n";
+  print $q->image_button(-class=>'img-fluid rounded border shadow-sm mx-auto d-block',-name=>$basename,
+    -src=>"$url/$basename.$format",-border=>0,-width=>$width,-height=>$height,
+    -style=>"cursor:crosshair"), "\n";
+  
   if (defined($q->param("$basename.x")) || defined($q->param("$basename.y")))
     {
       my $width=$coalesce->Get('columns');
       my $height=$coalesce->Get('rows');
       my $x=$q->param("$basename.x");
       my $y=$q->param("$basename.y");
-      print "<ul><pre class=\"overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary\" style=\"max-height:75svh;\"><samp>$x,$y: ";
+      print "<div class=\"bg-body-tertiary rounded border p-2 mt-3 d-inline-block text-start small\"><samp>$x,$y: ";
       my $page=$coalesce->Get('page');
       if ($page =~ /(\d+\.*\d*)x(\d+\.*\d*)\+(\d+\.*\d*)\+(\d+\.*\d*)/)
         {
@@ -4242,55 +4668,65 @@ XXX
                 $matte != 0;
             }
         }
-      print "</samp></pre></ul>\n";
+      print "</samp></div>\n";
     }
   if ($image->Get('error') != 0.0)
     {
       my $error=$image->Get('error');
       $error*=(Image::Magick->QuantumRange);
-      print '<ul><pre class="overflow-auto p-3 mb-2 text-body-secondary bg-body-tertiary" style="max-height:75svh;"><samp>';
+      print "<div class=\"bg-body-tertiary rounded border p-2 mt-2 d-inline-block text-start small\"><samp>";
       print 'Distortion: ' . $error . ' (' . $image->Get('error') . ')';
-      print "</samp></pre></ul>\n";
+      print "</samp></div>\n";
     }
-  print "<br>\n";
-  print "<fieldset>\n";
-  print "<legend>Paint Properties</legend>\n";
-  print "<dl><dd>\n";
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\">Fuzz</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Paint.html\" target=\"help\">Method</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Paint.html\" target=\"help\">Paint Type</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,
-    -value=>'0%'), "</td>\n";
-  my @types=Image::Magick->QueryOption('method');
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Method',
-    -values=>[@types]), "</td>\n";
-  print '<td>', $q->popup_menu(-class=>'form-control',-name=>'Primitive',
-    -values=>[@PrimitiveTypes]),"</td>\n";
-  print "</tr>\n";
-  print '</table><br>';
-  print "<table class=\"table table-sm table-hover table-striped\">\n";
-  print "<tr>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Fill Color</a></th>\n";
-  print "<th><a href=\"$DocumentDirectory/Color.html\" target=\"help\">Border Color</a></th>\n";
-  print "</tr>\n";
-  print "<tr>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'Color',
-    -value=>'none',-size=>25), "</td>\n";
-  print '<td>', $q->textfield(-class=>'form-control',-name=>'BorderColor',
-    -value=>'none',-size=>25), "</td>\n";
-  print "</tr>\n";
-  print '</table>';
-  print "</dd></dl>\n";
-  print "</fieldset>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"card shadow-sm border-0 mb-4\">\n";
+  print "<div class=\"card-header bg-body-tertiary fw-bold border-0 py-3 px-4\">Paint Properties</div>\n";
+  print "<div class=\"card-body p-4\">\n";
+  print "<div class=\"row g-3 mb-3\">\n";
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Fuzz',-size=>25,-value=>'0%',-placeholder=>'Fuzz'), "\n";
+  print "<label for=\"Fuzz\"><a href=\"$DocumentDirectory/Fuzz.html\" target=\"help\" class=\"text-decoration-none\">Fuzz</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  my @method_types=Image::Magick->QueryOption('method');
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Method',-values=>[@method_types]), "\n";
+  print "<label for=\"Method\"><a href=\"$DocumentDirectory/Paint.html\" target=\"help\" class=\"text-decoration-none\">Method</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-4\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->popup_menu(-class=>'form-select',-name=>'Primitive',-values=>[@PrimitiveTypes]), "\n";
+  print "<label for=\"Primitive\"><a href=\"$DocumentDirectory/Paint.html\" target=\"help\" class=\"text-decoration-none\">Paint Type</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"row g-3\">\n";
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'Color',-value=>'none',-size=>25,-placeholder=>'Fill Color'), "\n";
+  print "<label for=\"Color\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Fill Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "<div class=\"col-md-6\">\n";
+  print "<div class=\"form-floating\">\n";
+  print $q->textfield(-class=>'form-control',-name=>'BorderColor',-value=>'none',-size=>25,-placeholder=>'Border Color'), "\n";
+  print "<label for=\"BorderColor\"><a href=\"$DocumentDirectory/Color.html\" target=\"help\" class=\"text-decoration-none\">Border Color</a></label>\n";
+  print "</div>\n";
+  print "</div>\n";
+  print "</div>\n";
+
+  print "</div>\n";
+  print "</div>\n";
   print $q->end_form, "\n";
-  print <<XXX;
-<br> <br> <br> <br>
-XXX
-  ;
   Trailer(undef);
 }
 
@@ -4303,17 +4739,18 @@ sub Warning
 
   Header($message);
   print <<XXX;
-<br> <br>
-<dl>
-<dt><font face="Arial,Helvetica" size=+3>$message:</font>
-<br>
-<dd><font face="Arial,Helvetica" size=+2>$qualifier</font>
-</dl>
-<br> <br>
-<br>
-<br>
-<br>
-Press a tab above to continue.
+<div class="card border-warning shadow-sm mb-4">
+  <div class="card-body p-4 text-center">
+    <div class="text-warning mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </svg>
+    </div>
+    <h4 class="card-title text-warning fw-bold mb-2">$message</h4>
+    <p class="card-text text-secondary mb-3">$qualifier</p>
+    <p class="text-secondary mb-0">Select a menu item above to continue.</p>
+  </div>
+</div>
 XXX
   ;
   Trailer(1);

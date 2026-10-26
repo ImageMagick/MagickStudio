@@ -3,7 +3,7 @@ use warnings;
 
 our $ContactInfo = 'magick-users@imagemagick.org';
 our $Debug = undef;  # no debugging by default
-our $DefaultFont = "Arial";
+our $DefaultFont = "sans-serif";
 our $DocumentDirectory = '/MagickStudio';  # relative to server root
 our $DocumentRoot = '/var/www/html/ImageMagick';  # server root
 our $ExampleImage = 'https://imagemagick.org/image/wizard.jpg';

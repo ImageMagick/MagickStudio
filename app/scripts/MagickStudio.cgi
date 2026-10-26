@@ -121,7 +121,7 @@ sub Annotate
   getstore(Untaint(scalar $q->param('FontURL')),'MagickStudio.ttf')
     unless $q->param('FontURL') eq 'http://';
   $font="\@MagickStudio.ttf" if -e 'MagickStudio.ttf';
-  $font=($image->QueryFont(scalar $q->param('Font')))[10] unless -e 'MagickStudio.ttf';
+  $font=($image->QueryFont($q->param('Font')))[10] unless -e 'MagickStudio.ttf';
   $geometry='+0+0';
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $gravity=$q->param('Gravity');

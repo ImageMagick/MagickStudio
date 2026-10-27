@@ -3794,7 +3794,6 @@ XXX
     <div class="mb-2">
       <a href="#" class="text-decoration-none me-2">Back to top</a> •
       <a href="https://github.com/ImageMagick/ImageMagick/discussions" class="text-decoration-none mx-2">Community</a> •
-      <a href="https://github.com/sponsors/ImageMagick?o=esb" class="text-decoration-none ms-2">Donate</a>
     </div>
     <p class="text-secondary small mb-0">&copy; 1999 ImageMagick Studio LLC</p>
   </div>

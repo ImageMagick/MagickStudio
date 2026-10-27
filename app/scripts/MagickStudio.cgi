@@ -66,8 +66,8 @@ use strict;
 #
 # Global variable declarations.
 #
-my($action, %Functions, $header, $length, $prefix, $q, %seen, $timer,
-   $user_agent);
+my($action, %Functions, $header, $length, $prefix, $q, $request_count, %seen,
+   $timer, $user_agent);
 
 our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot,
     $ExampleImage, $ExpireCache, $ExpireThreshold, $HashDigestSalt, $IconSize,
@@ -4764,8 +4764,12 @@ XXX
 #setpriority(0,0,getpriority(0,0)+4);  # be nice
 $CGI::POST_MAX=1024*$MaxFilesize;
 our ($image, $compare, $composite);
+my $MAX_REQUESTS  = 200; 
+my $request_count = 0;
 while ($q = CGI::Fast->new)
 {
+  $request_count++;
+  last if $request_count >= $MAX_REQUESTS;
   eval
   {
     $timer=time;

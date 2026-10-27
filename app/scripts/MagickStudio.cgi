@@ -311,7 +311,7 @@ XXX
   print "<div class=\"row g-3 mb-3\">\n";
   print "<div class=\"col-md-6\">\n";
   print "<div class=\"form-floating\">\n";
-  print $q->scrolling_list(-class=>'form-select',-name=>'Font',-values=>[@fonts],-size=>5), "\n";
+  print $q->scrolling_list(-class=>'form-select',-name=>'Font',-values=>[@fonts],-size=>5, -style=>'height: 145px;'), "\n";
   print "<label for=\"Font\"><a href=\"$DocumentDirectory/fonts/\" class=\"text-decoration-none\">Font</a></label>\n";
   print "</div>\n";
   print "<div class=\"form-floating mt-2\">\n";

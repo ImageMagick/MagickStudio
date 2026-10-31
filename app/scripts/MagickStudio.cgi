@@ -104,10 +104,10 @@ sub Annotate
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Annotate image.
   #
@@ -169,14 +169,14 @@ sub Annotate
         scale=>$scale,rotate=>$rotate,skewX=>$skew_x,skewY=>$skew_y,
         antialias=>$antialias,direction=>$direction);
     }
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -499,10 +499,10 @@ sub Colormap
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Quantize image.
   #
@@ -536,7 +536,7 @@ sub Colormap
         $q->param('SessionID') . '.mpc';
       $colorcube=Image::Magick->new;
       $status=$colorcube->Read($filename);
-      Error($status) if $#$colorcube < 0;
+      Error($status,$q->Param('Name')) if $#$colorcube < 0;
       $image->Remap(image=>$colorcube);
     }
   if ($options{'netscape color cube'})
@@ -548,7 +548,7 @@ sub Colormap
       #
       $colorcube=Image::Magick->new;
       $status=$colorcube->Read('netscape:');
-      Error($status) if $#$colorcube < 0;
+      Error($status,$q->Param('Name')) if $#$colorcube < 0;
       $image->Remap(image=>$colorcube);
     }
   for ($levels=1; (($levels+1)*($levels+1)*($levels+1)) < $colors; $levels++)
@@ -561,14 +561,14 @@ sub Colormap
   $status=$image->Kmeans($parameter) if $options{'kmeans'};
   $status=$image->Quantize(colors=>$colors,dither=>$dither,
     colorspace=>$colorspace,'transparent-color'=>$transparent_color);
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -795,10 +795,10 @@ sub Compare
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Read compare image.
   #
@@ -822,15 +822,15 @@ sub Compare
   @extents=$compare->Ping("MagickStudio.dat");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
-  Error('Image extent exceeds maximum allowable') if $extent &&
-    ($extent > (1024*$MaxImageExtent));
+  Error('Image extent exceeds maximum allowable',$filename)
+    if $extent && ($extent > (1024*$MaxImageExtent));
   $status=$compare->Read('MagickStudio.dat');
   Error("unable to read your image",$filename) if $#$compare < 0;
   unlink('MagickStudio.dat');
-  Error('Image width or height differ') if $image->Get('width') ne
-   $compare->Get('width');
-  Error('Image width or height differ') if $image->Get('height') ne
-   $compare->Get('height');
+  Error('Image width or height differ',$filename)
+   if $image->Get('width') ne $compare->Get('width');
+  Error('Image width or height differ',$filename)
+   if $image->Get('height') ne $compare->Get('height');
   #
   # Compare image.
   #
@@ -851,7 +851,7 @@ sub Compare
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$filename) if "$status";
   ViewForm($image);
 }
 
@@ -957,10 +957,10 @@ sub Composite
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Read composite image.
   #
@@ -984,8 +984,8 @@ sub Composite
   @extents=$composite->Ping("MagickStudio.dat");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
-  Error('Image extent exceeds maximum allowable') if $extent &&
-    ($extent > (1024*$MaxImageExtent));
+  Error('Image extent exceeds maximum allowable',$filename)
+    if $extent && ($extent > (1024*$MaxImageExtent));
   $status=$composite->Read('MagickStudio.dat');
   Error("unable to read your image",$filename) if $#$composite < 0;
   unlink('MagickStudio.dat');
@@ -1026,7 +1026,7 @@ sub Composite
     $status=$image->[$i]->Composite(compose=>$compose,image=>$slice,
       gravity=>$gravity,geometry=>$geometry,rotate=>$rotate,color=>$color,
       tile=>$tile);
-    Error($status) if "$status";
+    Error($status,$q->Param('Name')) if "$status";
   }
   #
   # Write image.
@@ -1034,7 +1034,7 @@ sub Composite
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -1172,14 +1172,14 @@ sub CreateWorkDirectory
 #  CheckStudioHours();
   CheckStudioStatus() if $check;
   $path=$DocumentRoot . $DocumentDirectory . '/workarea';
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   umask(002);
   $digest=Digest::SHA3->new(512);
   $digest->add($HashDigestSalt,$q->remote_addr(),time(),{},rand(),$$);
   $path.='/' . $digest->hexdigest;
   $ENV{TMPDIR}=$path;
   mkdir($path,0775);
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $q->param(-name=>'Path',-value=>$path);
 }
 
@@ -1196,10 +1196,10 @@ sub Decorate
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Decorate image.
   #
@@ -1217,14 +1217,14 @@ sub Decorate
     if $q->param('Option') eq 'raise *';
   $status=$image->Raise(geometry=>$geometry,raise=>'False')
     if $q->param('Option') eq 'sunken *';
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -1322,17 +1322,17 @@ sub Download
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Write image.
   #
   CreateWorkDirectory(undef);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Convert the image to the selected format.
   #
@@ -1437,7 +1437,7 @@ sub Download
       $image=$coalesce if $q->param('Coalesce') eq 'on';
     }
   $status=$coalesce->Write("$basename.$format");
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   $format=$q->param('Magick');
   $format=$q->param('Format') if $q->param('Format');
   $format='jpg' if $format =~ /jpeg/;
@@ -1454,23 +1454,23 @@ sub Download
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID');
       $status=$image->Write(filename=>"$filename.mpc");
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
       $clipboard=$image->Clone();
       $clipboard->Resize($IconSize);
       $status=$clipboard->Write("$filename.gif");
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   if ($#$image > 0)
     {
       $status=$image->Write(filename=>"$prefix$basename.$format",adjoin=>1);
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
       $status=$image->Write(filename=>'Animate.gif',adjoin=>1);
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   if (($q->param('Option') ne 'single file') || ($#$image == 0))
     {
       $status=$image->Write("$prefix$basename.$format");
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   else
     {
@@ -1478,16 +1478,16 @@ sub Download
 
       $filename="$prefix$basename" . '%d.' . "$format";
       $status=$image->Write(filename=>$filename);
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   if (($q->param('Option') eq 'histogram') ||
       ($q->param('Option') eq 'preview'))
     {
       undef @$image;
       $status=$image->Read("$basename.$format");
-      Error($status) if $#$image < 0;
+      Error($status,$q->Param('Name')) if $#$image < 0;
       $status=$image->Write("$basename.$format");
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   #
   # Label image.
@@ -1502,10 +1502,10 @@ sub Download
   $montage=$image->Montage(background=>'#efefef',borderwidth=>0,
     geometry=>'120x120+2+2>',gravity=>'Center',font=>$DefaultFont,
     fill=>'black',transparent=>'#efefef');
-  Error($montage) if !ref($montage);
+  Error($montage,$q->Param('Name')) if !ref($montage);
   $montage->Set(page=>'0x0+0+0');
   $status=$montage->Write('MagickStudio.gif');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Display images to the user.
   #
@@ -1656,10 +1656,10 @@ sub DownloadForm
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Display Download form.
   #
@@ -1868,10 +1868,10 @@ sub Draw
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Draw image.
   #
@@ -1914,20 +1914,20 @@ sub Draw
         $q->param('SessionID') . '.mpc';
       $tile=Image::Magick->new;
       $status=$tile->Read($filename);
-      Error($status) if $#$tile < 0;
+      Error($status,$q->Param('Name')) if $#$tile < 0;
       $status=$image->Draw(primitive=>$primitive,fill=>$fill,stroke=>$stroke,
         strokewidth=>$strokewidth,tile=>$tile,points=>$points,x=>$x,y=>$y,
         translate=>$translate,scale=>$scale,rotate=>$rotate,skewX=>$skew_x,
         skewY=>$skew_y,antialias=>$antialias);
     }
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -2070,10 +2070,10 @@ sub Effects
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Effects image.
   #
@@ -2103,12 +2103,12 @@ sub Effects
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.mpc';
       $status=$source->Read($filename);
-      Error($status) if $#$source < 0;
+      Error($status,$q->Param('Name')) if $#$source < 0;
       if ($channel eq 'All')
         { $image->Clut(image=>$source); }
       else
         { $image->Clut(image=>$source,channel=>$channel); }
-      Error($image) if !ref($image);
+      Error($image,$q->Param('Name')) if !ref($image);
     }
   $status=$image->ConnectedComponents("$parameter") if $q->param('Option') eq
     'connected components *';
@@ -2165,7 +2165,7 @@ sub Effects
           else
             { $image = $image->ChannelFx(channel=>$channel,
               expression=>$parameter); }
-          Error($image) if !ref($image);
+          Error($image,$q->Param('Name')) if !ref($image);
         }
       else
         {
@@ -2178,7 +2178,7 @@ sub Effects
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $q->param('SessionID') . '.mpc';
           $status=$source->Read($filename);
-          Error($status) if $#$source < 0;
+          Error($status,$q->Param('Name')) if $#$source < 0;
           if ($channel eq 'All')
             {
               $status=$image->ChannelFx(image=>$source,expression=>$parameter);
@@ -2188,7 +2188,7 @@ sub Effects
               $status=$image->ChannelFx(image=>$source,channel=>$channel,
                 expression=>$parameter);
             }
-          Error($image) if !ref($image);
+          Error($image,$q->Param('Name')) if !ref($image);
         }
     }
   if ($q->param('Option') eq 'F(x) *')
@@ -2204,7 +2204,7 @@ sub Effects
             { $image = $image->Fx(expression=>$parameter); }
           else
             { $image = $image->Fx(channel=>$channel,expression=>$parameter); }
-          Error($image) if !ref($image);
+          Error($image,$q->Param('Name')) if !ref($image);
         }
       else
         {
@@ -2217,7 +2217,7 @@ sub Effects
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $q->param('SessionID') . '.mpc';
           $status=$source->Read($filename);
-          Error($status) if $#$source < 0;
+          Error($status,$q->Param('Name')) if $#$source < 0;
           if ($channel eq 'All')
             { $status=$image->Fx(image=>$source,expression=>$parameter); }
           else
@@ -2225,7 +2225,7 @@ sub Effects
               $status=$image->Fx(image=>$source,channel=>$channel,
                 expression=>$parameter);
             }
-          Error($image) if !ref($image);
+          Error($image,$q->Param('Name')) if !ref($image);
         }
     }
   $status=$image->GaussianBlur(geometry=>"$parameter",channel=>$channel) if
@@ -2239,12 +2239,12 @@ sub Effects
       $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
         $q->param('SessionID') . '.mpc';
       $status=$source->Read($filename);
-      Error($status) if $#$source < 0;
+      Error($status,$q->Param('Name')) if $#$source < 0;
       if ($channel eq 'All')
         { $status=$image->HaldClut(image=>$source); }
       else
         { $status=$image->HaldClut(image=>$source,channel=>$channel); }
-      Error($image) if !ref($image);
+      Error($image,$q->Param('Name')) if !ref($image);
     }
   $status=$image->HoughLine("$parameter") if $q->param('Option') eq
     'hough line *';
@@ -2269,7 +2269,7 @@ sub Effects
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $q->param('SessionID') . '.mpc';
           $status=$image->Read($filename);
-          Error($status) if $#$image < 0;
+          Error($status,$q->Param('Name')) if $#$image < 0;
         }
       $morph_image=$image->Morph(frames=>$parameter);
       if (ref($morph_image))
@@ -2301,7 +2301,7 @@ sub Effects
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $q->param('SessionID') . '.mpc';
           $status=$image->Read($filename);
-          Error($status) if $#$image < 0;
+          Error($status,$q->Param('Name')) if $#$image < 0;
         }
       $mosaic_image=$image->Mosaic();
       if (ref($mosaic_image))
@@ -2378,7 +2378,8 @@ sub Effects
         $q->param('SessionID') . '.mpc';
       $clipboard=Image::Magick->new(size=>"256x256+$parameter");
       $status=$clipboard->Read($filename);
-      Error("unable to stegano image, no clipboard image") if $#$clipboard < 0;
+      Error("unable to stegano image, no clipboard image",$q->Param('Name'))
+        if $#$clipboard < 0;
       $status=$image->Stegano(image=>$clipboard);
     }
   if ($q->param('Option') eq 'stereo')
@@ -2407,14 +2408,14 @@ sub Effects
   $status=$image->WhiteThreshold(threshold=>"$parameter",channel=>$channel) if
     $q->param('Option') eq 'white threshold *';
   $status=$image->Set(page=>'0x0+0+0') if $q->param('Repage') eq 'on';
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -2540,10 +2541,10 @@ sub Enhance
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Enhance image.
   #
@@ -2560,7 +2561,7 @@ sub Enhance
         $q->param('SessionID') . '.mpc';
       $clut=Image::Magick->new;
       $status=$clut->Read($filename);
-      Error($status) if $#$clut < 0;
+      Error($status,$q->Param('Name')) if $#$clut < 0;
       $image->Remap(image=>$clut,channel=>$channel);
     }
   $status=$image->Set('virtual-pixel'=>$q->param('VirtualPixelMethod')) if
@@ -2592,14 +2593,14 @@ sub Enhance
   $status=$image->Negate(channel=>$channel) if $q->param('Option') eq 'negate';
   $status=$image->SigmoidalContrast(geometry=>$parameter,channel=>$channel) if
     $q->param('Option') eq 'sigmoidal-contrast *';
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -2743,7 +2744,7 @@ sub ExpireFiles
 
   local(*DIR);
 
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   opendir(DIR,".");
   @files=readdir(DIR);
   closedir(DIR);
@@ -2897,12 +2898,12 @@ sub FileTransfer
   #
   SaveQueryState($q->param('SessionID'),'FileTransfer');
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
   $basename=$q->param('Name');
   $format=$q->param('Magick');
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Construct FTP URL.
   #
@@ -3393,10 +3394,10 @@ sub Identify
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $images=Image::Magick->new(precision=>6);
   $status=$images->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$images < 0;
+  Error($status,$q->Param('Name')) if $#$images < 0;
   $magick=$q->param('Magick');
   $filename=$q->param('Name') . '.' . $magick;
   $images->Set(filename=>$filename,magick=>$magick);
@@ -3453,7 +3454,8 @@ sub Mogrify
   $tooltype=scalar $q->param('ToolType');
   View() unless defined($tooltype);
   Error('Unable to view image','no path is defined') unless $q->param('Path');
-  RestoreQueryState(scalar $q->param('SessionID'),scalar $q->param('Path'),$tooltype);
+  RestoreQueryState(scalar $q->param('SessionID'),scalar $q->param('Path'),
+    $tooltype);
   $function=$Tools{$tooltype};
   &$function() if defined($function);
   Error('Request failed due to malformed query');
@@ -3473,19 +3475,19 @@ sub Resize
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Resize image.
   #
   $image->Set(gravity=>scalar $q->param('Gravity'));
   $q->param('Geometry') =~ /(\d+)\D*(\d*)/;
-  Error('Image area exceeds maximum allowable') if $1 && $2 &&
-    (($1*$2) > (1024*$MaxImageArea));
-  Error('Image area exceeds maximum allowable') if $1 && !$2 &&
-    (($1*$1) > (1024*$MaxImageArea));
+  Error('Image area exceeds maximum allowable',$q->param('Name'))
+    if $1 && $2 && (($1*$2) > (1024*$MaxImageArea));
+  Error('Image area exceeds maximum allowable',$q->param('Name'))
+    if $1 && !$2 && (($1*$1) > (1024*$MaxImageArea));
   $geometry='100%';
   $geometry=$q->param('Geometry') if $q->param('Geometry');
   $filter='Undefined';
@@ -3510,14 +3512,14 @@ sub Resize
     $q->param('Algorithm') eq 'resample *';
   $status=$image->Thumbnail($geometry) if $q->param('Algorithm') eq
     'thumbnail *';
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -3548,7 +3550,7 @@ sub ResizeForm
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   ($width,$height)=$image->Ping("$path/MagickStudio.mpc");
   $q->delete('Geometry');
@@ -3719,7 +3721,7 @@ sub Trailer
       <div class="card im-card mb-4 overflow-hidden border-0 bg-gradient bg-primary bg-opacity-10">
         <div class="card-body p-3 text-center">
           <img src="https://imagemagick.org/image/wizard.jpg" alt="ImageMagick Wizard" class="rounded shadow mb-3 img-fluid" style="max-height: 200px;">
-          <p class="small text-body-secondary mb-3">Help sustain the free ImageMagick online service.</p>
+          <p class="small text-body-secondary mb-3">Help sustain the free Magick Studio online service.</p>
           <a href="https://github.com/sponsors/ImageMagick" target="_blank" rel="noopener" class="btn btn-sm btn-dark w-100 fw-semibold d-flex align-items-center justify-content-center gap-2">
             ❤️ Sponsor
           </a>
@@ -3792,7 +3794,7 @@ XXX
   print <<XXX;
     <div class="mb-2">
       <a href="#" class="text-decoration-none me-2">Back to top</a> •
-      <a href="https://github.com/ImageMagick/ImageMagick/discussions" class="text-decoration-none mx-2">Community</a> •
+      <a href="https://github.com/ImageMagick/ImageMagick/discussions" class="text-decoration-none mx-2">Community</a>
     </div>
     <p class="text-secondary small mb-0">&copy; 1999 ImageMagick Studio LLC</p>
   </div>
@@ -3863,10 +3865,10 @@ sub Transform
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   #
   # Transform image.
   #
@@ -3904,14 +3906,14 @@ sub Transform
   $status=$image->Transpose() if $q->param('Option') eq 'transpose';
   $status=$image->Transverse() if $q->param('Option') eq 'transverse';
   $status=$image->UniqueColors() if $q->param('Option') eq 'unique colors';
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Write image.
   #
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -4119,17 +4121,17 @@ sub Upload
       if (-z 'MagickStudio.dat')
         {
           $q->param('SizeGeometry')=~/(\d+)\D*(\d*)/;
-          Error('Image area exceeds maximum allowable') if $1 && $2 &&
-            (($1*$2) > (1024*$MaxImageArea));
-          Error('Image area exceeds maximum allowable') if $1 && !$2 &&
-            (($1*$1) > (1024*$MaxImageArea));
+          Error('Image area exceeds maximum allowable',$q->param('Name'))
+            if $1 && $2 && (($1*$2) > (1024*$MaxImageArea));
+          Error('Image area exceeds maximum allowable',$q->param('Name'))
+            if $1 && !$2 && (($1*$1) > (1024*$MaxImageArea));
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $q->param('SessionID') . '.mpc' if $filename eq 'clipboard:';
           $format=$q->param('Format') . ':' if $q->param('Format');
           $status=$image->Read("$format$filename$scene");
-          Error($status) if $#$image < 0;
+          Error($status,$q->Param('Name')) if $#$image < 0;
           $status=$image->Write('MagickStudio.dat');
-          Error($status) if "$status";
+          Error($status,$q->Param('Name')) if "$status";
           $format='';
         }
     }
@@ -4158,9 +4160,9 @@ sub Upload
                       Error('Image extents exceeds maximum allowable') if
                         $extent && ($extent > (1024*$MaxImageExtent));
                       $status=$image->Read($filename);
-                      Error($status) if $#$image < 0;
+                      Error($status,$q->Param('Name')) if $#$image < 0;
                       $status=$image->Write('MagickStudio.dat');
-                      Error($status) if "$status";
+                      Error($status,$q->Param('Name')) if "$status";
                     }
                 }
             }
@@ -4174,12 +4176,12 @@ sub Upload
               $extent=0;
               for ($i=0; $i < $#extents; $i+=4)
                 { $extent+=$extents[$i]*$extents[$i+1]; }
-              Error('Image extents exceeds maximum allowable') if $extent &&
-                ($extent > (1024*$MaxImageExtent));
+              Error('Image extents exceeds maximum allowable',$q->Param('Name'))
+                if $extent && ($extent > (1024*$MaxImageExtent));
               $status=$image->Read("*");
-              Error($status) if $#$image < 0;
+              Error($status,$q->Param('Name')) if $#$image < 0;
               $status=$image->Write('MagickStudio.dat');
-              Error($status) if "$status";
+              Error($status,$q->Param('Name')) if "$status";
               chop($filename);
             }
         }
@@ -4189,18 +4191,18 @@ sub Upload
             {
               $filename=Untaint(scalar $q->param('Meta'));
               $q->param('SizeGeometry') =~ /(\d+)\D*(\d*)/;
-              Error('Image area exceeds maximum allowable') if $1 && $2 &&
-                (($1*$2) > (1024*$MaxImageArea));
-              Error('Image area exceeds maximum allowable') if $1 && !$2 &&
-                (($1*$1) > (1024*$MaxImageArea));
+              Error('Image area exceeds maximum allowable',$q->param('Name'))
+                if $1 && $2 && (($1*$2) > (1024*$MaxImageArea));
+              Error('Image area exceeds maximum allowable',$q->param('Name'))
+                if $1 && !$2 && (($1*$1) > (1024*$MaxImageArea));
               $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
                 $q->param('SessionID') . '.mpc' if $filename eq 'clipboard:';
               $format=$q->param('Format') . ':' if $q->param('Format');
               $status=$image->Read("$format$filename$scene");
-              Error($status) if $#$image < 0;
+              Error($status,$q->Param('Name')) if $#$image < 0;
               $image->Set(magick=>'mpc');
               $status=$image->Write('MagickStudio.dat');
-              Error($status) if "$status";
+              Error($status,$q->Param('Name')) if "$status";
               $image->Set(magick=>'mpc');
               $format='';
             }
@@ -4221,12 +4223,12 @@ sub Upload
   @extents=$image->Ping("$format$path/MagickStudio.dat$scene");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
-  Error('Image extents exceeds maximum allowable') if $extent &&
-    ($extent > (1024*$MaxImageExtent));
+  Error('Image extents exceeds maximum allowable',$q->Param('Name'))
+    if $extent && ($extent > (1024*$MaxImageExtent));
   $image=Image::Magick->new;
   $image->Set(density=>$q->param('Density')) if $q->param('Density');
   $status=$image->Read("$format$path/MagickStudio.dat$scene");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   $magick=$image->Get('magick') if $image->Get('magick') ne 'MPC';
   unlink('MagickStudio.dat');
   if (length($q->param('Passphrase')) > 0)
@@ -4272,11 +4274,11 @@ sub Upload
           $filename=$DocumentRoot . $DocumentDirectory . '/clipboard/' .
             $session;
           $status=$clipboard->Write(filename=>"$filename.mpc");
-          Error($status) if "$status";
+          Error($status,$q->Param('Name')) if "$status";
           $clipboard=$clipboard->Coalesce();
           $clipboard->Resize($IconSize);
           $status=$clipboard->Write("$filename.gif");
-          Error($status) if "$status";
+          Error($status,$q->Param('Name')) if "$status";
         }
     }
   $q->param(-name=>'SessionID',-value=>$session);
@@ -4288,7 +4290,7 @@ sub Upload
   #
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -4504,15 +4506,15 @@ sub View
   # Read image.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   $image=Image::Magick->new;
   @extents=$image->Ping("$path/MagickStudio.mpc");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }
-  Error('Image extents exceeds maximum allowable') if $extent &&
-    ($extent > (1024*$MaxImageExtent));
+  Error('Image extents exceeds maximum allowable',$q->Param('Name'))
+    if $extent && ($extent > (1024*$MaxImageExtent));
   $status=$image->Read("$path/MagickStudio.mpc");
-  Error($status) if $#$image < 0;
+  Error($status,$q->Param('Name')) if $#$image < 0;
   if ($q->param('Primitive') ne 'None')
     {
       #
@@ -4546,7 +4548,7 @@ sub View
       $method=$q->param('Method');
       $status=$image->Draw(primitive=>$primitive,points=>$points,fill=>$fill,
         bordercolor=>$bordercolor,method=>$method);
-      Error($status) if "$status";
+      Error($status,$q->Param('Name')) if "$status";
     }
   #
   # Write image.
@@ -4554,7 +4556,7 @@ sub View
   CreateWorkDirectory(1);
   Header(GetTitle($image));
   $status=$image->Write(filename=>'MagickStudio.mpc');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   ViewForm($image);
 }
 
@@ -4581,7 +4583,7 @@ sub ViewForm
   # Ensure image resources are within bounds.
   #
   $path=Untaint(scalar $q->param('Path'));
-  chdir($path) || Error('Your image has expired',$q->Param('Name'));
+  chdir($path) || Error('Your image has expired',$q->param('Name'));
   if (!$image)
     {
       #
@@ -4589,7 +4591,7 @@ sub ViewForm
       #
       $image=Image::Magick->new;
       $status=$image->Read("$path/MagickStudio.mpc");
-      Error($status) if $#$image < 0;
+      Error($status,$q->Param('Name')) if $#$image < 0;
       Header(GetTitle($image));
     }
   #
@@ -4598,7 +4600,7 @@ sub ViewForm
   $icon=$image->Coalesce();
   $icon->Resize($IconSize);
   $status=$icon->Write(filename=>'MagickStudio.gif');
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   $basename=$q->param('Name');
   $format='png';
   $coalesce=$image->Coalesce();
@@ -4609,7 +4611,7 @@ sub ViewForm
     }
   $coalesce->Set(interlace=>'none');
   $status=$coalesce->Write("$basename.$format");
-  Error($status) if "$status";
+  Error($status,$q->Param('Name')) if "$status";
   #
   # Display View form.
   #

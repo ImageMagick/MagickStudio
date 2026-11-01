@@ -3375,7 +3375,7 @@ sub Header
 <div class="container-xl px-4 pt-5 mt-4">
   <div class="row">
     <!-- Main Content Column (~80% width on large screens) -->
-    <main role="main" class="col-lg-10 col-xl-10 px-3">
+    <main role="main" class="col-lg-10 px-3">
 XXX
   ;
 }
@@ -3716,7 +3716,7 @@ sub Trailer
     </main>
 
     <!-- Sidebar Column (~20% width on large screens) -->
-    <aside class="col-lg-2 col-xl-2 px-3">
+    <aside class="col-lg-2 px-3">
       <!-- Sponsor Card -->
       <div class="card im-card mb-4 overflow-hidden border-0 bg-gradient bg-primary bg-opacity-10">
         <div class="card-body p-3 text-center">

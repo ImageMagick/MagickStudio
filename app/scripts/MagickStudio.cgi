@@ -3721,7 +3721,7 @@ sub Trailer
       <div class="card im-card mb-4 overflow-hidden border-0 bg-gradient bg-primary bg-opacity-10">
         <div class="card-body p-3 text-center">
           <img src="https://imagemagick.org/image/wizard.jpg" alt="ImageMagick Wizard" class="rounded shadow mb-3 img-fluid" style="max-height: 200px;">
-          <p class="small text-body-secondary mb-3">Help sustain the free Magick Studio online service.</p>
+          <p class="small text-body-secondary mb-3">Help sustain the free Magick Online Studio service.</p>
           <a href="https://github.com/sponsors/ImageMagick" target="_blank" rel="noopener" class="btn btn-sm btn-dark w-100 fw-semibold d-flex align-items-center justify-content-center gap-2">
             ❤️ Sponsor
           </a>

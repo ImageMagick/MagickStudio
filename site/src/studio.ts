@@ -3,7 +3,7 @@
 
 import MagickWorker from './magick.worker?worker'
 
-import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, WorkerRequest, WorkerResponse } from './messages'
+import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, ResizeOptions, WorkerRequest, WorkerResponse } from './messages'
 
 type Request = WorkerRequest extends infer T ? T extends { id: number } ? Omit<T, 'id'> : never : never
 
@@ -91,6 +91,10 @@ export const studio = {
 
     async paint(options: PaintOptions): Promise<CurrentImage> {
         return setCurrent(await send<ImageView>({ type: 'paint', options }))
+    },
+
+    async resize(options: ResizeOptions): Promise<CurrentImage> {
+        return setCurrent(await send<ImageView>({ type: 'resize', options }))
     },
 
     identify(): Promise<IdentifyResult> {

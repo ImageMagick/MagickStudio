@@ -4,6 +4,8 @@
 import wasmUrl from '@imagemagick/magick-wasm/x64/magick.wasm?url'
 import {
     CompositeOperator,
+    FilterType,
+    Gravity,
     DrawableBorderColor,
     DrawableColor,
     DrawableFillColor,
@@ -11,6 +13,7 @@ import {
     Magick,
     MagickColor,
     MagickFormat,
+    MagickGeometry,
     MagickImageCollection,
     PaintMethod,
     Percentage,
@@ -19,7 +22,7 @@ import {
     type IMagickImageCollection,
 } from '@imagemagick/magick-wasm'
 
-import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, WorkerRequest, WorkerResponse } from './messages'
+import type { DownloadResult, IdentifyResult, ImageView, InitializeResult, PaintOptions, ResizeOptions, WorkerRequest, WorkerResponse } from './messages'
 
 interface StudioImage {
     images: IMagickImageCollection
@@ -157,6 +160,96 @@ function paint(options: PaintOptions): ImageView {
     return view()
 }
 
+function resize(options: ResizeOptions): ImageView {
+    const { images } = requireImage()
+    const geometryText = options.geometry.trim()
+    const geometry = geometryText === '' ? undefined : new MagickGeometry(geometryText)
+    const needsGeometry = options.algorithm !== 'double size' && options.algorithm !== 'half size'
+    if (needsGeometry && geometry === undefined)
+        throw new Error('Please enter an image size.')
+    const requireGeometry = () => {
+        if (geometry === undefined)
+            throw new Error('Please enter an image size.')
+        if (geometry.width < 0 || geometry.height < 0 || (geometry.width === 0 && geometry.height === 0))
+            throw new Error(`Invalid image size: ${geometryText}`)
+        return geometry
+    }
+
+    let filter: FilterType = FilterType.Mitchell
+    if (options.algorithm === 'resize' || options.algorithm === 'resample') {
+        const selectedFilter = FilterType[options.filter as keyof typeof FilterType]
+        if (selectedFilter === undefined || typeof selectedFilter !== 'number' || selectedFilter === FilterType.Undefined)
+            throw new Error(`Invalid resize filter: ${options.filter}`)
+        filter = selectedFilter
+    }
+
+    let support = 0
+    let blur = 1
+    if (options.algorithm === 'resize') {
+        support = Number(options.support)
+        blur = Number(options.blur)
+        if (!Number.isFinite(support) || support < 0)
+            throw new Error(`Invalid filter support: ${options.support}`)
+        if (!Number.isFinite(blur) || blur <= 0)
+            throw new Error(`Invalid filter blur: ${options.blur}`)
+    }
+
+    let gravity: Gravity = Gravity.Center
+    let background = new MagickColor('none')
+    if (options.algorithm === 'extent') {
+        const selectedGravity = Gravity[options.gravity as keyof typeof Gravity]
+        if (selectedGravity === undefined || typeof selectedGravity !== 'number' || selectedGravity === Gravity.Undefined)
+            throw new Error(`Invalid gravity: ${options.gravity}`)
+        gravity = selectedGravity
+        background = parseColor(options.background)
+    }
+    for (const image of images) {
+        switch (options.algorithm) {
+            case 'resize':
+                image.settings.setDefine('filter:support', support.toString())
+                image.settings.setDefine('filter:blur', blur.toString())
+                image.resize(requireGeometry(), filter)
+                break
+            case 'adaptive resize':
+                image.adaptiveResize(requireGeometry())
+                break
+            case 'double size':
+                image.magnify()
+                break
+            case 'extent':
+                image.extent(requireGeometry(), gravity, background)
+                break
+            case 'half size':
+                image.minify()
+                break
+            case 'liquid rescale':
+                image.liquidRescale(requireGeometry())
+                break
+            case 'resample': {
+                const density = requireGeometry()
+                if (density.isPercentage || density.width === 0)
+                    throw new Error(`Resample size must be a positive resolution: ${geometryText}`)
+                const densityX = density.width
+                const densityY = density.height || densityX
+                image.resample(densityX, densityY, filter)
+                break
+            }
+            case 'sample':
+                image.sample(requireGeometry())
+                break
+            case 'scale':
+                image.scale(requireGeometry())
+                break
+            case 'thumbnail':
+                image.thumbnail(requireGeometry())
+                break
+            default:
+                throw new Error(`Invalid resize algorithm: ${options.algorithm}`)
+        }
+    }
+    return view()
+}
+
 function identify(): IdentifyResult {
     const { images, name, format } = requireImage()
     const fileName = `${name}.${format.toLowerCase()}`
@@ -193,6 +286,8 @@ async function handle(request: WorkerRequest): Promise<unknown> {
             return pixel(request.x, request.y)
         case 'paint':
             return paint(request.options)
+        case 'resize':
+            return resize(request.options)
         case 'identify':
             return identify()
         case 'download':

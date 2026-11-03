@@ -7,6 +7,7 @@ import 'bootstrap'
 
 import { renderDocker } from './pages/docker'
 import { renderIdentify } from './pages/identify'
+import { renderResize } from './pages/resize'
 import { renderUnavailable } from './pages/unavailable'
 import { renderUpload } from './pages/upload'
 import { renderView } from './pages/view'
@@ -15,7 +16,6 @@ import { busy, clearStatus, errorMessage, showStatus } from './ui'
 
 const unavailableTools: Record<string, string> = {
     transform: 'Transform',
-    resize: 'Resize',
     effects: 'Effects',
     fx: 'F/X',
     enhance: 'Enhance',
@@ -70,6 +70,8 @@ async function render() {
             await renderView(container)
         else if (route === 'identify')
             await renderIdentify(container)
+        else if (route === 'resize')
+            await renderResize(container)
         else if (route === 'docker')
             renderDocker(container)
         else if (route in unavailableTools)

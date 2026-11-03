@@ -13,11 +13,34 @@ export interface PaintOptions {
     border: string
 }
 
+export type ResizeAlgorithm =
+    | 'resize'
+    | 'adaptive resize'
+    | 'double size'
+    | 'extent'
+    | 'half size'
+    | 'liquid rescale'
+    | 'resample'
+    | 'sample'
+    | 'scale'
+    | 'thumbnail'
+
+export interface ResizeOptions {
+    geometry: string
+    algorithm: ResizeAlgorithm
+    filter: string
+    support: string
+    blur: string
+    gravity: string
+    background: string
+}
+
 export type WorkerRequest =
     | { id: number, type: 'initialize' }
     | { id: number, type: 'load', data: Uint8Array, name: string }
     | { id: number, type: 'pixel', x: number, y: number }
     | { id: number, type: 'paint', options: PaintOptions }
+    | { id: number, type: 'resize', options: ResizeOptions }
     | { id: number, type: 'identify' }
     | { id: number, type: 'download' }
 

@@ -24,7 +24,6 @@ Remove an item when it is done.
 ## Tools (currently show the "not available" page)
 
 - [ ] Transform
-- [ ] Resize
 - [ ] Effects
 - [ ] F/X
 - [ ] Enhance

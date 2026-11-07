@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policymap [
+  <!ELEMENT policymap (policy)*>
+  <!ATTLIST policymap xmlns CDATA #FIXED "">
+  <!ELEMENT policy EMPTY>
+  <!ATTLIST policy xmlns CDATA #FIXED "">
+  <!ATTLIST policy domain NMTOKEN #REQUIRED>
+  <!ATTLIST policy name NMTOKEN #IMPLIED>
+  <!ATTLIST policy pattern CDATA #IMPLIED>
+  <!ATTLIST policy rights NMTOKEN #IMPLIED>
+  <!ATTLIST policy stealth NMTOKEN #IMPLIED>
+  <!ATTLIST policy value CDATA #IMPLIED>
+]>
+
+<!--
+  ImageMagick Web-Safe Security Policy
+
+  This policy is intended for public-facing services that process untrusted
+  images. It reduces ImageMagick's attack surface while preserving support
+  for common raster image operations.
+
+  Security objectives:
+
+    * Limit CPU, memory, disk, and file resource consumption.
+    * Mitigate denial-of-service attacks through resource and runtime limits.
+    * Prevent access to sensitive local files and Linux virtual filesystems.
+    * Prevent indirect file reads via @filename expansion.
+    * Prevent use of stdin/stdout and file descriptor paths.
+    * Disable all delegates and loadable filters.
+    * Disable selected high-risk modules that provide scripting, vector
+      graphics processing, or URL access.
+
+  This policy does not restrict ImageMagick to a specific image format
+  allowlist. Additional coder or module restrictions may be added for
+  deployments requiring a stricter security posture.
+
+  References:
+
+    https://imagemagick.org/security-policy/
+    https://imagemagick-secevaluator.doyensec.com/
+-->
+
+<policymap>
+
+  <!-- ============================================================= -->
+  <!-- Resource Limits                                                -->
+  <!-- ============================================================= -->
+
+  <!-- Limit ImageMagick to at most five worker threads. -->
+  <policy domain="resource" name="thread" value="3"/>
+
+  <!-- Abort operations that exceed 30 seconds of processing time. -->
+  <policy domain="resource" name="time" value="30"/>
+
+  <!-- Maximum number of simultaneously open pixel-cache files. -->
+  <policy domain="resource" name="file" value="768"/>
+
+  <!-- Maximum heap memory available to the pixel cache. -->
+  <policy domain="resource" name="memory" value="512MiB"/>
+
+  <!-- Maximum amount of memory-mapped pixel cache storage. -->
+  <policy domain="resource" name="map" value="1024MiB"/>
+
+  <!-- Images larger than 32 megapixels spill to disk-backed cache. -->
+  <policy domain="resource" name="area" value="32MP"/>
+
+  <!-- Limit total disk usage for pixel cache and temporary files. -->
+  <policy domain="resource" name="disk" value="2GiB"/>
+
+  <!-- Limit the number of images permitted in a sequence. -->
+  <policy domain="resource" name="list-length" value="16"/>
+
+  <!-- Reject images wider than approximately 8192 pixels. -->
+  <policy domain="resource" name="width" value="8KP"/>
+
+  <!-- Reject images taller than approximately 8192 pixels. -->
+  <policy domain="resource" name="height" value="8KP"/>
+
+  <!-- Prevent excessively large single memory allocation requests. -->
+  <policy domain="system" name="max-memory-request" value="512MiB"/>
+
+  <!-- Maximum size of an image profile. -->
+  <policy domain="system" name="max-profile-size" value="16MiB"/>
+
+  <!-- ============================================================= -->
+  <!-- Path Restrictions                                              -->
+  <!-- ============================================================= -->
+
+  <!-- Disallow reading from or writing to stdin/stdout via "-". -->
+  <policy domain="path" rights="none" pattern="-"/>
+
+  <!-- Disable indirect file reads such as @filename. -->
+  <policy domain="path" rights="none" pattern="@*"/>
+
+  <!-- Prevent access to file descriptors (fd:). -->
+  <policy domain="path" rights="none" pattern="[Ff][Dd\\]:*"/>
+
+  <!-- Prevent access to operating system configuration files. -->
+  <policy domain="path" rights="none" pattern="/etc/*"/>
+
+  <!-- Prevent access to Linux process and runtime information. -->
+  <policy domain="path" rights="none" pattern="/proc/*"/>
+
+  <!-- Prevent access to Linux kernel and device nformation. -->
+  <policy domain="path" rights="none" pattern="/sys/*"/>
+
+  <!-- ============================================================= -->
+  <!-- Feature Restrictions                                           -->
+  <!-- ============================================================= -->
+
+  <!-- Disable all external delegates (Ghostscript, ffmpeg, etc.). -->
+  <policy domain="delegate" rights="none" pattern="*"/>
+
+  <!-- Disable all loadable image filters. -->
+  <policy domain="filter" rights="none" pattern="*"/>
+
+  <!-- ============================================================= -->
+  <!-- High-Risk Module Restrictions                                  -->
+  <!-- ============================================================= -->
+
+  <!-- Disable the Magick Vector Graphics interpreter. -->
+  <policy domain="module" rights="none" pattern="MVG"/>
+
+  <!-- Disable the Magick Scripting Language interpreter. -->
+  <policy domain="module" rights="none" pattern="MSL"/>
+
+  <!-- Disable URL, HTTP, HTTPS, and related network access support. -->
+  <policy domain="module" rights="none" pattern="URL"/>
+
+</policymap>

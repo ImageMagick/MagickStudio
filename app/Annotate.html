@@ -1,21 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
-      name="generator" />
+
 <title>Annotate Image</title>
-<link rel="StyleSheet" href="style/magick.css" type="text/css" />
-</head>
-<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
-vlink="#800080" alink="#0085C0">
-<center><img src="images/magick.png" align="bottom" width="114"
-height="113" /></center>
-<hr />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/><meta content="width=device-width, initial-scale=1" name="viewport"/></head>
+<body class="bg-light text-dark"><div class="container my-5"><div class="row justify-content-center"><div class="col-lg-8">
+<div class="text-center"><img align="bottom" class="img-fluid rounded mb-4" height="160" src="images/magick.png" width="120"/></div>
+<hr class="my-4"/>
 <p>You can annotate your image with text. Optionally you can
 include the image filename, type, width, height, or other image
 attribute by embedding special format characters:</p>
-<pre>
+<pre class="bg-white p-3 border rounded shadow-sm">
     %b   file size
     %d   directory
     %e   filename extention
@@ -32,13 +30,13 @@ attribute by embedding special format characters:</p>
     \r   carriage return
 </pre>
 <p>For example,</p>
-<pre>
+<pre class="bg-white p-3 border rounded shadow-sm">
   "%m:%f %wx%h"
 </pre>
-<dl>
-<dd>produces an image annotation of <b>MIFF:bird.miff 512x480</b>
+<dl class="dl-modern">
+<dd class="text-muted ms-3">produces an image annotation of <b>MIFF:bird.miff 512x480</b>
 for an image titled <b>bird.miff</b> and whose width is 512 and
-height is 480.</dd><br /></dl>
+height is 480.</dd></dl>
 <p>To generate a Unicode character (<i>TrueType fonts only</i>),
 embed the code as an escaped hex string (e.g.
 <tt>\\0x30a3</tt>).</p>
@@ -47,7 +45,7 @@ the image. The (x,y) offset of the location is conveniently
 specified as one value. For example if your text is located 30
 pixels along the horizontal and 40 pixels along the vertical,
 use:</p>
-<pre>
+<pre class="bg-white p-3 border rounded shadow-sm">
     +30+40
 </pre>
 <p>From this starting point the final text location is determined
@@ -67,10 +65,7 @@ Postscript fonts are used. In most cases, X font rendering is much
 faster than with Postscript. The point size gives the height of the
 text when rendered with Postscript fonts. Finally, the angle of the
 text is specified in degrees, 0 to 360.</p>
-<hr />
-<p>
-<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
-   target="Comment"><img alt="[comment]" src="images/mail.png"
-   border="0" /></a></p>
-</body>
+<hr class="my-4"/>
+
+</div></div></div></body>
 </html>

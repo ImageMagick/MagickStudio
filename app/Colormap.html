@@ -1,47 +1,45 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta content="HTML Tidy for Linux/x86 (vers 1st March 2003), see www.w3.org"
-      name="generator" />
+
 <title>Colormap Image</title>
-<link rel="StyleSheet" href="style/magick.css" type="text/css" />
-</head>
-<body bgcolor="#FFFFFF" text="#000000" link="#0085C0"
-vlink="#800080" alink="#0085C0">
-<center><img src="images/magick.png" align="bottom" width="114"
-height="113" /></center>
-<hr />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/><meta content="width=device-width, initial-scale=1" name="viewport"/></head>
+<body class="bg-light text-dark"><div class="container my-5"><div class="row justify-content-center"><div class="col-lg-8">
+<div class="text-center"><img align="bottom" class="img-fluid rounded mb-4" height="160" src="images/magick.png" width="120"/></div>
+<hr class="my-4"/>
 <p>First define the preferred number of colors in your image. The
 actual number of colors in the image may be less than your request,
 but never more. Note, this is a color reduction option. Images with
 less unique colors than specified with this option will have any
 duplicate or unused colors removed. Refer to
-<a href="https://imagemagick.org/script/quantize.php">quantize</a>
+<a href="https://imagemagick.org/quantize">Color Reduction Utilizing Adaptive Spatial Subdivision</a>
 for more details.</p>
 <p>You also have a choice of several options that affect your image
 colormap. Choose from these options:</p>
+<dl class="dl-modern">
+<dd class="text-muted ms-3">
 <dl>
-<dd>
-<dl>
-<dt><b>dither</b></dt>
-<dd>apply Floyd/Steinberg error diffusion to the image. The basic
+<dt class="fw-bold mt-3"><b>dither</b></dt>
+<dd class="text-muted ms-3">apply Floyd/Steinberg error diffusion to the image. The basic
 strategy of dithering is to trade intensity resolution for spatial
 resolution by averaging the intensities of several neighboring
 pixels. Images which suffer from severe contouring when reducing
-colors can be improved with this option.</dd><br />
-<dt><b>black &amp; white</b></dt>
-<dd>transform the image to black and white.</dd><br />
-<dt><b>global colormap</b></dt>
-<dd>create a single colormap for a sequence of images.</dd><br />
-<dt><b>netscape color cube</b></dt>
-<dd>map image to web safe colors.</dd><br />
-<dt><b>map to clipboard</b></dt>
-<dd>map image to clipboard colors.</dd><br />
-<dt><b>gray image</b></dt>
-<dd>transform the image to gray colors.</dd><br />
-<dt><b>ordered dither</b></dt>
-<dd>ordered dither.  The parameter should be one of
+colors can be improved with this option.</dd>
+<dt class="fw-bold mt-3"><b>black &amp; white</b></dt>
+<dd class="text-muted ms-3">transform the image to black and white.</dd>
+<dt class="fw-bold mt-3"><b>global colormap</b></dt>
+<dd class="text-muted ms-3">create a single colormap for a sequence of images.</dd>
+<dt class="fw-bold mt-3"><b>netscape color cube</b></dt>
+<dd class="text-muted ms-3">map image to web safe colors.</dd>
+<dt class="fw-bold mt-3"><b>map to clipboard</b></dt>
+<dd class="text-muted ms-3">map image to clipboard colors.</dd>
+<dt class="fw-bold mt-3"><b>gray image</b></dt>
+<dd class="text-muted ms-3">transform the image to gray colors.</dd>
+<dt class="fw-bold mt-3"><b>ordered dither</b></dt>
+<dd class="text-muted ms-3">ordered dither.  The parameter should be one of
 <pre>
   threshold        Threshold Non-Dither
   checks           Checkerboard Dither
@@ -57,20 +55,17 @@ colors can be improved with this option.</dd><br />
   h8x8o            Halftone 8x8 (othogonal)
   h16x16o          Halftone 16x16 (othogonal)
   hlines6x4        Horizontal Lines 6x4
-</pre></dd><br />
-<dt><b>segment</b></dt>
-<dd>segment an image by analyzing the histograms of the color
+</pre></dd>
+<dt class="fw-bold mt-3"><b>segment</b></dt>
+<dd class="text-muted ms-3">segment an image by analyzing the histograms of the color
 components and identifying units that are homogeneous with the
-fuzzy c-means technique.</dd><br />
-<dt><b>preserve transparent pixels</b></dt>
-<dd>by default color reduction does not preserve and transparent
+fuzzy c-means technique.</dd>
+<dt class="fw-bold mt-3"><b>preserve transparent pixels</b></dt>
+<dd class="text-muted ms-3">by default color reduction does not preserve and transparent
 pixels in your image. Choose this option to reduce the number of
 colors in your image <em>while</em> preserving any transparent
-pixels.</dd><br /></dl></dd><br /></dl>
-<hr />
-<p>
-<a href="scripts/MagickStudio.cgi/?Action=mogrify&amp;ToolType=Comment&amp;SessionID=null&amp;Path=null"
-   target="Comment"><img alt="[comment]" src="images/mail.png"
-   border="0" /></a></p>
-</body>
+pixels.</dd></dl></dd></dl>
+<hr class="my-4"/>
+
+</div></div></div></body>
 </html>

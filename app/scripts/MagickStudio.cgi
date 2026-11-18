@@ -4219,7 +4219,7 @@ sub Upload
   $image=Image::Magick->new;
   $image->Set(font=>$DefaultFont);
   $image->Set(density=>scalar $q->param('Density')) if $q->param('Density');
-  $image->Set(size=>$q->param('SizeGeometry')) if $q->param('SizeGeometry');
+  $image->Set(size=>scalar $q->param('SizeGeometry')) if $q->param('SizeGeometry');
   @extents=$image->Ping("$format$path/MagickStudio.dat$scene");
   $extent=0;
   for ($i=0; $i < $#extents; $i+=4) { $extent+=$extents[$i]*$extents[$i+1]; }

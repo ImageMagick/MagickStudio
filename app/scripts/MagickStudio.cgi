@@ -4226,7 +4226,7 @@ sub Upload
   Error('Image extents exceeds maximum allowable',$q->Param('Name'))
     if $extent && ($extent > (1024*$MaxImageExtent));
   $image=Image::Magick->new;
-  $image->Set(density=>$q->param('Density')) if $q->param('Density');
+  $image->Set(density=>scalar $q->param('Density')) if $q->param('Density');
   $status=$image->Read("$format$path/MagickStudio.dat$scene");
   Error($status,$q->Param('Name')) if $#$image < 0;
   $magick=$image->Get('magick') if $image->Get('magick') ne 'MPC';

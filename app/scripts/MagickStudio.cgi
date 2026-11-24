@@ -3729,15 +3729,15 @@ sub Trailer
       </div>
       <!-- Banner Ad Container -->
       <div class="my-4 text-center">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745" crossorigin="anonymous"></script>
         <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-3129977114552745"
-          data-ad-slot="1083537442"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-3129977114552745"
+             data-ad-slot="5439289906"></ins>
         <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+       </script>
       </div>
     </aside>
   </div>

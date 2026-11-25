@@ -60,6 +60,7 @@ BEGIN {
 use CGI::Fast;
 use CGI::Carp qw/fatalsToBrowser/;
 use Sys::Hostname;
+use Fcntl qw(:flock);
 use MagickStudio;
 use strict;
 
@@ -70,11 +71,10 @@ my($action, %Functions, $header, $length, $prefix, $q, $request_count, %seen,
    $timer, $user_agent);
 my $LastExpireSweep=0;  # time of the last expiry sweep (throttled to once a minute)
 
-our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot,
-    $ExampleImage, $ExpireCache, $ExpireThreshold, $HashDigestSalt, $IconSize,
-    $LoadAverageThreshold, $MaxFilesize, $MaxImageArea, $MaxImageExtent,
-    $MaxWorkFiles, $MinExpireAge, $RedirectURL, $SponsorIcon, $SponsorURL,
-    $Timeout);
+our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot, $ExampleImage,
+    $ExpireCache, $ExpireThreshold, $HashDigestSalt, $IconSize, $LoadAverageThreshold,
+    $MaxFilesize, $MaxImageArea, $MaxImageExtent, $MaxWorkFiles, $MinExpireAge, $RateLimitWindow,
+    $RateLimitMaxHits, $RedirectURL, $SponsorIcon, $SponsorURL, $Timeout);
 
 #
 # Change these variables to reflect your environment.
@@ -3486,6 +3486,37 @@ sub Mogrify
 }
 
 #
+# Per-IP sliding-window rate limiter across all FastCGI workers.
+#
+sub RateLimitExceeded
+{
+  my($ip, $now, $state_file, $fh, @timestamps);
+
+  $ip=$q->remote_addr() || 'unknown';
+  $ip=~s/[^0-9a-fA-F:.]//g;
+  $state_file = $DocumentRoot . $DocumentDirectory . "/tmp/ratelimit_$ip.log";
+  open($fh,'+>>',$state_file) or return 0;
+  flock($fh,LOCK_EX) or do { close($fh); return 0; };
+  seek($fh,0,0);
+  @timestamps=map { chomp; $_ } grep { length($_) } <$fh>;
+  $now=time();
+  @timestamps=grep { ($now - $_) < $RateLimitWindow } @timestamps;
+  if (scalar(@timestamps) >= $RateLimitMaxHits)
+    {
+      flock($fh,LOCK_UN);
+      close($fh);
+      return(1);
+    }
+  push(@timestamps,$now);
+  seek($fh,0,0);
+  truncate($fh,0);
+  print $fh "$_\n" for @timestamps;
+  flock($fh,LOCK_UN);
+  close($fh);
+  return(0);
+}
+
+#
 # Resize image.
 #
 sub Resize
@@ -4817,6 +4848,12 @@ while ($q = CGI::Fast->new)
     $header=undef;
     $action=undef;
     $q->autoEscape(undef);
+    if (RateLimitExceeded() != 0)
+      {
+        $!=0;
+        Error('Rate limit exceeded','Please slow down and try again shortly.');
+        die "FCGI_DONE\n";
+      }
     $q->delete('CacheID');
     $q->param(-name=>'CacheID',-value=>rand($timer+$$));
     #

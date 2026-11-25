@@ -3728,8 +3728,7 @@ sub Trailer
         </div>
       </div>
       <!-- Banner Ad Container -->
-      <div class="my-4 text-center">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3129977114552745" crossorigin="anonymous"></script>
+      <div class="text-center px-0 px-md-2 mb-4" style="min-height: 280px;">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-format="auto"
@@ -3738,7 +3737,7 @@ sub Trailer
              data-ad-slot="1083537442"></ins>
         <script>
              (adsbygoogle = window.adsbygoogle || []).push({});
-       </script>
+        </script>
       </div>
     </aside>
   </div>

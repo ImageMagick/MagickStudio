@@ -61,6 +61,8 @@ use CGI::Fast;
 use CGI::Carp qw/fatalsToBrowser/;
 use Sys::Hostname;
 use Fcntl qw(:flock);
+use JSON::PP qw(encode_json);
+use Encode qw(encode_utf8);
 use MagickStudio;
 use strict;
 
@@ -3759,6 +3761,28 @@ sub SaveQueryState
 }
 
 #
+# Post a rate limit exception.
+#
+sub SendRateLimitError
+{
+  my($retry_after) = @_;
+
+  $retry_after //= 15;
+  $retry_after = 1 if $retry_after < 1;
+  my $payload = encode_utf8(encode_json({
+    code    => 'RATE_LIMIT_EXCEEDED',
+    message => 'Rate limit exceeded',
+    detail  => 'Please slow down and try again shortly.',
+  }));
+  print "Status: 429 Too Many Requests\r\n";
+  print "Content-Type: application/json; charset=UTF-8\r\n";
+  print "Retry-After: $retry_after\r\n";
+  print "Content-Length: " . length($payload) . "\r\n";
+  print "\r\n";
+  print $payload;
+}
+
+#
 # Print the standard HTML trailer.
 #
 sub Trailer
@@ -4851,7 +4875,7 @@ while ($q = CGI::Fast->new)
     if (RateLimitExceeded() != 0)
       {
         $!=0;
-        Error('Rate limit exceeded','Please slow down and try again shortly.');
+        SendRateLimitError($RateLimitWindow);
         die "FCGI_DONE\n";
       }
     $q->delete('CacheID');

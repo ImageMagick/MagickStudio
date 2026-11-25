@@ -3188,7 +3188,8 @@ sub GetLoadAverage
 sub ExitIfBusy
 {
   return unless GetLoadAverage() > $LoadAverageThreshold;
-  print $q->redirect($RedirectURL);
+  $!=0;
+  Error('Server is too busy','try again later');
   die "FCGI_DONE\n";
 }
 

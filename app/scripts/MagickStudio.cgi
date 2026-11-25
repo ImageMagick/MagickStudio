@@ -68,6 +68,7 @@ use strict;
 #
 my($action, %Functions, $header, $length, $prefix, $q, $request_count, %seen,
    $timer, $user_agent);
+my $LastExpireSweep=0;  # time of the last expiry sweep (throttled to once a minute)
 
 our($ContactInfo, $Debug, $DefaultFont, $DocumentDirectory, $DocumentRoot,
     $ExampleImage, $ExpireCache, $ExpireThreshold, $HashDigestSalt, $IconSize,
@@ -3144,29 +3145,51 @@ sub GetHostname
 
 #
 # Return the average number of jobs in the run queue over the last minute.
+# The value is cached for a couple of seconds because the one-minute load
+# average moves slowly and several code paths ask for it during one request.
 #
+my($CachedLoadAverage, $CachedLoadTime)=(0,0);
+
 sub GetLoadAverage
 {
-  my($load_average, $os);
+  my($load_average, $now, $os);
 
+  $now=time();
+  return($CachedLoadAverage) if ($now-$CachedLoadTime) < 2;
   unless ($os = $^O)
   {
     require Config;
     $os=$Config::Config{'osname'};
   }
   $load_average=0;
-  return if $os =~ /Win/i;
-  if (!(-e "/proc/loadavg"))
-    { $load_average=`uptime` =~ /average:\s+(\S+),/; }
+  return($load_average) if $os =~ /Win/i;
+  if (open(my $fh,'<','/proc/loadavg'))
+    {
+      my $line=<$fh>;
+      close($fh);
+      $load_average=$1 if defined($line) && ($line =~ /^\s*([\d.]+)/);
+    }
   else
     {
-      local(*DATA);
-
-      open(DATA,"/proc/loadavg");
-      $load_average=<DATA>;
-      close(DATA);
+      my $uptime=`uptime`;
+      $load_average=$1 if defined($uptime) &&
+        ($uptime =~ /average[s]?:\s+([\d.]+)/);
     }
-  $load_average+0.0;
+  $CachedLoadAverage=$load_average+0.0;
+  $CachedLoadTime=$now;
+  $CachedLoadAverage;
+}
+
+#
+# Bail out immediately (no sleeping, no further work) when the server load
+# exceeds the threshold.  The client is redirected and the FastCGI worker is
+# freed for the next request.
+#
+sub ExitIfBusy
+{
+  return unless GetLoadAverage() > $LoadAverageThreshold;
+  print $q->redirect($RedirectURL);
+  die "FCGI_DONE\n";
 }
 
 #
@@ -4087,11 +4110,15 @@ sub Upload
   # Expire files.
   #
   $path=$DocumentRoot . $DocumentDirectory;
-  ExpireFiles("$path/workarea",$ExpireThreshold);
-  ExpireFiles("$path/clipboard",$ExpireThreshold);
-  ExpireFiles("$path/tmp",$ExpireThreshold);
-  ExpireFiles("$path/session_info",7*$ExpireThreshold);
-  ExpireFiles("$path/comments",14*$ExpireThreshold);
+  if ((time()-$LastExpireSweep) >= 60)
+    {
+      $LastExpireSweep=time();
+      ExpireFiles("$path/workarea",$ExpireThreshold);
+      ExpireFiles("$path/clipboard",$ExpireThreshold);
+      ExpireFiles("$path/tmp",$ExpireThreshold);
+      ExpireFiles("$path/session_info",7*$ExpireThreshold);
+      ExpireFiles("$path/comments",14*$ExpireThreshold);
+    }
   #
   # Read image.
   #
@@ -4331,13 +4358,7 @@ sub UploadForm
   #
   # Display input image form.
   #
-  $load_average=GetLoadAverage();
-  if ($load_average > $LoadAverageThreshold)
-    {
-      sleep $load_average/2;
-      print $q->redirect($RedirectURL);
-      die "FCGI_DONE\n";
-    }
+  ExitIfBusy();
   $url=$q->script_name();
   $q->delete('ToolType');
   $q->param(-name=>'ToolType',-value=>'Upload');
@@ -4780,7 +4801,7 @@ XXX
 # FastCGI request loop.  Each pass through this loop services exactly one
 # HTTP request; the Perl process itself stays resident between requests.
 #
-#setpriority(0,0,getpriority(0,0)+4);  # be nice
+setpriority(0,0,getpriority(0,0)+4);  # be nice
 $CGI::POST_MAX=1024*$MaxFilesize;
 our ($image, $compare, $composite);
 my $MAX_REQUESTS  = 200; 
@@ -4788,7 +4809,6 @@ my $request_count = 0;
 while ($q = CGI::Fast->new)
 {
   $request_count++;
-  last if $request_count >= $MAX_REQUESTS;
   eval
   {
     $timer=time;
@@ -4803,6 +4823,11 @@ while ($q = CGI::Fast->new)
     #
     $action=$q->param('Action');
     $q->delete('Action');
+    #
+    # New work (uploads or the upload form) is refused immediately when the
+    # server is busy, before any image is read or any form is built.
+    #
+    ExitIfBusy() if defined($q->param('File')) || defined($q->param('URL')) || !defined($action);
     Upload() if defined($q->param('File'));
     Upload() if defined($q->param('URL'));
     UploadForm() unless defined($action);
@@ -4849,4 +4874,8 @@ while ($q = CGI::Fast->new)
       #
       warn "MagickStudio request error: $@";
     }
+  #
+  # Recycle the worker only after the current request has been served.
+  #
+  last if $request_count >= $MAX_REQUESTS;
 }

@@ -3494,7 +3494,7 @@ sub RateLimitExceeded
 
   $ip=$q->remote_addr() || 'unknown';
   $ip=~s/[^0-9a-fA-F:.]//g;
-  $state_file = $DocumentRoot . $DocumentDirectory . "/tmp/ratelimit_$ip.log";
+  $state_file=$DocumentRoot . $DocumentDirectory . "/session_info/timestamp-$ip.txt";
   open($fh,'+>>',$state_file) or return 0;
   flock($fh,LOCK_EX) or do { close($fh); return 0; };
   seek($fh,0,0);

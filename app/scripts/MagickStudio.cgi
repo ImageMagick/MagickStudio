@@ -3490,32 +3490,33 @@ sub Mogrify
 #
 # Per-IP sliding-window rate limiter across all FastCGI workers.
 #
-sub RateLimitExceeded
-{
-  my($ip, $now, $state_file, $fh, @timestamps);
+sub RateLimitExceeded {
+  my ($ip, $now, $state_file, $fh, @timestamps);
 
-  $ip=$q->remote_addr() || 'unknown';
-  $ip=~s/[^0-9a-fA-F:.]//g;
-  $state_file=$DocumentRoot . $DocumentDirectory . "/session_info/timestamp-$ip.txt";
-  open($fh,'+>>',$state_file) or return 0;
-  flock($fh,LOCK_EX) or do { close($fh); return 0; };
-  seek($fh,0,0);
-  @timestamps=map { chomp; $_ } grep { length($_) } <$fh>;
-  $now=time();
-  @timestamps=grep { ($now - $_) < $RateLimitWindow } @timestamps;
-  if (scalar(@timestamps) >= $RateLimitMaxHits)
-    {
-      flock($fh,LOCK_UN);
-      close($fh);
-      return(1);
-    }
-  push(@timestamps,$now);
-  seek($fh,0,0);
-  truncate($fh,0);
+  $ip = $q->remote_addr() || 'unknown';
+  $ip =~ s/[^0-9a-fA-F:.]//g;
+  $ip = 'unknown' if $ip eq '';
+  $state_file = "$DocumentRoot$DocumentDirectory/session_info/rate-limit-$ip.lock";
+  if (!open($fh, '+<', $state_file)) {
+    open($fh, '+>', $state_file) or return 0;
+  }
+  flock($fh, LOCK_EX) or do { close($fh); return 0; };
+  seek($fh, 0, 0) or do { close($fh); return 0; };
+  @timestamps = map { chomp; $_ } <$fh>;
+  $now = time();
+  @timestamps = grep { /^\d+$/ && ($now - $_) >= 0 && ($now - $_) < $RateLimitWindow } @timestamps;
+  if (scalar(@timestamps) >= $RateLimitMaxHits) {
+    flock($fh, LOCK_UN);
+    close($fh);
+    return 1;
+  }
+  push(@timestamps, $now);
+  seek($fh, 0, 0) or do { close($fh); return 0; };
+  truncate($fh, 0) or do { close($fh); return 0; };
   print $fh "$_\n" for @timestamps;
-  flock($fh,LOCK_UN);
+  flock($fh, LOCK_UN);
   close($fh);
-  return(0);
+  return 0;
 }
 
 #
